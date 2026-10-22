@@ -2,6 +2,7 @@
 from __future__ import annotations
 import hashlib
 import json
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
@@ -25,6 +26,8 @@ def _require_str(value: Any, name: str) -> str:
 def validate_use_case(data: Any) -> dict[str, Any]:
     if not isinstance(data, dict):
         raise SceneError("Use case must be an object")
+    if isinstance(data.get("extraction"), dict) and data["extraction"].get("ready") is False:
+        raise SceneError("Extracted draft is not ready: " + "; ".join(data["extraction"].get("issues", [])))
     for key in MANDATORY:
         if key not in data:
             raise SceneError(f"Missing field: {key}")

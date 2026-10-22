@@ -22,3 +22,7 @@ jobs:
           ucscene validate examples/warehouse-scan.json
           ucscene plan examples/warehouse-scan.json --out /tmp/scene-plan.json
           ucscene review /tmp/scene-plan.json
+          ucscene extract examples/warehouse-scan.md --out /tmp/extracted.json
+          ucscene validate /tmp/extracted.json
+          ucscene plan /tmp/extracted.json --out /tmp/extracted-plan.json
+          ucscene review /tmp/extracted-plan.json

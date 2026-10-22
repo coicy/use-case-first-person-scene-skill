@@ -1,32 +1,31 @@
-# Development roadmap
+# Roadmap
 
-## v0.1 — functioning baseline
+## v0.1.0 — initial working skill
 
-- Structured use case to first-person scene plan and prompts.
-- Source traceability per step, anchored consistent environment.
-- Optional explicit provider-based PNG rendering and offline static plan review.
-- CLI, example, JSON schema, offline tests and CI.
+- Structured use case JSON, deterministic prompt plans, POV constraints, generation provider, offline tests and CI.
 
-## v0.2 — visual grounding
+## v0.2.0 — grounded extraction and visual QA (implemented)
 
-- Optional PRD and markdown extraction using an LLM adapter, with source quotes.
-- Archetype library for POS, warehouse, kiosk, desktop, mobile, and in-game interactions.
-- Vision-assisted quality review for viewpoint, required evidence and invented objects; human review remains required.
+- Offline Chinese/English Markdown extraction with unready draft mechanism.
+- Opt-in freeform AI extraction with exact source quote checks.
+- Reference-based image editing and optional sequential chaining.
+- Vision-based advisory image quality check for POV, visible evidence, exact UI text and optional reference continuity.
+- Mocked provider tests and CI smoke test.
 
-## v0.3 — continuity and UI accuracy
+## v0.3.0 — higher-fidelity representation
 
-- Reference-image/edit-mode continuity and visual anchor assets.
-- Screen overlay or screenshot compositing for exact UI.
-- Delta regeneration on changed use cases, revision tracking and QA reports.
+- Support for document/PRD import, explicit source provenance spans and image archetypes by use case type.
+- Reusable manually reviewed scene anchor asset library, style manifests and composition maps.
+- Verified UI screenshots composited into generated scene frames to avoid synthetic/incorrect lettering.
+- Visual QA metrics with multiple independent reviewers and stability experiments.
 
-## v1.0 — repository integration
+## v1.0 — engineering integration
 
-- Trace asset filenames to use case ids and specifications.
-- Incremental CI checks of changed use cases with opt-in image budgets.
-- Continuity QA for scene batches.
+- Incremental regeneration after requirement changes; trace from cases to assets and release reports.
+- Optional design review workflows, versioned image anchors, cost ceilings and budget reporting.
 
 ## Non-goals
 
-- Replacing requirements or test cases with generated images.
-- Fabricating complete UX flow from an underspecified story.
-- Guaranteeing typography fidelity from image models.
+- Generated images are not proof of functioning software or business logic.
+- Model-generated exact text is not reliable and cannot replace verified UI overlays.
+- The skill does not guarantee background, object, or identity consistency between images.

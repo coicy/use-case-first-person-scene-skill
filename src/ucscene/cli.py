@@ -16,7 +16,7 @@ from .imaging import inspect_image
 from .benchmark import run_benchmark, export_benchmark_plans, make_prompt_lock, verify_prompt_lock
 from .benchmark_human import rating_template, score_human_packet
 from .acceptance import create_gallery, verify_gallery
-from .design import (init_brief, migrate_legacy_case, create_bundle, validate_product_brief, validate_design_decision, validate_scene_design, validate_design_bundle)
+from .design import (init_brief, migrate_legacy_case, create_bundle, validate_product_brief, validate_design_decision, validate_scene_design, validate_design_bundle, create_design_plan, validate_design_plan, export_design_prompts)
 
 def run(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="ucscene", description="Use-case first-person scenario planning and image generation")
@@ -121,8 +121,38 @@ def run(argv: list[str] | None = None) -> int:
     design_scaffold = sub.add_parser("design-scaffold", help="Create UNRESOLVED scene skeletons, not final layouts or images")
     design_scaffold.add_argument("brief")
     design_scaffold.add_argument("--out", default="out/design-bundle.json")
+    designer = sub.add_parser("design-plan", help="Design 2-3 original UI/game scene candidates from a new ProductBrief (offline by default)")
+    designer.add_argument("source", help="ProductBrief or unresolved DesignBundle")
+    designer.add_argument("--variants", type=int, choices=[2,3], default=2)
+    designer.add_argument("--ai", action="store_true", help="Explicitly opt in to paid AI design proposals")
+    designer.add_argument("--model", default="gpt-4.1-mini")
+    designer.add_argument("--out", default="out/new-product-design-plan.json")
+    designer_review = sub.add_parser("design-plan-review", help="Check candidate proposals, cross-references and prompt hashes")
+    designer_review.add_argument("plan")
+    designer_export = sub.add_parser("design-export", help="Export candidate-specific prompts for later image generation")
+    designer_export.add_argument("plan")
+    designer_export.add_argument("--variant", help="Optional candidate ID such as VAR-01")
+    designer_export.add_argument("--out", default="out/design-prompts.json")
     args = parser.parse_args(argv)
     try:
+        if args.command == "design-plan":
+            planned = create_design_plan(load_json(args.source), variants=args.variants, ai=args.ai, model=args.model)
+            save_json(args.out, planned)
+            print(json.dumps({"ok": True, "path": args.out, "candidates": len(planned["candidates"]),
+                              "screens_per_candidate": len(planned["candidates"][0]["screens"]),
+                              "generator": planned["generator"], "approval": "none"}, ensure_ascii=False))
+            return 0
+        if args.command == "design-plan-review":
+            planned = validate_design_plan(load_json(args.plan))
+            print(json.dumps({"ok": True, "path": args.plan, "candidates": len(planned["candidates"]),
+                              "approval": planned["approval"]}, ensure_ascii=False))
+            return 0
+        if args.command == "design-export":
+            payload = export_design_prompts(load_json(args.plan), variant_id=args.variant)
+            save_json(args.out, payload)
+            print(json.dumps({"ok": True, "path": args.out, "prompts": len(payload["prompts"]),
+                              "generated_images": 0}, ensure_ascii=False))
+            return 0
         if args.command == "brief-init":
             brief = init_brief(args.product_id, args.name, args.category, args.prompt, args.use_case)
             save_json(args.out, brief)

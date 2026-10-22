@@ -1,0 +1,296 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/ucscene/v0.7/design-plan.schema.json",
+  "title": "WP-02 New Product DesignPlan v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "plan_version",
+    "product_id",
+    "source_brief_sha256",
+    "generator",
+    "model",
+    "requirement_classification",
+    "design_bundle",
+    "candidates",
+    "approval",
+    "warning"
+  ],
+  "properties": {
+    "plan_version": {
+      "const": "1.0"
+    },
+    "product_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_brief_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "generator": {
+      "enum": [
+        "ai-model",
+        "offline-heuristic"
+      ]
+    },
+    "model": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "requirement_classification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "must",
+        "may",
+        "unknown",
+        "use_case_steps"
+      ],
+      "properties": {
+        "must": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "text",
+              "authority"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "text": {
+                "type": "string"
+              },
+              "authority": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "may": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "unknown": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "use_case_steps": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "design_bundle": {
+      "$ref": "design-bundle.schema.json"
+    },
+    "candidates": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "status",
+          "label",
+          "design_decision_ids",
+          "tradeoff",
+          "layout",
+          "navigation",
+          "visual_style",
+          "controls",
+          "information_priority",
+          "feedback",
+          "screens"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "status": {
+            "const": "proposed"
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1
+          },
+          "design_decision_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 3,
+            "maxItems": 3
+          },
+          "tradeoff": {
+            "type": "string",
+            "minLength": 1
+          },
+          "layout": {
+            "type": "string",
+            "minLength": 1
+          },
+          "navigation": {
+            "type": "string",
+            "minLength": 1
+          },
+          "visual_style": {
+            "type": "string",
+            "minLength": 1
+          },
+          "controls": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1
+          },
+          "information_priority": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1
+          },
+          "feedback": {
+            "type": "string",
+            "minLength": 1
+          },
+          "screens": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "scene_id",
+                "use_case_id",
+                "step_id",
+                "state",
+                "flow",
+                "required_evidence",
+                "required_ui_text",
+                "requirement_ids",
+                "design_decision_ids",
+                "prompt",
+                "prompt_sha256",
+                "interaction"
+              ],
+              "properties": {
+                "scene_id": {
+                  "type": "string"
+                },
+                "use_case_id": {
+                  "type": "string"
+                },
+                "step_id": {
+                  "type": "string"
+                },
+                "state": {
+                  "type": "string"
+                },
+                "flow": {
+                  "type": "string"
+                },
+                "prompt": {
+                  "type": "string"
+                },
+                "required_evidence": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "required_ui_text": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "requirement_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "design_decision_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "prompt_sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                },
+                "interaction": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "purpose",
+                    "primary_object",
+                    "proposed_controls",
+                    "proposed_feedback",
+                    "priority",
+                    "status"
+                  ],
+                  "properties": {
+                    "purpose": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "primary_object": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "proposed_controls": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "minItems": 1
+                    },
+                    "proposed_feedback": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "priority": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "status": {
+                      "const": "proposed"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "approval": {
+      "const": "none"
+    },
+    "warning": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

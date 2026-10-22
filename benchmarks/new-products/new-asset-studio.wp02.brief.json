@@ -1,0 +1,87 @@
+{
+  "schema_version": "1.0",
+  "product_id": "new-asset-studio",
+  "name": "Asset Studio",
+  "category": "desktop",
+  "concept": "一款面向独立游戏团队的全新资产管理应用，集中管理贴图、模型和音频，并支持标签筛选",
+  "requirements": [
+    {
+      "id": "REQ-001",
+      "text": "一款面向独立游戏团队的全新资产管理应用，集中管理贴图、模型和音频，并支持标签筛选",
+      "source": "user-prompt",
+      "authority": "source-stated",
+      "use_case_ids": []
+    },
+    {
+      "id": "REQ-002",
+      "text": "用户按类型和标签筛选游戏资产，选择素材查看详情",
+      "source": "user-prompt",
+      "authority": "source-stated",
+      "use_case_ids": [
+        "UC-001"
+      ]
+    }
+  ],
+  "hard_constraints": [],
+  "use_cases": [
+    {
+      "id": "UC-001",
+      "title": "用户按类型和标签筛选游戏资产，选择素材查看详情",
+      "actor": "unspecified",
+      "goal": "用户按类型和标签筛选游戏资产，选择素材查看详情",
+      "steps": [
+        {
+          "id": "STEP-001",
+          "action": "用户按标签筛选游戏素材，查看匹配的贴图和模型",
+          "state": "in-progress",
+          "flow": "main",
+          "ui_text": [
+            "筛选"
+          ],
+          "visible_evidence": [
+            "筛选条件",
+            "筛选后的素材列表"
+          ]
+        },
+        {
+          "id": "STEP-002",
+          "action": "用户选中一条模型素材并查看缩略预览和元数据",
+          "state": "in-progress",
+          "flow": "main",
+          "ui_text": [
+            "详情"
+          ],
+          "visible_evidence": [
+            "当前素材选中态",
+            "素材预览区域",
+            "素材属性区"
+          ]
+        },
+        {
+          "id": "STEP-003",
+          "action": "用户保存素材标签修改时发生命名冲突，界面提示保存失败",
+          "state": "failure",
+          "flow": "exception",
+          "ui_text": [
+            "保存失败"
+          ],
+          "visible_evidence": [
+            "被编辑的素材标签",
+            "与当前素材关联的错误提示"
+          ]
+        }
+      ]
+    }
+  ],
+  "unknowns": [
+    "actor",
+    "interaction design",
+    "UI layout",
+    "visual style",
+    "visible feedback"
+  ],
+  "origin": {
+    "mode": "curated",
+    "source_id": "benchmarks/new-products/fictional-WP02"
+  }
+}

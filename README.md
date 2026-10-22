@@ -149,3 +149,23 @@ ucscene migrate-legacy examples/warehouse-scan.json --product-id warehouse-conce
 ```
 
 完整模型、原创新产品示例、离线校验范围和限制参见 [WP-01 实施说明](docs/WP01_IMPLEMENTATION.md)。**WP-02 的自动 UI 设计与正式图像提示词编译仍未实现**；`design-scaffold` 输出的是未定型结构，不应直接交给旧 `generate`。
+
+
+## v0.7 WP-02: new-product interface and scene design proposals (implemented)
+
+The main product objective remains generating original **software-internal concept visuals for NEW products**, not reproducing existing application screenshots. WP-02 can now propose layouts, interactions, and per-step image prompts:
+
+```bash
+# Offline deterministic two-candidate design (does not call an AI service)
+ucscene design-plan benchmarks/new-products/new-asset-studio.wp02.brief.json --variants 2 --out out/asset-design-plan.json
+ucscene design-plan-review out/asset-design-plan.json
+ucscene design-export out/asset-design-plan.json --variant VAR-01 --out out/asset-prompts.json
+
+# Three game design candidates, each covering three steps
+ucscene design-plan benchmarks/new-products/new-hamlet-builder.wp02.brief.json --variants 3 --out out/hamlet-design-plan.json
+
+# Opt-in model-assisted proposals (needs OPENAI_API_KEY, may incur charges)
+ucscene design-plan benchmarks/new-products/new-asset-studio.wp02.brief.json --ai --model gpt-4.1-mini --out out/ai-design-plan.json
+```
+
+Plans classify requirements as MUST/MAY/UNKNOWN, attach 2–3 candidate approaches, propose per-step controls and feedback, and compile prompts with SHA-256 hashes. The default is a **rule-based baseline**, not AI creativity; `--ai` uses the Responses API explicitly. All proposal decisions stay unapproved and unlocked. No new-product PNG is generated in WP-02; WP-03 will govern design acceptance/freeze and WP-04 image generation. See [implementation and limitations](docs/WP02_IMPLEMENTATION.md).

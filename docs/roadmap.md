@@ -28,3 +28,10 @@ No new v0.7 feature should be marked implemented until code and tests verify it.
 - Implemented: ProductBrief / DesignDecision / UseCaseScene / DesignBundle model contracts and validation, safe v0.6 migration, new commands `brief-init`, `design-scaffold`, `design-validate`, `migrate-legacy`, original-product fixtures, and regression tests.
 - See [WP01_IMPLEMENTATION.md](WP01_IMPLEMENTATION.md).
 - **Still planned:** WP-02 AI-based interface decisions and variants; WP-03 design system approvals/locks; WP-04 actual v0.7 rendered images; WP-05 human-reviewed new-product image benchmarks. Model scaffolds are not designed or rendered images.
+
+
+## WP-02 implementation milestone (2026-10-22)
+
+WP-01 and WP-02 are implemented. WP-02 includes new-product design-plan/review/export commands, 2–3 variant original interface proposals, MUST/MAY/UNKNOWN requirement classification, source-bound per-step interaction design and SHA-256 prompt verification. Offline deterministic heuristics are tested; optional model ideation requires explicit `--ai` and has not been live-validated.
+
+**Still planned:** WP-03 approval and frozen DesignSystem; WP-04 image output for new-product plans; WP-05 real visual-quality acceptance benchmark. Read [WP02_IMPLEMENTATION.md](WP02_IMPLEMENTATION.md) and [V07_WORK_PLAN.md](V07_WORK_PLAN.md). Older roadmap phases above are historical and do not supersede PRODUCT-002.

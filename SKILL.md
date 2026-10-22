@@ -41,3 +41,10 @@ See docs/V07_WORK_PLAN.md for deliverables and acceptance gates. Retain the exis
 The `ProductBrief`, `DesignDecision`, `UseCaseScene` and `DesignBundle` contracts are implemented under `src/ucscene/design/` with JSON Schemas and tests. Use `ucscene brief-init` for a brand-new software product, `ucscene migrate-legacy` for review-required historical cases, `ucscene design-scaffold` for an UNRESOLVED scene model, and `ucscene design-validate --kind brief|decision|scene|bundle` for static validation.
 
 A missing design detail is not a reason to require an existing software screenshot. The WP-01 scaffold is NOT a designed UI, a selected proposal, or a generated image. The AI-driven proposal/planning workflow is WP-02 (pending). Only describe WP-01 as implemented. See `docs/WP01_IMPLEMENTATION.md`.
+
+
+## v0.7 WP-02 — implemented original product design planning
+
+For NEW software/game concept design, start from ProductBrief, run `ucscene design-plan BRIEF --variants 2 --out out/design-plan.json`, then `ucscene design-plan-review out/design-plan.json` and `ucscene design-export out/design-plan.json --out out/prompts.json`. The result contains 2–3 alternative layouts, interaction designs, state-specific feedback, tradeoffs and source-bound per-step image prompts. Original design elements are allowed but must be labeled `proposed`. Existing application screenshots are NOT required.
+
+Default `design-plan` is a deterministic heuristic generator; opt-in `--ai --model gpt-4.1-mini` requests creative model proposals through a paid API with the operator's key. Never imply the offline mode is an LLM, that model output has been live-tested, or that prompt generation produced images. WP-03 approval/freeze and WP-04 actual concept image generation are not implemented yet. See docs/WP02_IMPLEMENTATION.md.

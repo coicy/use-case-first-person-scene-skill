@@ -131,3 +131,10 @@ WP-05 的测试夹具可以在 WP-01 同步准备，但正式评分必须在 WP-
 **已完成 WP-01 建模基础**，详见 [WP01_IMPLEMENTATION.md](WP01_IMPLEMENTATION.md)。已提交 JSON Schema（ProductBrief、DesignDecision、UseCaseScene、DesignBundle）、Python 校验与迁移层、四项 CLI 命令、两款原创产品输入与场景草案、回归测试和 CI 冒烟流程。源用例动作、分支、状态、视觉证据及 UI 文本在草案中不可被静默覆盖，AI 提案不能自动批准。
 
 **尚未完成**：WP-02 自动设计界面/交互候选，WP-03 确认/冻结操作工作流，WP-04 真实生成与验收新产品概念图片，WP-05 两款原创产品各三步骤视觉基准。因此只将 WP-01 标为完成，不提升整个 v0.7 的完成状态。
+
+
+## 实施记录：WP-02（2026-10-22）
+
+**已实现 WP-02 的代码与离线工程验收**：新增 `ucscene design-plan`、`design-plan-review`、`design-export` 命令，按 ProductBrief 中的 MUST/MAY/UNKNOWN 分类，提出 2–3 套原创 UI/游戏场景布局、导航、控件及各步骤的状态反馈，最后编译带哈希的生图提示词。默认规则化候选完全离线，显式 `--ai` 才请求模型提供原创设计提案。包含两款原创产品各 3 个步骤的示例和完整回归测试。详见 [WP02_IMPLEMENTATION.md](WP02_IMPLEMENTATION.md)。
+
+**尚未完成**：WP-03 的用户批准与 DesignSystem 冻结；WP-04 对新软件概念图的真实 PNG 生图及人工验收；WP-05 正式视觉效果评测。模型辅助创作仅用模拟响应测试，未声称实际付费 API 的端到端可用性。

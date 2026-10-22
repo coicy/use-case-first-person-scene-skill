@@ -23,6 +23,12 @@ jobs:
           ucscene design-validate benchmarks/new-products/new-asset-studio.bundle.json --kind bundle
           ucscene design-validate benchmarks/new-products/new-hamlet-builder.brief.json --kind brief
           ucscene design-validate benchmarks/new-products/new-hamlet-builder.bundle.json --kind bundle
+          ucscene design-plan benchmarks/new-products/new-asset-studio.wp02.brief.json --variants 2 --out /tmp/asset-wp02-plan.json
+          ucscene design-plan-review /tmp/asset-wp02-plan.json
+          ucscene design-export /tmp/asset-wp02-plan.json --variant VAR-01 --out /tmp/asset-wp02-prompts.json
+          ucscene design-plan benchmarks/new-products/new-hamlet-builder.wp02.brief.json --variants 3 --out /tmp/game-wp02-plan.json
+          ucscene design-plan-review /tmp/game-wp02-plan.json
+          ucscene design-export /tmp/game-wp02-plan.json --variant VAR-02 --out /tmp/game-wp02-prompts.json
           ucscene brief-init --product-id ci-demo --name "CI Demo" --category web --prompt "新的协作软件" --use-case "用户创建任务" --out /tmp/ci-brief.json
           ucscene design-scaffold /tmp/ci-brief.json --out /tmp/ci-design-bundle.json
           ucscene design-validate /tmp/ci-design-bundle.json --kind bundle

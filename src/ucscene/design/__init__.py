@@ -9,4 +9,7 @@ __all__ = [
     'create_bundle', 'init_brief', 'migrate_legacy_case', 'scaffold_scenes',
     'validate_design_bundle', 'validate_design_decision',
     'validate_product_brief', 'validate_scene_design',
+    'create_design_plan', 'validate_design_plan', 'export_design_prompts',
 ]
+
+from .planner import create_design_plan, validate_design_plan, export_design_prompts

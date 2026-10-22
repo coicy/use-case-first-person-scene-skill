@@ -45,3 +45,8 @@ ucscene benchmark benchmarks/famous-projects/suite.json --lock benchmarks/famous
 ```
 
 See [docs/decision-001-software-only.md](docs/decision-001-software-only.md) for the contract revision and migration rules. See README for `generate`, `review-image` and `compose-ui` options.
+
+
+## Actual software screenshot acceptance (v0.6)
+
+After generating PNGs, match each real image to one known scene ID and record its actual origin. Run `ucscene acceptance-gallery benchmarks/famous-projects/suite.json --selection selection.json --images images --out-dir out/acceptance`, then `ucscene acceptance-verify out/acceptance/manifest.json`. Open `out/acceptance/index.html` and ask the user to review every scene. NEVER present the existence of an image, successful hash checks, or model review as human sign-off. Benchmark prompt SHA is NOT necessarily the original generation prompt hash; keep generation provenance explicit. If the current UI state depends on prior steps, add source-supported `carry_forward` facts to the source case rather than hallucinating screen content.

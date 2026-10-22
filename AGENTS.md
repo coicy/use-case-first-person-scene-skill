@@ -52,3 +52,12 @@ The GitHub Actions workflow must pass Python 3.10 and 3.12. Do not claim real AP
 - `device` is deprecated optional source metadata and may not cause monitors/hands/phones to be rendered.
 - The benchmark suite, acceptance visuals, test fixtures, and evaluator must apply this definition. Do not reuse v0.4 device-shot demos as valid acceptance.
 - If introducing a new demo, it must show direct interface/game pixels, not someone standing or sitting in front of a screen.
+
+
+## Additional v0.6 quality gates
+
+- Acceptance galleries use actual decoded image bytes, relative safe paths, per-image origin, and SHA-256 integrity manifests.
+- An offline gallery cannot assign image quality or claim a human verdict. The user enters acceptance decisions in the HTML review UI and exports them separately.
+- Distinguish benchmark reference prompts from the prompts actually used by external image generators; never infer equivalence.
+- Carry forward only sourced software state from earlier use-case steps (`carry_forward`), so later screenshots retain object/node/class identity.
+- A generated editor-looking image is never an official application screenshot unless provenance proves a real application capture.

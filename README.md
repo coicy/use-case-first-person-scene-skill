@@ -1,6 +1,6 @@
 # Use Case Software-Only Scene Skill
 
-**v0.5.0 — 用例驱动的软件内场景可视化**。本工具生成的是应用/游戏自身的内容画面，而不是软件用户或现实设备的照片。
+**v0.6.0 — 用例驱动的软件内场景可视化与实际图片验收**。本工具生成的是应用/游戏自身的内容画面，而不是软件用户或现实设备的照片。
 
 ## 核心定义（已修正）
 
@@ -83,6 +83,38 @@ ucscene compose-ui \
 ```
 
 该合成能力只保证几何处理与输入哈希可追溯，不保证截图真实运行、生成图内容准确、字体绝对清晰或 UI 可交互。
+
+
+## 实际生成图验收画廊（v0.6）
+
+不能只用 `benchmark` 的结构通过来宣称生图成功。本版加入 `acceptance-gallery`：将**真实图片文件**与指定基准步骤绑定，生成可离线逐张审阅的 HTML、包含 SHA-256 的 manifest，以及交互式意见导出。
+
+准备 `selection.json`（这是示例；图片需由操作者实际提供）：
+
+```json
+{
+  "samples": [{
+    "scene_id": "BENCH-GODOT-MOB--03-gravity",
+    "image": "godot-gravity.png",
+    "origin": "conversation-image-generation",
+    "notes": "图片是模型生成的概念图，不是 Godot 的实际运行截图"
+  }]
+}
+```
+
+```bash
+ucscene acceptance-gallery benchmarks/famous-projects/suite.json \
+  --selection selection.json --images images \
+  --out-dir out/acceptance
+ucscene acceptance-verify out/acceptance/manifest.json
+# 用浏览器打开 out/acceptance/index.html，逐图检查和导出 user-visual-review.json
+```
+
+`origin` 必须明确：`conversation-image-generation`、`external-image-model`、`ucscene-cli`、`app-runtime-screenshot` 或 `manually-composited`。若声称由本 CLI 生成，必须提供与当前用例匹配的 `generation_prompt_sha256`；对外部生图工具，不会假设使用了当前基准提示词。图片文件校验和提示词校验**不代表语义审核通过**，用户确认仍须单独收集。详见 `docs/acceptance-2026-10-22.md`。
+
+## 多步操作保持既有功能状态（v0.6）
+
+对于软件操作，用例的后续步骤经常必须保持已创建的对象和节点关系。可以在步骤上提供经过来源核实的 `carry_forward` 字符串列表，这些事实会传入后续每一步，即使只规划最后一步也不会丢失。Godot 基准包含 `RigidBody2D` 根节点和三个子节点的延续约束，防止后续生成图擅自替换为 `CharacterBody2D`。不能将 `carry_forward` 用于凭空补充未定义的软件功能。
 
 ## 验收
 

@@ -26,6 +26,9 @@
       ],
       "source_refs": [
         "GODOT-MOB"
+      ],
+      "carry_forward": [
+        "Mob 的根节点类型必须保持 RigidBody2D，不能换成 CharacterBody2D"
       ]
     },
     {
@@ -39,6 +42,9 @@
       ],
       "source_refs": [
         "GODOT-MOB"
+      ],
+      "carry_forward": [
+        "Mob 场景树下应同时存在 AnimatedSprite2D、CollisionShape2D 和 VisibleOnScreenNotifier2D 三个子节点"
       ]
     },
     {

@@ -104,6 +104,12 @@ def validate_use_case(data: Any) -> dict[str, Any]:
             raise SceneError(f"steps[{i}].branch unsupported: {branch}")
         if "ui_text" in step and (not isinstance(step["ui_text"], list) or any(not isinstance(v,str) for v in step["ui_text"])):
             raise SceneError(f"steps[{i}].ui_text must be a list of strings")
+        if "carry_forward" in step:
+            values = step["carry_forward"]
+            if (not isinstance(values, list) or any(not isinstance(v, str) or not v.strip() for v in values)):
+                raise SceneError(f"steps[{i}].carry_forward must be a list of nonempty source-supported facts")
+            if any(any(term in v.casefold() for term in banned_outside) for v in values):
+                raise SceneError(f"steps[{i}].carry_forward contains outside-software content")
     if "constraints" in data:
         c = data["constraints"]
         if not isinstance(c, dict):
@@ -128,7 +134,7 @@ def make_scene_anchor(data: dict[str, Any]) -> dict[str, str]:
     }
 
 
-def _prompt(case: dict[str, Any], step: dict[str, Any], anchor: dict[str, str]) -> str:
+def _prompt(case: dict[str, Any], step: dict[str, Any], anchor: dict[str, str], prior_facts: list[str]) -> str:
     evidence = "\n".join(f"- {v}" for v in step["visible_evidence"])
     constraints = case.get("constraints", {})
     exact = step.get("ui_text", [])
@@ -161,6 +167,7 @@ def _prompt(case: dict[str, Any], step: dict[str, Any], anchor: dict[str, str]) 
         f"CURRENT STEP: {step['action']}",
         f"STEP STATE: {step.get('state', 'in-progress')}; FLOW: {step.get('branch', 'main')}",
         "REQUIRED VISIBLE EVIDENCE (each must be recognizable in software/game pixels):\n" + evidence,
+        "PERSISTENT SOFTWARE STATE FROM EARLIER STEPS: " + ("; ".join(prior_facts) if prior_facts else "none established"),
         "ADDITIONAL MUST-SHOW: " + ("; ".join(constraints.get("must_show", [])) if constraints.get("must_show") else "none"),
         "FORBIDDEN OUT-OF-SOFTWARE ELEMENTS: " + "; ".join(forbidden),
         "SOFTWARE ANCHOR (unchanged across this use case): " + anchor["continuity"],
@@ -179,10 +186,15 @@ def build_plan(data: dict[str, Any], step_ids: list[str] | None = None) -> dict[
         raise SceneError("Unknown step(s): " + ", ".join(sorted(choices - ids)))
     anchor = make_scene_anchor(case)
     scenes = []
+    # Prior-step facts must be preserved even when only one later step is selected.
+    carried_facts: list[str] = []
     for index, step in enumerate(case["steps"]):
         if choices and step["id"] not in choices:
+            for fact in step.get("carry_forward", []):
+                if fact not in carried_facts:
+                    carried_facts.append(fact)
             continue
-        prompt = _prompt(case, step, anchor)
+        prompt = _prompt(case, step, anchor, carried_facts)
         scenes.append({
             "id": f"{case['id']}--{step['id']}",
             "index": index,
@@ -191,10 +203,14 @@ def build_plan(data: dict[str, Any], step_ids: list[str] | None = None) -> dict[
             "state": step.get("state", "in-progress"),
             "branch": step.get("branch", "main"),
             "evidence": step["visible_evidence"],
+            "persistent_facts": list(carried_facts),
             "exact_ui_text": step.get("ui_text", []),
             "prompt": prompt,
             "prompt_sha256": hashlib.sha256(prompt.encode("utf-8")).hexdigest(),
         })
+        for fact in step.get("carry_forward", []):
+            if fact not in carried_facts:
+                carried_facts.append(fact)
     return {
         "format_version": "1.1",
         "use_case_id": case["id"],

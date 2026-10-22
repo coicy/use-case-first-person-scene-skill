@@ -6,49 +6,49 @@
     "BENCH-VSCODE-DEBUG": {
       "case_sha256": "965c1fdeb44d7a9d075cc3d965ec609794c3f170768079deb93bb646f340f7c5",
       "prompt_sha256": {
-        "01-breakpoint": "eff356b6e1f1a2d9f982e99c49664a2ae789d84c0431fdc1a8e0cf51f589999e",
-        "02-debug": "95ff023773c31730b929b14606f9691c1050fe23e061ff1f974df9416f4a7a64",
-        "03-variables": "016fdb75c75e87ae25d69f2091df6ac9c4ff9fbb04d9fce8b24d5b3054a81927"
+        "01-breakpoint": "9f3dc4260faff2744807c8788168d3b857fc81ff0b940d0cfd74ecb40b57e403",
+        "02-debug": "d4e32cf5852dd0092463aa3a5c5cea0903ae594237cbfb6f5497656fafd7bb1d",
+        "03-variables": "1676de9fb1f949478cfde105331ae72d8d45407c4eafb682dedef49d1273fed2"
       }
     },
     "BENCH-BLENDER-EXTRUDE": {
       "case_sha256": "59471d80a84e94d08316ed2356660bce2fa8d1303942d46313a11800658c6223",
       "prompt_sha256": {
-        "01-edit": "802b2b2d1a7adb4dd552796d82a24affb34a2eaca7cc5ec3eb0ed558473d79d6",
-        "02-extrude": "51ec37825ab68791cb7a1de3659d81fb44cb397c6732e9ff00035a6f9bf2d6ba",
-        "03-confirm": "18bb3db59e2d37c0aa419d2da394d1aeb3c48b796b7d65848410e5a0b284a6a4"
+        "01-edit": "9147592686fe06e82d0cb7f1550f9ddb0e1b85416b9b7015bd8c1857b3fe9e0d",
+        "02-extrude": "88b8da3cd68c1a09f742a4df234b2c0ee1d59d879513fe55a76d378e10d5f9c2",
+        "03-confirm": "dbc8c34f487d730571f97fc77ee911a2419a14faeffd249ddb922222e7e9c02a"
       }
     },
     "BENCH-GIMP-CROP": {
       "case_sha256": "43738e0569ffc4846ca4d0ea6b47467e454611cde70e7b82ec4d4d677de4fbcc",
       "prompt_sha256": {
-        "01-tool": "2565d3bfd7ddd77b5c63465fb7e5b7f3bf6e3003a529834bba562848d2471b0e",
-        "02-rectangle": "7ef3e1e48ec7617c728a76c311e1638839e1bf4089800a6bfdc19dd1f6c40ffa",
-        "03-result": "762238d6d891afbe35da44fb3592a0f13888c7005e5d7bc21b8f4a24a26d00cd"
+        "01-tool": "5c5e4d94823a64394bebb1c9afa9907c5e7c3484301790c4b907f64f2ccd802a",
+        "02-rectangle": "a7d2a12191be9cfae298e394f93f3e9214b3b7548df2d4bd795f6fcc5ad37a3e",
+        "03-result": "4cbc3536ef5cd6f00a09652801870740df83ba1e9b1fbea32751e8f33b42ca59"
       }
     },
     "BENCH-GODOT-MOB": {
-      "case_sha256": "2237b5af737f580c6eaed64a84be3cbfb8790599834e46d15113649184d33bd3",
+      "case_sha256": "47515e6b45f1d41838b86404bec5dc4506db9e676433c848a967d839cf21d8b3",
       "prompt_sha256": {
-        "01-root": "702b983eb8f26db68ee1ca97d027a6e31f7ef92ddfa3fdb20c3e753dd369ca7b",
-        "02-children": "283d9135fd80f2ebd2a574a810eaf13a1d5d4018958c4567ed5ac7f79a03ab02",
-        "03-gravity": "6a77f13514adc5ce290e85602cd63f5d027a1aa4defe201094238b9132d34740"
+        "01-root": "701c5d20f1cdfc7b00dd091dc8c98e751906f0c688247a7d9f5d38888265ed7f",
+        "02-children": "275e58ed200331c05f6c8b896d0a11eee210823efba00a0f483117bf9beb5f09",
+        "03-gravity": "c56e77b94c24ec647bd67879db6a49bb74c8e06a050f8bf6ea88ab1cdde0db84"
       }
     },
     "BENCH-OPENTTD-RAIL": {
       "case_sha256": "89bec21d0c57b2f48d736c347de0f06ba5331f1f0d02651e958e8aeadafceeed",
       "prompt_sha256": {
-        "01-toolbar": "cbe032fbf715d19d4bab590b580e229523cb3632568f8a1a3a0964afd8f3f50c",
-        "02-station": "af8c6ff2dce657385dc70c718cee2b503c706e64a4f78cc4a4b08a673b0251f3",
-        "03-track": "d53ba8b23252947e8682427618443368b05426aee3a55b21c120cde77957d5fc"
+        "01-toolbar": "71e4086bc0e9d021905f694860a55b2d00be1a634580a0e49e3ef5fd18af018d",
+        "02-station": "06464abffbb776eb1c22cb83dee909b9f6e280598fd2cc842921fa318dc6f26c",
+        "03-track": "3c50e0c0c24bb1aa555679c1e4b00675aa964fc6838d7f86269093a1c7922fe6"
       }
     },
     "BENCH-LUANTI-MINE": {
       "case_sha256": "196c0f303dbdabb72fe533ce9d6b6e9d15233369390988d42ca1b96955f5ee2f",
       "prompt_sha256": {
-        "01-target": "c6f1a4e363b99cdeae97e9ac139c569646c5f453a586080202538dccf1f48f8b",
-        "02-mine": "9415ee5a122af6eeb648a1eb4a5bd7f8f313649cd5cfff57af74dfdfee0ad02a",
-        "03-place": "72296007cf7d21321c2fa282cf8a2b2ca73429faa9135d9029fe3c8d27e68fbb"
+        "01-target": "004fb8c51cdcc78fa5f3badb91349d86fad00a50d2d8de7648d38434ee0e7297",
+        "02-mine": "23492dee46648bfd402663aad98e110c56978581f7e78e4ec569e079cab9ff78",
+        "03-place": "451bdb9a7ee3a81c1ea8c80499bed58ce181d7f8aff78e9ad5879824fe77088f"
       }
     }
   }

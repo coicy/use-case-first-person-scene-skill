@@ -114,6 +114,14 @@
             "items": {
               "type": "string"
             }
+          },
+          "carry_forward": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Evidence-backed facts that remain true in later steps and must not be overwritten by image models."
           }
         }
       }

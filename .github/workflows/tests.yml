@@ -35,3 +35,4 @@ jobs:
           ucscene anchor-create /tmp/scene-plan.json --image out/demo/scene.png --out /tmp/demo-anchor.json
           ucscene anchor-verify /tmp/demo-anchor.json --plan /tmp/scene-plan.json
           ucscene compose-ui --scene out/demo/scene.png --ui out/demo/ui.png --quad examples/screen-quad.demo.json --out /tmp/composited.png --report /tmp/composited-report.json
+          # Actual acceptance gallery paths, input integrity and HTML review are exercised in tests/test_acceptance.py.

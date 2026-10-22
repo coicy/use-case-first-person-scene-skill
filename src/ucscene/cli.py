@@ -15,6 +15,7 @@ from .composite import compose_ui, compose_batch
 from .imaging import inspect_image
 from .benchmark import run_benchmark, export_benchmark_plans, make_prompt_lock, verify_prompt_lock
 from .benchmark_human import rating_template, score_human_packet
+from .acceptance import create_gallery, verify_gallery
 
 def run(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="ucscene", description="Use-case first-person scenario planning and image generation")
@@ -86,6 +87,13 @@ def run(argv: list[str] | None = None) -> int:
     bench_lock = sub.add_parser("benchmark-lock", help="Deliberately create or update the golden prompt lock after human review")
     bench_lock.add_argument("suite")
     bench_lock.add_argument("--out", required=True)
+    accept = sub.add_parser("acceptance-gallery", help="Create offline reviewer gallery from real image files and official benchmark steps")
+    accept.add_argument("suite")
+    accept.add_argument("--selection", required=True, help="JSON mapping of scene ids to image files and explicitly identified origin")
+    accept.add_argument("--images", required=True, help="Trusted directory containing actual image files")
+    accept.add_argument("--out-dir", required=True, help="New output directory for an HTML gallery and hash manifest")
+    acceptance_verify = sub.add_parser("acceptance-verify", help="Verify saved gallery asset hashes (NOT image semantics)")
+    acceptance_verify.add_argument("manifest")
     inspect = sub.add_parser("review-image", help="Opt-in visual QA of a generated scene (paid vision API)")
     inspect.add_argument("plan")
     inspect.add_argument("--step", required=True)
@@ -95,6 +103,14 @@ def run(argv: list[str] | None = None) -> int:
     inspect.add_argument("--out", default="out/visual-audit.json")
     args = parser.parse_args(argv)
     try:
+        if args.command == "acceptance-gallery":
+            packet = create_gallery(args.suite, args.selection, args.images, args.out_dir)
+            print(json.dumps({"ok": True, "samples": packet["selected_samples"], "pending_human_review": True, "path": str(Path(args.out_dir) / "index.html")}, ensure_ascii=False))
+            return 0
+        if args.command == "acceptance-verify":
+            packet = verify_gallery(args.manifest)
+            print(json.dumps(packet, ensure_ascii=False))
+            return 0
         if args.command == "benchmark-rating-template":
             packet = rating_template(args.suite)
             save_json(args.out, packet)

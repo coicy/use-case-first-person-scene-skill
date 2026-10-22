@@ -57,3 +57,17 @@
 - Deprecated input modes and old plans rejected; all six benchmark fixtures, prompt lock and docs migrated.
 - Vision QA now explicitly checks `software_only`, with physical content as a failure.
 - Perspective UI overlay is a legacy/general image operation for software-internal surfaces only, not the default render pipeline.
+
+
+## v0.6 completed
+
+- Software-only six-project offline acceptance gallery that binds generated images to source use-case scene IDs, original source URLs, reference prompt hashes, and actual image hashes.
+- An HTML review page that records explicit user verdicts; no fake visual passing score.
+- Per-image source provenance; external images are never claimed to be made with CLI prompts.
+- Evidence-backed state carryover for multi-step UI operations, fixing the Godot RigidBody2D vs CharacterBody2D regression.
+
+## Next
+
+- Manual acceptance imports with schema checking and signed-off reviewers.
+- Verified app runtime screenshot references for exact UI, source code and game-specific texture fidelity.
+- Multi-frame controlled comparisons; no model quality claims without real paired images and evaluators.

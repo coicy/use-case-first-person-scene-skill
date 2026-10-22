@@ -1,0 +1,65 @@
+{
+  "id": "BENCH-OPENTTD-RAIL",
+  "title": "OpenTTD 俯视铁路建设体验",
+  "actor": "正在游玩 OpenTTD 的玩家",
+  "goal": "在等距视角地图上选择工具并铺设铁路",
+  "environment": "玩家桌面显示器中的 OpenTTD 等距视角地图",
+  "device": "运行 OpenTTD 的电脑显示器和鼠标",
+  "style": "ui-focused",
+  "viewpoint_mode": "physical-user",
+  "constraints": {
+    "continuity": "同一地图区域，同一 OpenTTD 等距视角和工具栏；绝不转换成列车司机视角或第一人称实景铁路",
+    "must_not_show": [
+      "从外部拍摄正在操作的完整用户",
+      "无出处的功能按钮与系统状态"
+    ]
+  },
+  "steps": [
+    {
+      "id": "01-toolbar",
+      "action": "点击铁路建设按钮打开铁路建设工具栏",
+      "state": "start",
+      "branch": "main",
+      "visible_evidence": [
+        "OpenTTD 等距投影地形地图",
+        "屏幕上展开的铁路建设工具栏"
+      ],
+      "source_refs": [
+        "OPENTTD-RAIL"
+      ]
+    },
+    {
+      "id": "02-station",
+      "action": "选择建造铁路车站工具",
+      "state": "in-progress",
+      "branch": "main",
+      "visible_evidence": [
+        "铁路车站建造工具处于选中状态",
+        "同一等距地图和铁路工具栏仍可见"
+      ],
+      "source_refs": [
+        "OPENTTD-RAIL"
+      ]
+    },
+    {
+      "id": "03-track",
+      "action": "使用 Autorail 工具铺设连接铁轨",
+      "state": "success",
+      "branch": "main",
+      "visible_evidence": [
+        "等距地图上的新铺设铁路轨道",
+        "铁路工具栏仍包含 Autorail 工具"
+      ],
+      "source_refs": [
+        "OPENTTD-RAIL"
+      ]
+    }
+  ],
+  "benchmark_context": {
+    "project": "OpenTTD",
+    "visualization_assumptions": [
+      "工作台、镜头与屏幕构图是演示性的视觉设计约定，不代表官方 UI 截图"
+    ],
+    "source_id": "OPENTTD-RAIL"
+  }
+}

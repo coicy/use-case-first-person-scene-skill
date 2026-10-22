@@ -1,0 +1,65 @@
+{
+  "id": "BENCH-GIMP-CROP",
+  "title": "GIMP 使用裁剪工具选择图片区域",
+  "actor": "图片编辑者",
+  "goal": "保留照片中的目标区域并裁去外围内容",
+  "environment": "工作台显示器呈现 GIMP 图像编辑器",
+  "device": "电脑显示器和鼠标",
+  "style": "ui-focused",
+  "viewpoint_mode": "physical-user",
+  "constraints": {
+    "continuity": "同一图片和 GIMP 工作区，原图主体不改变，只展示裁剪状态变更",
+    "must_not_show": [
+      "从外部拍摄正在操作的完整用户",
+      "无出处的功能按钮与系统状态"
+    ]
+  },
+  "steps": [
+    {
+      "id": "01-tool",
+      "action": "打开 GIMP 的 Crop 工具",
+      "state": "start",
+      "branch": "main",
+      "visible_evidence": [
+        "打开的照片位于编辑画布",
+        "GIMP 的裁剪工具被激活"
+      ],
+      "source_refs": [
+        "GIMP-CROP"
+      ]
+    },
+    {
+      "id": "02-rectangle",
+      "action": "拖拽矩形框选择需要保留的画面",
+      "state": "in-progress",
+      "branch": "main",
+      "visible_evidence": [
+        "覆盖照片的裁剪矩形边界和控制点",
+        "裁切框外的外围图像仍能在编辑状态下看见"
+      ],
+      "source_refs": [
+        "GIMP-CROP"
+      ]
+    },
+    {
+      "id": "03-result",
+      "action": "应用选定的裁切区域",
+      "state": "success",
+      "branch": "main",
+      "visible_evidence": [
+        "裁剪后的照片保留目标主体",
+        "GIMP 编辑窗口中的画布范围变小"
+      ],
+      "source_refs": [
+        "GIMP-CROP"
+      ]
+    }
+  ],
+  "benchmark_context": {
+    "project": "GIMP",
+    "visualization_assumptions": [
+      "工作台、镜头与屏幕构图是演示性的视觉设计约定，不代表官方 UI 截图"
+    ],
+    "source_id": "GIMP-CROP"
+  }
+}

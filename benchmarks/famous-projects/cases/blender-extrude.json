@@ -1,0 +1,65 @@
+{
+  "id": "BENCH-BLENDER-EXTRUDE",
+  "title": "Blender 编辑模式挤出网格表面",
+  "actor": "三维美术设计师",
+  "goal": "在已有网格的选定面上挤出连接的三维结构",
+  "environment": "创作工作台，显示器呈现 Blender 的 3D Viewport",
+  "device": "桌面显示器、键盘和鼠标",
+  "style": "ui-focused",
+  "viewpoint_mode": "physical-user",
+  "constraints": {
+    "continuity": "同一 Blender 编辑器与模型，保持模型位置、网格拓扑和视口布局一致",
+    "must_not_show": [
+      "从外部拍摄正在操作的完整用户",
+      "无出处的功能按钮与系统状态"
+    ]
+  },
+  "steps": [
+    {
+      "id": "01-edit",
+      "action": "在 Edit Mode 中选择网格表面",
+      "state": "start",
+      "branch": "main",
+      "visible_evidence": [
+        "Blender 3D Viewport 中的网格模型",
+        "编辑模式下被高亮选择的面"
+      ],
+      "source_refs": [
+        "BLENDER-EXTRUDE"
+      ]
+    },
+    {
+      "id": "02-extrude",
+      "action": "按 E 挤出选定的面，沿法线方向拖动",
+      "state": "in-progress",
+      "branch": "main",
+      "visible_evidence": [
+        "原有面与新挤出面保持连接",
+        "可见的几何延伸和侧面"
+      ],
+      "source_refs": [
+        "BLENDER-EXTRUDE"
+      ]
+    },
+    {
+      "id": "03-confirm",
+      "action": "确认挤出后的三维结构",
+      "state": "success",
+      "branch": "main",
+      "visible_evidence": [
+        "完整连接的挤出网格体",
+        "Blender 网格编辑界面仍可见"
+      ],
+      "source_refs": [
+        "BLENDER-EXTRUDE"
+      ]
+    }
+  ],
+  "benchmark_context": {
+    "project": "Blender",
+    "visualization_assumptions": [
+      "工作台、镜头与屏幕构图是演示性的视觉设计约定，不代表官方 UI 截图"
+    ],
+    "source_id": "BLENDER-EXTRUDE"
+  }
+}

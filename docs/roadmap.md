@@ -33,3 +33,10 @@
 - Approved reference manifests express a human assertion, not independent certification or tamper-resistant signature.
 - Composited UI screenshots do not establish functional correctness; tiny text may become unreadable after resampling.
 - Generated imagery must not replace executable acceptance tests.
+
+## v0.4 — Public project benchmark and semantic viewpoint (implemented)
+
+- Official-doc-curated cases for VS Code, Blender, GIMP, Godot, OpenTTD, and Luanti.
+- `physical-user` vs `avatar-eyes` camera semantics, with structural tests to prevent isometric-world perspective collapse.
+- Offline source-traceability checks, deterministic golden prompt lock, case plan export, optional provenance-verified audit aggregation.
+- Still requires real paid image sampling and blinded human ratings before any claim that fixed anchors or chain editing actually improve image quality.

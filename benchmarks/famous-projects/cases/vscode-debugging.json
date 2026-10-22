@@ -1,0 +1,65 @@
+{
+  "id": "BENCH-VSCODE-DEBUG",
+  "title": "VS Code 调试时设置断点并查看变量",
+  "actor": "程序开发者",
+  "goal": "定位程序错误并查看断点暂停时的变量",
+  "environment": "室内办公桌前，显示器运行 Visual Studio Code 编辑器",
+  "device": "桌面电脑显示器、键盘与鼠标",
+  "style": "ui-focused",
+  "viewpoint_mode": "physical-user",
+  "constraints": {
+    "continuity": "同一 VS Code 编辑器窗口、同一调试文件、同一显示器；不同步骤仅修改对应 UI 状态",
+    "must_not_show": [
+      "从外部拍摄正在操作的完整用户",
+      "无出处的功能按钮与系统状态"
+    ]
+  },
+  "steps": [
+    {
+      "id": "01-breakpoint",
+      "action": "用鼠标在代码行号旁点击设置断点",
+      "state": "in-progress",
+      "branch": "main",
+      "visible_evidence": [
+        "代码编辑窗口中清晰的行号栏",
+        "断点行左侧的红色圆形标记"
+      ],
+      "source_refs": [
+        "VS-DEBUG"
+      ]
+    },
+    {
+      "id": "02-debug",
+      "action": "从 Run and Debug 启动调试并在断点暂停",
+      "state": "waiting",
+      "branch": "main",
+      "visible_evidence": [
+        "编辑器中的当前暂停行",
+        "调试工具栏和调试侧边栏"
+      ],
+      "source_refs": [
+        "VS-DEBUG"
+      ]
+    },
+    {
+      "id": "03-variables",
+      "action": "观察暂停状态下的 VARIABLES 面板",
+      "state": "success",
+      "branch": "main",
+      "visible_evidence": [
+        "调试侧边栏的 VARIABLES 列表",
+        "正在暂停的代码行仍可见"
+      ],
+      "source_refs": [
+        "VS-DEBUG"
+      ]
+    }
+  ],
+  "benchmark_context": {
+    "project": "Visual Studio Code",
+    "visualization_assumptions": [
+      "工作台、镜头与屏幕构图是演示性的视觉设计约定，不代表官方 UI 截图"
+    ],
+    "source_id": "VS-DEBUG"
+  }
+}

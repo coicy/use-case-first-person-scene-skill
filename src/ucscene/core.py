@@ -17,6 +17,11 @@ STYLE_PRESETS = {
     "ui-focused": "realistic first-person device view, screen is dominant and sharp, restrained surroundings",
 }
 MANDATORY = ("id", "title", "actor", "goal", "environment", "device", "steps")
+VIEWPOINT_MODES = {
+    "physical-user": "True first-person eye-level view of the real user operating a physical device; the application or game is visible on its real display, not an imagined walkable virtual world.",
+    "avatar-eyes": "True in-game first-person view from the controlled avatar's eyes, looking directly into the playable virtual world; do not show a physical computer, screen bezel, keyboard, desk, or an external observer.",
+}
+
 
 def _require_str(value: Any, name: str) -> str:
     if not isinstance(value, str) or not value.strip():
@@ -33,6 +38,11 @@ def validate_use_case(data: Any) -> dict[str, Any]:
             raise SceneError(f"Missing field: {key}")
     for key in ("id", "title", "actor", "goal", "environment", "device"):
         _require_str(data[key], key)
+    mode = data.get("viewpoint_mode", "physical-user")
+    if mode not in VIEWPOINT_MODES:
+        raise SceneError(f"Unsupported viewpoint_mode: {mode!r}")
+    if mode == "avatar-eyes" and data.get("device", "").strip().casefold() in {"pc", "laptop", "desktop monitor", "computer monitor", "手机", "电脑显示器"}:
+        raise SceneError("avatar-eyes mode requires an in-game viewport, not a physical monitor device")
     if data.get("style", "realistic") not in STYLE_PRESETS:
         raise SceneError(f"style must be one of: {', '.join(STYLE_PRESETS)}")
     if not isinstance(data["steps"], list) or not data["steps"]:
@@ -78,7 +88,8 @@ def make_scene_anchor(data: dict[str, Any]) -> dict[str, str]:
         "environment": data["environment"].strip(),
         "device": data["device"].strip(),
         "style": data.get("style", "realistic"),
-        "viewpoint": "true first-person camera at the actor's eye position",
+        "viewpoint_mode": data.get("viewpoint_mode", "physical-user"),
+        "viewpoint": VIEWPOINT_MODES[data.get("viewpoint_mode", "physical-user")],
         "continuity": str(c.get("continuity", "same physical environment, device, and visual style in all scenes")),
     }
 
@@ -88,9 +99,16 @@ def _prompt(case: dict[str, Any], step: dict[str, Any], anchor: dict[str, str]) 
     must_show = constraints.get("must_show", [])
     must_not_show = constraints.get("must_not_show", [])
     exact = step.get("ui_text", [])
+    avatar = anchor["viewpoint_mode"] == "avatar-eyes"
+    camera_rule = (
+        "CAMERA: In-game first-person avatar-eyes view. Look straight into the world through the controlled avatar's eyes. No monitor, no workstation, no HUD invented beyond documented evidence. No external view of the avatar."
+        if avatar else
+        "CAMERA: Physical user's first-person eyes looking at the real device display while operating it. A plausible partial hand may appear. The source application's original camera (isometric/top-down/2D) MUST REMAIN as seen on the screen; never transform the game's world into a fictional first-person 3D scene. No third-person photo of the user."
+    )
     return "\n".join([
         "Create ONE authentic first-person use-case scene illustration, not a diagram or a third-person portrait.",
-        "CAMERA: The camera is literally the actor's eyes, looking toward the current interaction target. A partial hand is allowed only when physically plausible. Never show the actor as a full person; no over-the-shoulder shot.",
+        camera_rule,
+        f"POV MODE: {anchor['viewpoint_mode']}",
         f"ACTOR ROLE: {anchor['actor']}",
         f"TASK GOAL: {case['goal']}",
         f"ENVIRONMENT: {anchor['environment']}",
@@ -99,11 +117,12 @@ def _prompt(case: dict[str, Any], step: dict[str, Any], anchor: dict[str, str]) 
         f"STEP STATE: {step.get('state', 'in-progress')}; FLOW: {step.get('branch', 'main')}",
         "REQUIRED VISIBLE EVIDENCE (each must be recognizable):\n" + evidence,
         "ADDITIONAL MUST-SHOW: " + ("; ".join(must_show) if must_show else "none"),
-        "FORBIDDEN: " + "; ".join(["third-person view", "full-body user", "unrelated decorative activity", "invented system behavior", *must_not_show]),
+        "FORBIDDEN: " + "; ".join(["third-person view", "full-body user", "unrelated decorative activity", "invented system behavior", *(["monitor frame", "desk", "real-world hands holding a controller"] if avatar else []), *must_not_show]),
         "SCENE ANCHOR (do not change across this use case): " + anchor["continuity"],
         "VISUAL STYLE: " + STYLE_PRESETS[anchor["style"]],
         "VISIBLE UI TEXT: " + ("; ".join(exact) if exact else "use minimal generic UI labels, avoid invented product claims"),
         "IMPORTANT: Image generation may not reproduce text perfectly; keep critical exact words in a separate post-production UI overlay, not as proof of functional correctness.",
+        "EVIDENCE POLICY: Only the provided use-case evidence and explicitly supplied references are product facts. Camera framing and background are visualization assumptions, not product requirements.",
         "FOCUS: Tell the story of this exact action and its current state, with clear environmental context, plausible posture, consistent scale and camera geometry. Do not invent additional screens, permissions, actors, outcomes, or actions.",
     ])
 
@@ -146,6 +165,9 @@ def review_plan(plan: dict[str, Any]) -> list[str]:
     if not isinstance(plan.get("scenes"), list) or not plan["scenes"]:
         errors.append("No scenes")
     seen: set[str] = set()
+    anchor = plan.get("anchor")
+    if not isinstance(anchor, dict) or anchor.get("viewpoint_mode", "physical-user") not in VIEWPOINT_MODES:
+        errors.append("Invalid or missing viewpoint anchor")
     for scene in plan.get("scenes", []):
         sid = scene.get("id", "")
         if sid in seen:
@@ -154,9 +176,11 @@ def review_plan(plan: dict[str, Any]) -> list[str]:
         if not scene.get("evidence"):
             errors.append(f"Missing visual evidence: {sid}")
         prompt = scene.get("prompt", "")
-        for required in ("first-person", "CAMERA:", "REQUIRED VISIBLE EVIDENCE", "SCENE ANCHOR"):
+        for required in ("first-person", "CAMERA:", "POV MODE:", "REQUIRED VISIBLE EVIDENCE", "SCENE ANCHOR"):
             if required not in prompt:
                 errors.append(f"Missing prompt constraint {required}: {sid}")
+        if anchor and f"POV MODE: {anchor.get('viewpoint_mode', 'physical-user')}" not in prompt:
+            errors.append(f"Scene viewpoint mismatch: {sid}")
         if hashlib.sha256(prompt.encode("utf-8")).hexdigest() != scene.get("prompt_sha256"):
             errors.append(f"Prompt hash mismatch: {sid}")
     return errors

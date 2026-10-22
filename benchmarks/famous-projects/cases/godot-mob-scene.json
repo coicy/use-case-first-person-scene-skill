@@ -1,0 +1,65 @@
+{
+  "id": "BENCH-GODOT-MOB",
+  "title": "Godot 2D 游戏中创建敌人场景",
+  "actor": "游戏开发者",
+  "goal": "创建含视觉表现、碰撞和屏幕可见性检测的敌人场景",
+  "environment": "电脑屏幕中的 Godot 2D 编辑器，场景树和属性检查器可见",
+  "device": "桌面显示器、键盘与鼠标",
+  "style": "ui-focused",
+  "viewpoint_mode": "physical-user",
+  "constraints": {
+    "continuity": "相同 Godot 编辑会话、相同 Mob 场景和 Inspector/Scene Tree 分栏",
+    "must_not_show": [
+      "从外部拍摄正在操作的完整用户",
+      "无出处的功能按钮与系统状态"
+    ]
+  },
+  "steps": [
+    {
+      "id": "01-root",
+      "action": "新建 Mob 场景并设置 RigidBody2D 根节点",
+      "state": "start",
+      "branch": "main",
+      "visible_evidence": [
+        "场景树根节点命名 Mob",
+        "RigidBody2D 节点类型清晰可见"
+      ],
+      "source_refs": [
+        "GODOT-MOB"
+      ]
+    },
+    {
+      "id": "02-children",
+      "action": "添加 AnimatedSprite2D、CollisionShape2D、VisibleOnScreenNotifier2D 子节点",
+      "state": "in-progress",
+      "branch": "main",
+      "visible_evidence": [
+        "Mob 的场景树包含三个指定子节点",
+        "2D 编辑视口保持打开"
+      ],
+      "source_refs": [
+        "GODOT-MOB"
+      ]
+    },
+    {
+      "id": "03-gravity",
+      "action": "将 Mob 根节点的 Gravity Scale 设置为 0",
+      "state": "success",
+      "branch": "main",
+      "visible_evidence": [
+        "Mob 根节点选中",
+        "Inspector 的 Gravity Scale 字段显示 0"
+      ],
+      "source_refs": [
+        "GODOT-MOB"
+      ]
+    }
+  ],
+  "benchmark_context": {
+    "project": "Godot Engine",
+    "visualization_assumptions": [
+      "工作台、镜头与屏幕构图是演示性的视觉设计约定，不代表官方 UI 截图"
+    ],
+    "source_id": "GODOT-MOB"
+  }
+}

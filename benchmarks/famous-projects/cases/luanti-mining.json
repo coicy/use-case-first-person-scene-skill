@@ -1,0 +1,65 @@
+{
+  "id": "BENCH-LUANTI-MINE",
+  "title": "Luanti 第一人称体素采掘与放置",
+  "actor": "第一人称视角的游戏角色",
+  "goal": "在体素世界中采掘一个方块并放置方块",
+  "environment": "可交互的三维体素世界，游戏内视角指向地表方块",
+  "device": "直接呈现的游戏第一人称画面（gameplay viewport），不是外部电脑屏幕",
+  "style": "illustration",
+  "viewpoint_mode": "avatar-eyes",
+  "constraints": {
+    "continuity": "同一游戏角色眼睛位置、同一体素区域和像素纹理风格；只改变采掘和放置结果",
+    "must_not_show": [
+      "从外部拍摄正在操作的完整用户",
+      "无出处的功能按钮与系统状态"
+    ]
+  },
+  "steps": [
+    {
+      "id": "01-target",
+      "action": "从角色眼睛视角瞄准一个地表节点",
+      "state": "start",
+      "branch": "main",
+      "visible_evidence": [
+        "近距离可指向的体素方块",
+        "游戏世界前方的十字准星"
+      ],
+      "source_refs": [
+        "LUANTI-CONTROLS"
+      ]
+    },
+    {
+      "id": "02-mine",
+      "action": "按左键挖掘目标方块",
+      "state": "in-progress",
+      "branch": "main",
+      "visible_evidence": [
+        "原先目标方块正在被挖掘的位置",
+        "直接看到三维体素地形而非外部显示器"
+      ],
+      "source_refs": [
+        "LUANTI-CONTROLS"
+      ]
+    },
+    {
+      "id": "03-place",
+      "action": "按右键在选定位置放置方块",
+      "state": "success",
+      "branch": "main",
+      "visible_evidence": [
+        "世界中新的可见方块",
+        "周围体素地形与相机视角保持连续"
+      ],
+      "source_refs": [
+        "LUANTI-CONTROLS"
+      ]
+    }
+  ],
+  "benchmark_context": {
+    "project": "Luanti",
+    "visualization_assumptions": [
+      "使用游戏第一人称视角进行采掘操作；具体 HUD/贴图未由官方文档给出"
+    ],
+    "source_id": "LUANTI-CONTROLS"
+  }
+}

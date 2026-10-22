@@ -22,6 +22,10 @@ jobs:
           ucscene validate examples/warehouse-scan.json
           ucscene plan examples/warehouse-scan.json --out /tmp/scene-plan.json
           ucscene review /tmp/scene-plan.json
+          ucscene benchmark benchmarks/famous-projects/suite.json --lock benchmarks/famous-projects/prompt-lock.json --out /tmp/official-benchmark.json
+          ucscene benchmark-export benchmarks/famous-projects/suite.json --out-dir /tmp/benchmark-plans
+          ucscene review /tmp/benchmark-plans/BENCH-OPENTTD-RAIL.json
+          ucscene review /tmp/benchmark-plans/BENCH-LUANTI-MINE.json
           ucscene extract examples/warehouse-scan.md --out /tmp/extracted.json
           ucscene validate /tmp/extracted.json
           ucscene plan /tmp/extracted.json --out /tmp/extracted-plan.json

@@ -13,6 +13,7 @@ from .vision import review_image
 from .anchors import create_anchor, verify_anchor
 from .composite import compose_ui, compose_batch
 from .imaging import inspect_image
+from .benchmark import run_benchmark, export_benchmark_plans, make_prompt_lock, verify_prompt_lock
 
 def run(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="ucscene", description="Use-case first-person scenario planning and image generation")
@@ -64,6 +65,18 @@ def run(argv: list[str] | None = None) -> int:
     batch.add_argument("--map", required=True, help="JSON mapping from step ID to screenshot and quad")
     batch.add_argument("--out", required=True, help="Separate output directory for composited scenes")
     batch.add_argument("--strict", action="store_true", help="Require a mapping for every scene")
+    bench = sub.add_parser("benchmark", help="Run offline sourced-project structural benchmark; optionally evaluate saved image audits")
+    bench.add_argument("suite", help="A benchmark suite manifest JSON")
+    bench.add_argument("--out", default="out/benchmark-report.json")
+    bench.add_argument("--audits", help="Directory of review-image JSON results; must be paired with --images")
+    bench.add_argument("--images", help="Directory of the matching actual scene PNGs; must be paired with --audits")
+    bench.add_argument("--lock", help="Require byte-for-byte unchanged fixture and prompt fingerprints from an approved golden lock")
+    bench_export = sub.add_parser("benchmark-export", help="Export per-case plans for generation and subsequent image auditing")
+    bench_export.add_argument("suite")
+    bench_export.add_argument("--out-dir", default="out/benchmark-plans")
+    bench_lock = sub.add_parser("benchmark-lock", help="Deliberately create or update the golden prompt lock after human review")
+    bench_lock.add_argument("suite")
+    bench_lock.add_argument("--out", required=True)
     inspect = sub.add_parser("review-image", help="Opt-in visual QA of a generated scene (paid vision API)")
     inspect.add_argument("plan")
     inspect.add_argument("--step", required=True)
@@ -73,6 +86,22 @@ def run(argv: list[str] | None = None) -> int:
     inspect.add_argument("--out", default="out/visual-audit.json")
     args = parser.parse_args(argv)
     try:
+        if args.command == "benchmark-export":
+            index = export_benchmark_plans(args.suite, args.out_dir)
+            print(json.dumps({"ok": True, "cases": len(index["plans"]), "path": args.out_dir}, ensure_ascii=False))
+            return 0
+        if args.command == "benchmark-lock":
+            report = run_benchmark(args.suite)
+            save_json(args.out, make_prompt_lock(report))
+            print(json.dumps({"ok": True, "locked_scenes": report["planned_scenes"], "path": args.out}, ensure_ascii=False))
+            return 0
+        if args.command == "benchmark":
+            report = run_benchmark(args.suite, audits=args.audits, images=args.images)
+            if args.lock:
+                verify_prompt_lock(report, args.lock)
+            save_json(args.out, report)
+            print(json.dumps({"ok": report["static_pass"], "cases": report["cases"], "scenes": report["planned_scenes"], "evidence": report["checked_visible_evidence"], "visual": report["visual_evaluation"]["status"], "path": args.out}, ensure_ascii=False))
+            return 0 if report["static_pass"] else 2
         if args.command == "extract":
             source = Path(args.source).read_text(encoding="utf-8")
             overrides = {key: getattr(args, key) for key in ("id", "title", "actor", "goal", "environment", "device") if getattr(args, key) is not None}

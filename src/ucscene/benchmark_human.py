@@ -127,7 +127,9 @@ def score_human_packet(suite_path: str | Path, packet_path: str | Path, images_d
     by_pair: dict[tuple[str, str], dict[str, bool]] = defaultdict(dict)
     for item in results:
         by_pair[(item["scene_id"], item["rater_id"])][item["mode"]] = item["passed_strict"]
-    paired = [m for m in by_pair.values() if set(m) == set(MODES)]
+    paired_groups = {key: values for key, values in by_pair.items() if set(values) == set(MODES)}
+    paired = list(paired_groups.values())
+    paired_scenes = {scene_id for scene_id, _rater_id in paired_groups}
     per_mode = {
         mode: {
             "scored_reviews": counters[mode], "strict_passes": successes[mode],
@@ -143,6 +145,6 @@ def score_human_packet(suite_path: str | Path, packet_path: str | Path, images_d
         "coverage_complete": all(per_mode[m]["missing_from_single_rater_baseline"] == 0 for m in MODES),
         "per_mode": per_mode, "fully_paired_scene_rater_groups": len(paired),
         "paired_strict_passes": {mode: sum(item[mode] for item in paired) for mode in MODES},
-        "comparison_ready": len(paired) == len(scene_ids) and len(scene_ids) > 0,
+        "comparison_ready": paired_scenes == scene_ids and bool(scene_ids),
         "warning": "Independent manual image scores only. Do not claim statistical superiority without sufficient replicated trials and blinded raters.",
     }

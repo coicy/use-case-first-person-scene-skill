@@ -92,6 +92,27 @@ class HumanRatingTests(unittest.TestCase):
             self.assertEqual(result['paired_strict_passes'],{'prompt-only':1,'fixed-reference':0,'sequential-chain':1})
             self.assertFalse(result['comparison_ready'])
 
+    def test_multiple_reviewers_still_allow_complete_comparison(self):
+        """Extra paired raters must not turn a complete comparison into incomplete."""
+        with TemporaryDirectory() as temp:
+            base = Path(temp)
+            data = rating_template(SUITE)
+            for row in data['ratings']:
+                self.create_real_sample(base, row['mode'], row)
+            additional = []
+            for row in data['ratings'][:3]:
+                clone = dict(row)
+                clone['rater_id'] = 'independent-reviewer-2'
+                additional.append(clone)
+            data['ratings'].extend(additional)
+            packet = base / 'scores.json'
+            save_json(packet, data)
+            result = score_human_packet(SUITE, packet, base)
+            self.assertEqual(result['fully_paired_scene_rater_groups'], 19)
+            self.assertTrue(result['comparison_ready'])
+            self.assertTrue(result['coverage_complete'])
+            self.assertEqual(result['scored_reviews'], 57)
+
     def test_reject_forged_claim_with_no_real_image(self):
         with TemporaryDirectory() as temp:
             base=Path(temp);data=rating_template(SUITE);row=data['ratings'][0]

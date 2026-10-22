@@ -19,7 +19,7 @@ from .acceptance import create_gallery, verify_gallery
 from .design import (init_brief, migrate_legacy_case, create_bundle, validate_product_brief, validate_design_decision, validate_scene_design, validate_design_bundle, create_design_plan, validate_design_plan, export_design_prompts)
 from .design.system import create_design_system, validate_design_system, revise_design_system, compare_design_system
 from .design.continuity import apply_design_system, validate_consistent_plan
-from .rendering import make_render_packet, verify_render_packet, render_concepts, verify_generation_report, build_concept_gallery, verify_concept_gallery
+from .rendering import make_render_packet, verify_render_packet, render_concepts, verify_generation_report, build_concept_gallery, verify_concept_gallery, audit_concept_image
 
 def run(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="ucscene", description="Use-case first-person scenario planning and image generation")
@@ -192,6 +192,13 @@ def run(argv: list[str] | None = None) -> int:
     sources.add_argument('--selection', help='External images with explicit origin; cannot claim CLI generation')
     sources.add_argument('--report', help='Completed verified CLI generation report')
     concept_gallery.add_argument('--out-dir', required=True)
+    concept_audit = sub.add_parser('concept-audit', help='Opt-in PAID vision audit: detect multi-screen boards and missing use-case evidence')
+    concept_audit.add_argument('packet')
+    concept_audit.add_argument('--image', required=True)
+    concept_audit.add_argument('--variant', required=True)
+    concept_audit.add_argument('--scene', required=True)
+    concept_audit.add_argument('--model', default='gpt-4.1-mini')
+    concept_audit.add_argument('--out', default='out/concept-visual-audit.json')
     concept_verify = sub.add_parser('concept-verify', help='Check saved concept gallery image hashes; NOT semantic or user approval')
     concept_verify.add_argument('manifest')
     args = parser.parse_args(argv)
@@ -256,6 +263,11 @@ def run(argv: list[str] | None = None) -> int:
             print(json.dumps({'ok':True,'gallery':str(Path(args.out_dir)/'index.html'),
                 'images':len(gallery['images']),'pending_human_review':True},ensure_ascii=False))
             return 0
+        if args.command == 'concept-audit':
+            audit = audit_concept_image(load_json(args.packet), args.image, variant_id=args.variant, scene_id=args.scene, model=args.model)
+            save_json(args.out,audit)
+            print(json.dumps({'ok':audit['visual_gate']=='advisory-pass','path':args.out,'gate':audit['visual_gate'],'human_design_approval':'not_checked'},ensure_ascii=False))
+            return 0 if audit['visual_gate']=='advisory-pass' else 4
         if args.command == 'concept-verify':
             verified=verify_concept_gallery(args.manifest)
             print(json.dumps({'ok':True,**verified},ensure_ascii=False))

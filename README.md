@@ -203,3 +203,7 @@ Other packet modes: explore, consistent (approved design system and brief), revi
 Each provider request has a one-use-case-step full-bleed image contract, but prompts cannot guarantee model compliance.
 Real visual quality, source semantics, and single-frame composition require direct human image review.
 See docs/WP04_IMPLEMENTATION.md and docs/WP04_STATUS.md.
+
+
+### Optional image-composition review
+Use `ucscene concept-audit PACKET --image IMAGE.png --variant VAR-01 --scene SCENE-ID --out out/visual-audit.json` to opt in to a potentially paid visual QA call. It checks whether the actual image is a single full-bleed application/game state or a montage of independent screenshots, plus in-software boundary and step evidence. The result is **advisory** and is not human approval. Calls require `OPENAI_API_KEY`.

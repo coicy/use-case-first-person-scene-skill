@@ -96,3 +96,17 @@ Create several **independently generated** single-frame PNGs for each original p
 ## Single-frame contract (post-acceptance regression)
 
 Every request is scoped to exactly **one** software/game state and prepended/appended with a non-negotiable single-frame composition rule. Montage, contact sheet, storyboard, step captions and portfolio boards are explicitly forbidden. The offline packet validator rejects contract tampering. The acceptance gallery includes a distinct **single-frame** human review criterion. This is a **prompt and provenance guard**, not proof that an image model will obey; real images require visual inspection and failures must stay recorded. Crops from a generated collage are external derived samples, not independent successful generations.
+
+## Optional single-frame visual audit (added after repeated collage failures)
+
+
+define exactly one existing render packet item, then execute:
+
+```bash
+ucscene concept-audit out/concept-packet.json \
+  --image out/generated/VAR-01--PRODUCT--UC--STEP.png \
+  --variant VAR-01 --scene PRODUCT--UC--STEP \
+  --out out/concept-audit.json
+```
+
+This command **explicitly opts in to a potentially paid vision API request**. It uses a structured independent assessment of whether the pixels show a single complete app/game state or a montage, whether outside-software imagery exists, and whether visible evidence appears. It records the real PNG SHA-256 and original prompt digest. Model judgments can be wrong; `advisory-pass` is NOT a human signoff. A montage requires manual rejection/revision and should not count as a successful generated use-case image.

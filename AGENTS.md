@@ -41,3 +41,5 @@ ucscene compose-ui --scene out/demo/scene.png --ui out/demo/ui.png --quad exampl
 ```
 
 The GitHub Actions workflow must pass Python 3.10 and 3.12. Do not claim real API image-generation compatibility or cross-scene visual fidelity from mocked tests; report unverified API integration honestly.
+
+- Human visual rating packet records are never populated by Agent defaults or fabricated scores; each scored record requires actual image bytes, strict digest integrity, and a human rater ID. `benchmark-score` must not perform model inference.

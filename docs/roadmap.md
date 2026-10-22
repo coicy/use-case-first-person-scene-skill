@@ -40,3 +40,12 @@
 - `physical-user` vs `avatar-eyes` camera semantics, with structural tests to prevent isometric-world perspective collapse.
 - Offline source-traceability checks, deterministic golden prompt lock, case plan export, optional provenance-verified audit aggregation.
 - Still requires real paid image sampling and blinded human ratings before any claim that fixed anchors or chain editing actually improve image quality.
+
+
+## v0.4 — known-project benchmark and evaluation protocol
+
+- Source-referenced public UI/game cases (VS Code, Blender, GIMP, Godot, OpenTTD, Luanti).
+- Distinguish real-user device POV from avatar-eyes gameplay POV.
+- Golden prompt hashes; offline CI-based source/scene integrity and export.
+- Real-image 3-arm manual rating packet and digest-bound human score aggregation.
+- No valid generation-quality scores until real images and reviewed scores are available.

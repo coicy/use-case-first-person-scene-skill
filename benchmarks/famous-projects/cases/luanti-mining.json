@@ -22,7 +22,7 @@
       "branch": "main",
       "visible_evidence": [
         "近距离可指向的体素方块",
-        "游戏世界前方的十字准星"
+        "视线中心附近的目标地表方块"
       ],
       "source_refs": [
         "LUANTI-CONTROLS"

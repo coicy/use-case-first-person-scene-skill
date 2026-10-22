@@ -6,8 +6,8 @@
 
 | 案例 | 用例 | 视角 | 官方依据 | 节点 |
 | --- | --- | --- | --- | ---: |
-| Visual Studio Code | 设置断点、启动调试、观察变量 | `physical-user`（实际开发者看显示器） | https://code.visualstudio.com/docs/editor/debugging | 3 |
-| Blender | 选择面、挤出、确认模型形状 | `physical-user` | https://docs.blender.org/manual/en/5.1/modeling/meshes/editing/face/extrude_faces.html | 3 |
+| Visual Studio Code | 设置断点、启动调试、观察变量 | `physical-user`（实际开发者看显示器） | https://code.visualstudio.com/docs/debugtest/debugging | 3 |
+| Blender | 选择面、挤出、确认模型形状 | `physical-user` | https://docs.blender.org/manual/en/5.0/modeling/meshes/editing/face/extrude_faces.html | 3 |
 | GIMP | 选择裁剪工具、拖拽裁剪框、应用裁剪 | `physical-user` | https://docs.gimp.org/3.0/en_GB/gimp-tutorial-quickie-crop.html | 3 |
 | Godot Engine | 创建 Mob 的 RigidBody2D/子节点/重力属性 | `physical-user`（编辑器而非玩家世界） | https://docs.godotengine.org/en/stable/getting_started/first_2d_game/04.creating_the_enemy.html | 3 |
 | OpenTTD | 进入铁路建设工具栏、选择车站、使用 Autorail | `physical-user`（显示器内仍是等距地图） | https://wiki.openttd.org/en/Manual/Railway%20construction | 3 |
@@ -57,17 +57,18 @@ ucscene benchmark benchmarks/famous-projects/suite.json \
 
 真实图片审查的结果 **仅是模型建议**；没有图片/审查时，报告必须显示 `not_evaluated`，仅有部分结果时显示 `incomplete`。不能因为部分图片通过就称整组模型“视觉通过”。
 
-### 独立人工评分（建议，非已实现自动评分）
+### 独立人工评分（v0.4 已实现采集与统计）
 
-每张图由两名以上不知道条件名称的评估者独立打分，逐项 0/1/2 分：
+`benchmark-rating-template` 生成三种模式下 54 张场景图对应的**空白**人工评分模板；`benchmark-score` 对真实图像文件做解码及 SHA-256 检查，验证使用的是对应场景的原始提示词，并仅统计由实际人工评分者填写的 0/1/2 分。四项维度：POV、可见证据、应用界面/玩法符合度、跨步骤连续性。
 
-- **POV**：镜头确实属于用户眼睛，且 OpenTTD 不被误画成司机实景、Luanti 不出现实体显示器。
-- **用例可识别性**：不看 prompt 也能辨认当前操作行为。
-- **来源事实符合度**：关键对象/状态符合被引用的官方文档，未擅自添加功能。
-- **连续性**：同一用例三个步骤保持相机、设备、布局、风格稳定。
-- **UI 可靠性**：需要精确的 UI 时，最好使用真实 UI 截图透视合成，对细小字体单独检查。
+```sh
+ucscene benchmark-rating-template benchmarks/famous-projects/suite.json --out out/ratings.json
+# 在生成真实图并人工填写上述 JSON 后：
+ucscene benchmark-score benchmarks/famous-projects/suite.json \
+  --packet out/ratings.json --images out/benchmark-images --out out/human-scores.json
+```
 
-每个条件每个场景至少三次实际生成后再比较通过比例与评审者间一致性；否则样本规模不足，不应给出“某方法更好”的定量结论。
+**注意**：`benchmark-score` 不会自己生图、编造评语、自动给分或联网调用模型。一次评分包是一轮实验；重复实验需各自的图片目录与评分包，不能在同一包中合并不同随机试次。完整评分定义见 `docs/benchmark-methodology.md`。
 
 ## 已执行与未执行
 

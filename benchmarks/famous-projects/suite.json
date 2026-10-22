@@ -24,7 +24,7 @@
       "official_sources": [
         {
           "id": "BLENDER-EXTRUDE",
-          "url": "https://docs.blender.org/manual/en/5.1/modeling/meshes/editing/face/extrude_faces.html",
+          "url": "https://docs.blender.org/manual/en/5.0/modeling/meshes/editing/face/extrude_faces.html",
           "paraphrase": "Blender 官方手册：Edit Mode 中选中面后按 E 进行 Extrude Faces，产生连接的几何面。"
         }
       ],

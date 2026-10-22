@@ -4,7 +4,7 @@
 
 核心输出是**用户亲眼看到、实际正在交互的场景**，而不是 UML 关系图、第三人称人物像或伪造的应用截图。
 
-## v0.3.0 — 已实现的命令
+## 核心命令（v0.4.0，兼容 v0.3）
 
 | 命令 | 在线 API | 做什么 |
 | --- | --- | --- |
@@ -169,3 +169,35 @@ python -m unittest discover -s tests -v
 ```
 
 GitHub Actions 使用 Python 3.10 / 3.12 安装 UI 扩展，运行离线测试和真实 CLI 冒烟测试。**CI 不会触发付费生图或视觉审查**。许可证：MIT。
+
+## v0.4.0 — 六个知名项目的场景基准测试
+
+公开可重放的基准集在 [`benchmarks/famous-projects/`](benchmarks/famous-projects/)：VS Code 断点调试、Blender 面挤出、GIMP 裁剪、Godot 2D 敌人场景配置、OpenTTD 铁路建设、Luanti 第一人称方块采掘。每个用例保留了**官方公开文档链接、步骤对应 source_refs、第一视角类型、视觉假设**。项目商标和界面归原权利人所有；基准集**不附带、也不声称包含官方截图**。
+
+```bash
+# 完全离线的结构、溯源、镜头与提示词锁检查
+ucscene benchmark benchmarks/famous-projects/suite.json \
+  --lock benchmarks/famous-projects/prompt-lock.json \
+  --out out/benchmark-report.json
+
+# 导出六份可执行场景计划（共 18 个场景）
+ucscene benchmark-export benchmarks/famous-projects/suite.json \
+  --out-dir out/benchmark-plans
+
+# 生成 54 张图（18 场景 × 3 方法）的“待人工填写”空白评分模板
+# 此命令不生图、不调用 API、不生成任何虚构分数
+ucscene benchmark-rating-template benchmarks/famous-projects/suite.json \
+  --out out/human-rating-template.json
+
+# 在人工拍摄/生成并评审图片、填写真实评分后进行离线核验与对照统计
+ucscene benchmark-score benchmarks/famous-projects/suite.json \
+  --packet out/human-rating-template.json \
+  --images out/benchmark-images \
+  --out out/human-score-report.json
+```
+
+要真正比较生图效果，**必须**先产生图像，并由人工逐张评分。三组图片分别保存在 `out/benchmark-images/prompt-only/`、`fixed-reference/`、`sequential-chain/`；文件名为 `场景ID.png`。对应生成方法：`ucscene generate PLAN --out <目录>`、`ucscene generate PLAN --anchor <已批准且兼容的参考图清单> --out <目录>`、`ucscene generate PLAN --chain --out <目录>`，每个 case 使用各自的 plan 与参考图。三种方法使用相同模型、尺寸、质量、用例和数量，并记录生成参数与费用。**这三条生成命令会调用付费 API，不能在 CI 自动执行。**
+
+评分量表每项 0（不合格）、1（部分符合或不确定）、2（完全符合），包含：第一视角是否真实、关键视觉证据覆盖、是否符合应用/游戏的原有界面、跨步骤连续性；若出现无依据的产品功能则即使其余项满分也不算严格通过。每个条目必须包含 `rater_id`、真实图片 SHA-256 和人工评分，不能用模型输出冒充真人评分。`benchmark-score` 对实际图片进行解码和哈希验证，仅比较同一个场景、同一评分者在三组方法下都有结果的配对样本，未评部分不能算作失败或成功。
+
+详细实验设计、评分说明与结果边界见 [`docs/benchmark-methodology.md`](docs/benchmark-methodology.md)。目前公开的静态结果为 **6 个案例、18 个步骤、36 条可见证据，全通过静态一致性检查；实际图片质量为“未评测”**。这些数量并不是 AI 生图准确率。

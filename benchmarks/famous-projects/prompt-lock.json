@@ -1,7 +1,7 @@
 {
   "format_version": "1.0",
   "suite_id": "official-software-and-games-v1",
-  "suite_sha256": "ddd2c22f00ad725291f528b57d56d9028430ef526627be2f3e7ca51e2f36b248",
+  "suite_sha256": "3168a7d8c4f008af1ce2f5a4899eca02a0660de4d2f9705a914ae6c9de477c61",
   "cases": {
     "BENCH-VSCODE-DEBUG": {
       "case_sha256": "6f635402a7de723b07bbe3a5558c57196e7460eaf30777eec41cde9a0db04267",
@@ -44,9 +44,9 @@
       }
     },
     "BENCH-LUANTI-MINE": {
-      "case_sha256": "ff42f1c084ebab835b4f5d21e71205f5ee9eb4729579a1855c77efba4af088da",
+      "case_sha256": "02c177da6f88a4c753ca2e30465eaab0611b8423cf65cfd140c4eaefd612e068",
       "prompt_sha256": {
-        "01-target": "e179cb32c270e646fcb836c13bd56281093b84ac37fd0128d0423324a613d097",
+        "01-target": "662a99003630101ff935fa384e437c20cccee87f1b0a33a14fdf50a68bfd2055",
         "02-mine": "efa5b3e023257a334cfaadab3c62218f5b19184e9f07b7238ec4cc3d402d24c4",
         "03-place": "f7f306e7c577bf32f3f4977cc752f1eddf6d04e671b6505f406b7eff109d4678"
       }

@@ -1,0 +1,151 @@
+{
+  "suite_id": "official-software-and-games-v1",
+  "suite_sha256": "3168a7d8c4f008af1ce2f5a4899eca02a0660de4d2f9705a914ae6c9de477c61",
+  "kind": "offline-plan-and-source-integrity",
+  "cases": 6,
+  "planned_scenes": 18,
+  "expected_scenes": 18,
+  "checked_visible_evidence": 36,
+  "expected_visible_evidence": 36,
+  "source_traceability": "all steps reference curated official documentation",
+  "static_pass": true,
+  "visual_evaluation": {
+    "status": "not_evaluated",
+    "total_scenes": 18,
+    "note": "No images were generated or visually evaluated by this offline benchmark"
+  },
+  "results": [
+    {
+      "case_id": "BENCH-VSCODE-DEBUG",
+      "project": "Visual Studio Code",
+      "category": "developer-tool",
+      "camera": "physical-user",
+      "case_sha256": "6f635402a7de723b07bbe3a5558c57196e7460eaf30777eec41cde9a0db04267",
+      "source_urls": [
+        "https://code.visualstudio.com/docs/editor/debugging"
+      ],
+      "expected_scenes": 3,
+      "planned_scenes": 3,
+      "source_linked_steps": 3,
+      "visible_evidence_items": 6,
+      "prompt_sha256": {
+        "01-breakpoint": "d7abf4eef3c7bdb75c7b731fbd02b604b94a1e707ecb5b79d181f2b02125df01",
+        "02-debug": "171f6e38eecea54a68f9585a03e65fca8fa3d3665932b77a4121da2b603892b1",
+        "03-variables": "4534e1143a5f5cefa8548fa217a66d711207db97be713cbc3fc361b9e19ab50e"
+      },
+      "structural_status": "pass",
+      "visual_audits": []
+    },
+    {
+      "case_id": "BENCH-BLENDER-EXTRUDE",
+      "project": "Blender",
+      "category": "3d-content-tool",
+      "camera": "physical-user",
+      "case_sha256": "bbdf9e4c263c688e42b8750e50cffdf18378f1abf7b0ee04011f3dae9e8dedb5",
+      "source_urls": [
+        "https://docs.blender.org/manual/en/5.0/modeling/meshes/editing/face/extrude_faces.html"
+      ],
+      "expected_scenes": 3,
+      "planned_scenes": 3,
+      "source_linked_steps": 3,
+      "visible_evidence_items": 6,
+      "prompt_sha256": {
+        "01-edit": "9d31942d9c929449da27b3ef19e48cd84148c896c685a2e4e1deddf7ec1f4381",
+        "02-extrude": "dace092f4baa649f7db8d5035654b88485b031bf43a16b1f846834ca789b8608",
+        "03-confirm": "61139c73217e94ada84300fe8d614c84ec2bf9357d820ee9c2d9744e1700bbbf"
+      },
+      "structural_status": "pass",
+      "visual_audits": []
+    },
+    {
+      "case_id": "BENCH-GIMP-CROP",
+      "project": "GIMP",
+      "category": "image-editor",
+      "camera": "physical-user",
+      "case_sha256": "ba6421a60f7535a80dbec1b129253091621f36e8fa473d726dab056912c0f94e",
+      "source_urls": [
+        "https://docs.gimp.org/3.0/en_GB/gimp-tutorial-quickie-crop.html"
+      ],
+      "expected_scenes": 3,
+      "planned_scenes": 3,
+      "source_linked_steps": 3,
+      "visible_evidence_items": 6,
+      "prompt_sha256": {
+        "01-tool": "1501a574c0d79602089afd8afd704857ecdbe6417011232ad5872af3d282ea4f",
+        "02-rectangle": "fab10f86860a7a01bc9732c450a83d6da22c13d5869b482eaa7d1731b8445389",
+        "03-result": "e127371fe4d6a1f0ddc0c00b9a2d74f5acd6971e0dcd668fce2ecdcc30419d6e"
+      },
+      "structural_status": "pass",
+      "visual_audits": []
+    },
+    {
+      "case_id": "BENCH-GODOT-MOB",
+      "project": "Godot Engine",
+      "category": "game-engine-editor",
+      "camera": "physical-user",
+      "case_sha256": "814400b7cfcd88c4ccabc039a582e75ec2960fb1ba52e23444ee5a80fc9974cd",
+      "source_urls": [
+        "https://docs.godotengine.org/en/stable/getting_started/first_2d_game/04.creating_the_enemy.html"
+      ],
+      "expected_scenes": 3,
+      "planned_scenes": 3,
+      "source_linked_steps": 3,
+      "visible_evidence_items": 6,
+      "prompt_sha256": {
+        "01-root": "ab5f7226c2079800d3fcf29bf7b4abbb1e7d6fba61c17cbe9916b66dbf6729c4",
+        "02-children": "cff7769a2d0cbf4599ceb5b0883aebdc5252ba9aac8b296e1c16c44ee4b48bff",
+        "03-gravity": "5fdb0d0e654b3bb25ff17fe11deac3cd17512d79b09f7f53a0028e8358d4e987"
+      },
+      "structural_status": "pass",
+      "visual_audits": []
+    },
+    {
+      "case_id": "BENCH-OPENTTD-RAIL",
+      "project": "OpenTTD",
+      "category": "isometric-strategy-game",
+      "camera": "physical-user",
+      "case_sha256": "6167fa37d6cf079e2436964d63b92f9a7263c61b7f83bb1aba00c3eb494321d0",
+      "source_urls": [
+        "https://wiki.openttd.org/en/Manual/Railway%20construction"
+      ],
+      "expected_scenes": 3,
+      "planned_scenes": 3,
+      "source_linked_steps": 3,
+      "visible_evidence_items": 6,
+      "prompt_sha256": {
+        "01-toolbar": "4d4d1c3c1f5b2c3afc6045e1c3dd05d8468c1aeebdf988dec8411df32a338d89",
+        "02-station": "1f67c79026525d1ebda9bc449438ce06ac88e155d350c41fee74c6714e10cd9b",
+        "03-track": "9c5748866b399a9ab6ebd21856040d85da6edfa92b3fc011a68e61346802ceb9"
+      },
+      "structural_status": "pass",
+      "visual_audits": []
+    },
+    {
+      "case_id": "BENCH-LUANTI-MINE",
+      "project": "Luanti",
+      "category": "first-person-voxel-game",
+      "camera": "avatar-eyes",
+      "case_sha256": "02c177da6f88a4c753ca2e30465eaab0611b8423cf65cfd140c4eaefd612e068",
+      "source_urls": [
+        "https://docs.luanti.org/for-players/controls/",
+        "https://docs.luanti.org/for-players/nodes/"
+      ],
+      "expected_scenes": 3,
+      "planned_scenes": 3,
+      "source_linked_steps": 3,
+      "visible_evidence_items": 6,
+      "prompt_sha256": {
+        "01-target": "662a99003630101ff935fa384e437c20cccee87f1b0a33a14fdf50a68bfd2055",
+        "02-mine": "efa5b3e023257a334cfaadab3c62218f5b19184e9f07b7238ec4cc3d402d24c4",
+        "03-place": "f7f306e7c577bf32f3f4977cc752f1eddf6d04e671b6505f406b7eff109d4678"
+      },
+      "structural_status": "pass",
+      "visual_audits": []
+    }
+  ],
+  "limitations": [
+    "Static metrics do not measure the correctness of actual generated pixels, typography, pose, UI, or composition.",
+    "Curated source references were checked by the project maintainer at benchmark authoring time; this command does not crawl sites or check their freshness.",
+    "A model-generated visual audit is fallible; controlled comparative claims require actual images and independent human ratings."
+  ]
+}

@@ -5,7 +5,7 @@ name: use-case-first-person-scene
 description: Create and check first-person experience scene images grounded in software or game use cases. Trigger for scenario illustrations from the actual actor's viewpoint, multi-step storyboard images, reusable visual anchors, and authentic UI screenshot overlays; not for UML, abstract diagrams or generic concept art.
 ---
 
-# Use Case → First-Person Scene Skill (v0.3)
+# Use Case → First-Person Scene Skill (v0.4)
 
 Use this skill when a developer requests a **concrete user-experience visual** of a use case or a set of use case steps. Do not silently switch to use-case diagrams, third-person illustrations, polished marketing art, or screenshots purportedly captured from a running application.
 
@@ -46,3 +46,7 @@ ucscene anchor-verify out/anchor.json --plan out/plan.json --require-approved
 ```
 
 See `README.md` for complete commands, `schemas/use-case.schema.json` for structured inputs, `src/ucscene/anchors.py` for manifests, and `src/ucscene/composite.py` for perspective overlay rules. Source of image-generation behavior is `src/ucscene/provider.py`; an approved anchor is not a guarantee that the model's image edit preserves every detail.
+
+## Official-project benchmark and real-image measurement (v0.4)
+
+Use `ucscene benchmark benchmarks/famous-projects/suite.json --lock benchmarks/famous-projects/prompt-lock.json` to check six public-project use cases without image API calls. `ucscene benchmark-export ...` exports plans. `ucscene benchmark-rating-template ...` emits blank 3-arm human scoring tasks; no scores or image-quality verdicts are manufactured. For real visual claims, generate three separately labeled method arms with explicit user authorization and API costs, have reviewers inspect actual images, then run `ucscene benchmark-score ...`. Review source citations and image hashes before reporting results. See `docs/benchmark-methodology.md`.

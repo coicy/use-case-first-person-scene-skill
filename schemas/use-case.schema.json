@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/ucscene/use-case.schema.json",
+  "title": "Use case for first-person scene planning",
+  "type": "object",
+  "required": ["id", "title", "actor", "goal", "environment", "device", "steps"],
+  "properties": {
+    "id": {"type": "string", "minLength": 1},
+    "title": {"type": "string", "minLength": 1},
+    "actor": {"type": "string", "minLength": 1},
+    "goal": {"type": "string", "minLength": 1},
+    "environment": {"type": "string", "minLength": 1},
+    "device": {"type": "string", "minLength": 1},
+    "style": {"enum": ["realistic", "sketch", "illustration", "ui-focused"]},
+    "constraints": {
+      "type": "object",
+      "properties": {
+        "continuity": {"type": "string"},
+        "must_show": {"type": "array", "items": {"type": "string"}},
+        "must_not_show": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "steps": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "action", "visible_evidence"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "action": {"type": "string", "minLength": 1},
+          "state": {"enum": ["start", "in-progress", "waiting", "success", "failure"]},
+          "branch": {"enum": ["main", "alternative", "exception"]},
+          "visible_evidence": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+          "ui_text": {"type": "array", "items": {"type": "string"}}
+        }
+      }
+    }
+  }
+}

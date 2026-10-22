@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "use-case-first-person-scene-skill"
+version = "0.1.0"
+description = "Use-case grounded first-person scenario planner and optional image generator"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+
+[project.scripts]
+ucscene = "ucscene.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

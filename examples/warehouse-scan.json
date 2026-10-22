@@ -1,0 +1,44 @@
+{
+  "id": "UC-WH-001",
+  "title": "仓库员工扫码出库",
+  "actor": "仓库拣货员",
+  "goal": "根据订单完成拣货与条码校验，并提交出库",
+  "environment": "明亮的仓储货架通道，标准货位编号，手持终端",
+  "device": "手持工业扫码终端，正面屏幕与扫描头可见",
+  "style": "realistic",
+  "constraints": {
+    "continuity": "相同仓库通道，相同货架编号和工业扫码终端，始终第一人称视角",
+    "must_show": ["可辨认的货架与货位", "当前扫描动作的物理接触点"],
+    "must_not_show": ["第三人称员工肖像", "科幻全息界面", "陌生工作人员代替当前用户操作"]
+  },
+  "steps": [
+    {
+      "id": "01-locate",
+      "action": "确认待拣订单并找到指定货位",
+      "state": "start",
+      "visible_evidence": ["手持终端显示待拣货位", "眼前对应编号的货架", "通道视线对准目标货位"],
+      "ui_text": ["待拣货位"]
+    },
+    {
+      "id": "02-scan",
+      "action": "手持扫码终端扫描商品上的条形码",
+      "state": "in-progress",
+      "visible_evidence": ["扫描头对准实物商品条码", "一只手握持扫码设备", "当前货架清晰处于背景"]
+    },
+    {
+      "id": "03-fail",
+      "action": "扫描到不匹配的商品，终端显示校验未通过",
+      "state": "failure",
+      "branch": "exception",
+      "visible_evidence": ["终端错误状态明显", "错误商品条码在画面中", "用户尚未完成出库"],
+      "ui_text": ["条码不匹配"]
+    },
+    {
+      "id": "04-success",
+      "action": "改扫正确商品并确认出库",
+      "state": "success",
+      "visible_evidence": ["正确商品条码", "终端成功确认状态", "用户仍在同一个货架前"],
+      "ui_text": ["出库成功"]
+    }
+  ]
+}

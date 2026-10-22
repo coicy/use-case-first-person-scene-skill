@@ -187,3 +187,19 @@ ucscene design-apply-review out/consistent-plan.json --system out/design-system.
 冻结规范只能通过显式授权标记 `--override-lock` 加新 `--evidence-ref` 重新批准后修订。用 `design-system-diff` 识别需要重新验收的设计变化。新增 Schema：`schemas/design-system.schema.json` 和 `schemas/consistent-scene-plan.schema.json`。详细说明见 [WP-03 实施记录](docs/WP03_IMPLEMENTATION.md)。
 
 **重要：WP-03 只输出带批准设计基线的多步骤生图提示词，不自动生图，不代表任何候选已经获得本用户真实批准。** 下一阶段 WP-04 才实现真实原创软件图片与视觉验收。
+
+
+## v0.7 WP-04 — original-software concept generation (implemented)
+New-product DesignPlan or ConsistentScenePlan inputs. By default, concept-render only prepares manifests; no paid calls occur.
+```bash
+ucscene concept-packet out/new-product-design-plan.json --mode draft --variant VAR-01 --out out/concept-packet.json
+ucscene concept-render out/concept-packet.json --out out/concept-images
+# Explicit paid mode requires an API key:
+# ucscene concept-render out/concept-packet.json --execute --max-images 3 --out out/concept-images
+ucscene concept-gallery out/concept-packet.json --images out/concept-images --report out/concept-images/generation-report.json --out-dir out/concept-gallery
+ucscene concept-verify out/concept-gallery/manifest.json
+```
+Other packet modes: explore, consistent (approved design system and brief), revise (selected variant and explicit change request).
+Each provider request has a one-use-case-step full-bleed image contract, but prompts cannot guarantee model compliance.
+Real visual quality, source semantics, and single-frame composition require direct human image review.
+See docs/WP04_IMPLEMENTATION.md and docs/WP04_STATUS.md.

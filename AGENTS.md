@@ -92,3 +92,10 @@ Test `tests/test_new_product_design.py`, two original-product fixtures in `bench
 - Reject silent changes to structured hard constraints and frozen design keys. Locked changes require separate new approval and explicit `--override-lock`.
 - Compare consecutive revisions with `design-system-diff`; mark related scenes for re-review. Do not claim it performs image regeneration.
 - CI must run `tests/test_design_system.py` and CLI smoke tests. Keep WP-04 image-generation claims separate from WP-03 offline planning.
+
+
+## WP-04 generation and visual acceptance gate
+Use concept-packet then concept-render. One item is one full-bleed software/game frame of one use-case step, never a multi-panel storyboard or marketing board.
+Paid calls require explicit --execute --max-images N plus API credentials. Do not claim visual pass from hash/mocked tests.
+Cropped panels from multi-panel failures are external derivative samples, never six independent successful generations.
+Only explicit user consent grants approval of product design decisions.

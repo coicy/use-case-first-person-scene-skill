@@ -19,6 +19,7 @@ from .acceptance import create_gallery, verify_gallery
 from .design import (init_brief, migrate_legacy_case, create_bundle, validate_product_brief, validate_design_decision, validate_scene_design, validate_design_bundle, create_design_plan, validate_design_plan, export_design_prompts)
 from .design.system import create_design_system, validate_design_system, revise_design_system, compare_design_system
 from .design.continuity import apply_design_system, validate_consistent_plan
+from .rendering import make_render_packet, verify_render_packet, render_concepts, verify_generation_report, build_concept_gallery, verify_concept_gallery
 
 def run(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="ucscene", description="Use-case first-person scenario planning and image generation")
@@ -165,6 +166,34 @@ def run(argv: list[str] | None = None) -> int:
     consistent_check.add_argument("plan")
     consistent_check.add_argument("--system", required=True)
     consistent_check.add_argument("--brief", required=True)
+    concept_packet = sub.add_parser('concept-packet', help='Compile original-software DesignPlan/ConsistentScenePlan into verifiable image requests (offline)')
+    concept_packet.add_argument('plan')
+    concept_packet.add_argument('--mode', required=True, choices=['explore','draft','consistent','revise'])
+    concept_packet.add_argument('--variant', help='Required for draft/revise; explore uses all variants')
+    concept_packet.add_argument('--system', help='Required only in consistent mode')
+    concept_packet.add_argument('--brief', help='Required only in consistent mode')
+    concept_packet.add_argument('--change-request', help='Only in revise mode; never overwrites source plan')
+    concept_packet.add_argument('--step', dest='steps', action='append', help='Optional step IDs to render')
+    concept_packet.add_argument('--out', default='out/concept-render-packet.json')
+    concept_render = sub.add_parser('concept-render', help='Prepare requests offline, or explicitly spend on real PNG generation')
+    concept_render.add_argument('packet')
+    concept_render.add_argument('--out', default='out/concept-images')
+    concept_render.add_argument('--execute', action='store_true', help='EXPLICIT paid OpenAI Images API opt-in')
+    concept_render.add_argument('--max-images', type=int, help='Required with --execute, >= requested count and <=12')
+    concept_render.add_argument('--model', default='gpt-image-1.5')
+    concept_render.add_argument('--size', default='1536x1024')
+    concept_render.add_argument('--quality', default='medium')
+    concept_render.add_argument('--reference-image', help='Optional verified image used as consistent style reference')
+    concept_render.add_argument('--chain', action='store_true', help='Optional sequential edit references; has visual drift risk')
+    concept_gallery = sub.add_parser('concept-gallery', help='Build a human-review gallery of actual original-product image files')
+    concept_gallery.add_argument('packet')
+    concept_gallery.add_argument('--images', required=True)
+    sources = concept_gallery.add_mutually_exclusive_group(required=True)
+    sources.add_argument('--selection', help='External images with explicit origin; cannot claim CLI generation')
+    sources.add_argument('--report', help='Completed verified CLI generation report')
+    concept_gallery.add_argument('--out-dir', required=True)
+    concept_verify = sub.add_parser('concept-verify', help='Check saved concept gallery image hashes; NOT semantic or user approval')
+    concept_verify.add_argument('manifest')
     args = parser.parse_args(argv)
     try:
         if args.command == "design-system-create":
@@ -202,6 +231,34 @@ def run(argv: list[str] | None = None) -> int:
             p = validate_consistent_plan(load_json(args.plan), system=load_json(args.system), brief=load_json(args.brief))
             print(json.dumps({"ok": True, "path": args.plan, "scenes": len(p['scenes']),
                               "design_revision": p['design_system_revision']}, ensure_ascii=False))
+            return 0
+        if args.command == 'concept-packet':
+            packet=make_render_packet(load_json(args.plan),mode=args.mode,variant_id=args.variant,
+                system=load_json(args.system) if args.system else None,
+                brief=load_json(args.brief) if args.brief else None,
+                change_request=args.change_request,step_ids=args.steps)
+            save_json(args.out,packet)
+            print(json.dumps({'ok':True,'path':args.out,'mode':packet['mode'],
+                'images_planned':len(packet['items']),'generated_images':0},ensure_ascii=False))
+            return 0
+        if args.command == 'concept-render':
+            report=render_concepts(load_json(args.packet),args.out,execute=args.execute,
+                max_images=args.max_images,model=args.model,size=args.size,quality=args.quality,
+                reference_image=args.reference_image,chain=args.chain)
+            print(json.dumps({'ok':True,'path':str(Path(args.out)/'generation-report.json'),
+                'status':report['status'],'images':len(report['images']),
+                'generated_images':sum(x['status']=='generated' for x in report['images'])},ensure_ascii=False))
+            return 0
+        if args.command == 'concept-gallery':
+            gallery=build_concept_gallery(load_json(args.packet),args.images,args.out_dir,
+                selection=load_json(args.selection) if args.selection else None,
+                generation_report=load_json(args.report) if args.report else None)
+            print(json.dumps({'ok':True,'gallery':str(Path(args.out_dir)/'index.html'),
+                'images':len(gallery['images']),'pending_human_review':True},ensure_ascii=False))
+            return 0
+        if args.command == 'concept-verify':
+            verified=verify_concept_gallery(args.manifest)
+            print(json.dumps({'ok':True,**verified},ensure_ascii=False))
             return 0
         if args.command == "design-plan":
             planned = create_design_plan(load_json(args.source), variants=args.variants, ai=args.ai, model=args.model)

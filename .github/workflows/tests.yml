@@ -39,6 +39,15 @@ jobs:
           ucscene design-apply /tmp/game-design-system.json benchmarks/new-products/new-hamlet-builder.wp02.brief.json --out /tmp/game-consistent-plan.json
           ucscene design-apply-review /tmp/game-consistent-plan.json --system /tmp/game-design-system.json --brief benchmarks/new-products/new-hamlet-builder.wp02.brief.json
           ucscene design-export /tmp/game-wp02-plan.json --variant VAR-02 --out /tmp/game-wp02-prompts.json
+          # WP-04: original product concept requests and pending offline manifests (NO paid API)
+          ucscene concept-packet /tmp/asset-wp02-plan.json --mode explore --step STEP-001 --out /tmp/asset-explore-requests.json
+          ucscene concept-render /tmp/asset-explore-requests.json --out /tmp/asset-concept-dry-run
+          ucscene concept-packet /tmp/asset-wp02-plan.json --mode draft --variant VAR-02 --out /tmp/asset-concept-draft.json
+          ucscene concept-render /tmp/asset-concept-draft.json --out /tmp/asset-concept-dry-run-draft
+          ucscene concept-packet /tmp/asset-consistent-plan.json --mode consistent --system /tmp/asset-design-system.json --brief benchmarks/new-products/new-asset-studio.wp02.brief.json --out /tmp/asset-consistent-packet.json
+          ucscene concept-render /tmp/asset-consistent-packet.json --out /tmp/asset-consistent-dry-run
+          ucscene concept-packet /tmp/game-wp02-plan.json --mode draft --variant VAR-03 --out /tmp/game-concept-draft.json
+          ucscene concept-render /tmp/game-concept-draft.json --out /tmp/game-concept-dry-run
           ucscene brief-init --product-id ci-demo --name "CI Demo" --category web --prompt "新的协作软件" --use-case "用户创建任务" --out /tmp/ci-brief.json
           ucscene design-scaffold /tmp/ci-brief.json --out /tmp/ci-design-bundle.json
           ucscene design-validate /tmp/ci-design-bundle.json --kind bundle

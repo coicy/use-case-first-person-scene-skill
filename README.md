@@ -1,4 +1,10 @@
-# Use Case Software-Only Scene Skill
+# Use-Case Driven Software Concept Designer
+
+> **当前正式产品定义：为尚未开发或仍在设计的新软件/游戏，根据提示词和用例生成原创的软件内部场景概念图。** AI 可以主动设计 UI、交互和场景，但必须区分用户需求与 AI 提案，并保持跨用例一致性。已确认的产品规则见 [PRODUCT_REQUIREMENTS.md](docs/PRODUCT_REQUIREMENTS.md)，下一步计划见 [V07_WORK_PLAN.md](docs/V07_WORK_PLAN.md)。
+>
+> **实施状态：** v0.6 CLI 仍是旧的用例到场景规划/生图工具；新产品概念设计流程属于 v0.7 待开发能力。以下保留 v0.6 命令文档作为兼容说明，不应将复刻既有软件当成后续默认目标。
+
+## v0.6 已实现功能与兼容说明
 
 **v0.6.0 — 用例驱动的软件内场景可视化与实际图片验收**。本工具生成的是应用/游戏自身的内容画面，而不是软件用户或现实设备的照片。
 
@@ -38,9 +44,9 @@ ucscene plan out/use-case.json --out out/scene-plan.json
 ucscene review out/scene-plan.json
 ```
 
-工具不会自行补造 UI：信息缺失时标记 `extraction.ready=false` 并拒绝规划。`extract --ai` 可使用显式配置的模型来辅助从自由文本抽取，但必须逐条验证来源。
+在 **v0.6 旧版 CLI** 中，信息缺失时可能标记 `extraction.ready=false` 并拒绝规划；这是即将改造的旧行为，不是新产品概念设计规则。**v0.7 应允许 AI 对尚未规定的 UI 细节提出可追溯的设计提案**，仅对硬性要求缺失/冲突作明确说明。`extract --ai` 在旧版中仍需要核验来源。
 
-## 六项目官方资料驱动基准（离线）
+## v0.6 历史兼容基准：六款已有软件（离线）
 
 ```bash
 ucscene benchmark benchmarks/famous-projects/suite.json \
@@ -54,7 +60,7 @@ ucscene benchmark-rating-template benchmarks/famous-projects/suite.json \
 
 共六项目、十八步骤、三十六条证据。结构通过**不等于**真实生成视觉合格。Golden lock 记录审核后的新一代软件内场景 prompt SHA-256；不能使用旧的现实设备视角基准。
 
-## 用真实应用/游戏截图作为视觉锚点
+## v0.6 兼容：用截图作为视觉锚点（新产品可选）
 
 ```bash
 ucscene anchor-create out/scene-plan.json \

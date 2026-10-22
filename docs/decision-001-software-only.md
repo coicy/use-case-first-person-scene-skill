@@ -25,3 +25,7 @@ The user corrected the project's fundamental interpretation: **only draw what ex
 ## Proof obligations
 
 Six-source benchmark with 18 steps and 36 in-software evidence targets, new golden prompt hashes, regression tests ensuring old modes are rejected and visuals containing physical surroundings are marked as failed by the reviewer. Static tests do not prove real image quality.
+
+## PRODUCT-002 clarification (2026-10-22)
+
+The software-only frame boundary remains authoritative. However, the earlier text about deriving **exact product UI** from screenshots applies only to existing-product fidelity work; it is **not** a prerequisite for a new, fictional, or not-yet-built product. Under [PRODUCT-002](PRODUCT_REQUIREMENTS.md), the AI is permitted and expected to propose new UI controls and scene layouts, clearly labeled as proposals rather than established product facts.

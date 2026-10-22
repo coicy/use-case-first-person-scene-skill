@@ -1,52 +1,37 @@
 ---
 name: use-case-first-person-scene
-description: Generate software-only use-case visuals, the application UI or rendered game framebuffer itself. Never draw real users, people interacting with computers, monitors, keyboards, hands outside games, or desks.
+description: Design software-only concept visuals for NEW or not-yet-built software and games from user prompts and use cases. Act as a UI/UX and scene designer, not an existing-product screenshot copier. Keep requirements separate from AI proposals and maintain cross-use-case consistency.
 ---
 
-# Use Case → Software-Only Scene Skill (v0.5)
+# Use Case Driven Software Concept Designer
 
-**Authoritative product rule (2026-10-22):** Output contains ONLY pixels/content that belong inside the software/game. It must not be a photo or illustration of someone using the software. This supersedes all former interpretations of 'user first-person' as physical-user POV.
+## Authoritative product intent
 
-## Correct visual boundaries
+Read docs/PRODUCT_REQUIREMENTS.md (PRODUCT-002) before planning or developing features. This product creates **new software / game use-case concept images**, based on user requirements and AI design proposals. It does not require actual app screenshots. The older v0.6 screenshot-fidelity objective is superseded as a primary use case.
 
-- Desktop applications (VS Code, Godot editor, Blender, GIMP, mobile app): **full-bleed in-application UI**, editor toolbars, views, panels, content, selected state, messages. Not a picture of a laptop/phone.
-- Games (OpenTTD): **full-bleed in-game scene and UI**, preserving the game's isometric/top-down camera, not a train driver POV or physical screen.
-- First-person games (Luanti): **full-bleed in-game character camera** with only warranted HUD/character limbs; never a photo of a gamer or monitor.
-- Game characters, virtual hands and virtual environments may be depicted ONLY if they are part of the original application's visible content. Real-world operator visuals are forbidden.
-- One frame = one concrete use-case step; no poster, collage, explanatory background or extraneous decorative environment.
+## Visual boundary inherited from PRODUCT-001
 
-## Workflow
+Each generated image must be entirely **inside the target software or game**. No actual users, monitor/phone hardware, keyboards, desk or promotional mockup. For a game show the game's designed camera; it need not be first-person gameplay. Virtual hands are acceptable when part of the in-game image.
 
-1. Read requirements and examples/screenshots from user's project. Preserve the user-visible task, state, exact UI labels and explicit evidence. Treat other elements as unknown, not inspiration to invent features.
-2. Extract the use case with `ucscene extract input.md --out out/case.json` or opt-in `--ai`. A *software-internal* environment is required; physical usage location/device information is optional metadata and never a visual object.
-3. Choose `viewpoint_mode` from `application-ui` (default) or `gameplay`. For `gameplay`, set `game_camera` to one of `documented`, `first-person`, `isometric`, `top-down`, `side-scrolling`, `third-person` only when justified by the use case or source.
-4. Run `ucscene validate CASE`, `ucscene plan CASE --out PLAN` and `ucscene review PLAN`. The plan must be `format_version=1.1`, `anchor.frame_scope=software-only`. v0.4 physical-user plans are invalid. No external UI/device context in a visual evidence item.
-5. Prefer exact application screenshots, UI compositions, and programmatic overlays to invented text. For multi-step output, use app/game-only reference images with `anchor-create`, `anchor-verify`, then `generate --anchor` only after human approval and explicit authorization of paid model calls.
-6. `compose-ui`/`compose-batch` can geometrically overlay real UI into regions INSIDE a software screenshot/game framebuffer. Never put software into a photograph of a physical monitor. Geometry preflight and provenance hashes are mandatory.
-7. Optionally run `review-image PLAN --step ID --image PNG` to check software-only frame, camera, step evidence and text. Human review is needed: model-audit PASS is not verified software correctness.
-8. Deliver images and source plans. State whether generation was performed, which source screenshots are real/synthetic, whether visual audits occurred, and any unresolved behavior.
+## Design-first working method
 
-## Non-negotiable tests
+1. Determine what the **new product** is, what goal the user pursues and which use-case step is shown.
+2. Separate **confirmed requirements** from **AI-proposed design** and **unknowns**. Do not present proposals as user-approved facts.
+3. Propose suitable navigation, panels, visible objects, controls, feedback, information hierarchy, styling and camera. Missing design details are opportunities to design; they are not an automatic reason to refuse image generation.
+4. Produce an explicit design plan for the screen/scene **before** an image prompt. If alternate layouts matter, propose several comparable candidates.
+5. Reuse established product-wide design choices across related use cases. A decision may only become approved or locked by explicit user action.
+6. Generate software-only visuals. If exact UI copy, numeric values or text must be guaranteed, use deterministic UI overlays or verified supplied assets; do not claim images prove functioning software.
+7. Review visible use-case evidence, interaction clarity, composition, legibility, consistency and design value. Preserve input IDs and generation provenance.
+8. Present image concepts as proposals until approved; when revising, retain all existing approved constraints.
 
-- Real hands on a keyboard, physical screens, desk, office and people using software → visual failure, even when the UI on the pictured screen is accurate.
-- In-game third-person character imagery is allowed when the *game itself* renders it.
-- Preserve the original software/game camera; do not force every use case into literal human-eye POV.
-- No invented app controls, game mechanics, behavior or acceptance claims.
-- Never claim offline plan tests or CI mocks prove actual visual correctness.
+## How to treat other software
 
-## Quick start
+Godot, VS Code, Blender, OpenTTD, GIMP and Luanti are **examples to learn interaction patterns**, not exact-replication targets for new products. References are optional. Do not demand runtime screenshots of a new product that does not exist.
 
-```bash
-python -m pip install -e '.[ui]'
-ucscene extract examples/warehouse-scan.md --out out/case.json
-ucscene plan out/case.json --out out/plan.json
-ucscene review out/plan.json
-ucscene benchmark benchmarks/famous-projects/suite.json --lock benchmarks/famous-projects/prompt-lock.json
-```
+## Existing CLI caveat
 
-See [docs/decision-001-software-only.md](docs/decision-001-software-only.md) for the contract revision and migration rules. See README for `generate`, `review-image` and `compose-ui` options.
+The released v0.6 CLI still implements source-grounded scene prompting, reference anchors, and acceptance galleries. The ProductBrief/DesignDecision/DesignSystem design workflow and modes explore/draft/consistent/revise are **planned for v0.7**, not already implemented. Keep describing CLI behavior truthfully until the implementation and tests land.
 
+## Engineering plan
 
-## Actual software screenshot acceptance (v0.6)
-
-After generating PNGs, match each real image to one known scene ID and record its actual origin. Run `ucscene acceptance-gallery benchmarks/famous-projects/suite.json --selection selection.json --images images --out-dir out/acceptance`, then `ucscene acceptance-verify out/acceptance/manifest.json`. Open `out/acceptance/index.html` and ask the user to review every scene. NEVER present the existence of an image, successful hash checks, or model review as human sign-off. Benchmark prompt SHA is NOT necessarily the original generation prompt hash; keep generation provenance explicit. If the current UI state depends on prior steps, add source-supported `carry_forward` facts to the source case rather than hallucinating screen content.
+See docs/V07_WORK_PLAN.md for deliverables and acceptance gates. Retain the existing no-external-hardware boundary and no-silent-paid-API policy.

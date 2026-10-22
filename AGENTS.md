@@ -1,4 +1,9 @@
-# Engineering Contract — Use Case First-Person Scene Skill
+# Engineering Contract — Use Case Driven Software Concept Designer
+
+## Current product authority (PRODUCT-002, 2026-10-22)
+
+**Before any implementation or prompt change, read docs/PRODUCT_REQUIREMENTS.md and docs/V07_WORK_PLAN.md.** The project designs visual use-case concepts for **NEW, not-yet-built software and games**. Inventing missing interface arrangements, components and interactions is a REQUIRED design capability when labeled as an AI proposal; it is not automatically a hallucination. Confirmed user requirements override AI proposals; a proposal may not silently become locked. Existing software is a design reference, not the required replication target. Maintain the software-only output boundary of PRODUCT-001. Legacy v0.6 behaviors below remain compatibility constraints until explicitly migrated, not v0.7 product requirements.
+
 
 ## Scope
 

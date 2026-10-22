@@ -82,3 +82,13 @@ Test `tests/test_new_product_design.py`, two original-product fixtures in `bench
 - Default design-plan runs offline deterministic heuristics. Paid AI ideation is only permitted via explicit `--ai`; CI must never call paid API.
 - Schema, plan validation and prompt-hash replay are required. Tests cover original desktop and game projects, 2–3 variants, prompt tampering, exact hard constraints, machine-API mock, and backwards compatibility.
 - A passing WP-02 model test does NOT prove live AI ideation quality or final image quality. Only WP-04 generates actual PNG concepts.
+
+
+## WP-03 design-system safeguards (implemented)
+
+- Treat `DesignPlan` as unapproved suggestions. Never issue `design-system-create --approve` without an actual user confirmation; test/CI must label mock approvals `CI-SYNTHETIC`.
+- DesignSystem records approved choice, digest, revision, 3 effects, and optional lock. Metadata `approval.by=user` is a caller assertion, not identity verification.
+- Preserve previously approved layout, navigation, visual style, common controls and information priority in new use case prompts, even when a future brief adds steps.
+- Reject silent changes to structured hard constraints and frozen design keys. Locked changes require separate new approval and explicit `--override-lock`.
+- Compare consecutive revisions with `design-system-diff`; mark related scenes for re-review. Do not claim it performs image regeneration.
+- CI must run `tests/test_design_system.py` and CLI smoke tests. Keep WP-04 image-generation claims separate from WP-03 offline planning.

@@ -28,6 +28,16 @@ jobs:
           ucscene design-export /tmp/asset-wp02-plan.json --variant VAR-01 --out /tmp/asset-wp02-prompts.json
           ucscene design-plan benchmarks/new-products/new-hamlet-builder.wp02.brief.json --variants 3 --out /tmp/game-wp02-plan.json
           ucscene design-plan-review /tmp/game-wp02-plan.json
+          # WP-03: SYNTHETIC approval token exercises CLI behavior; it is NOT human acceptance.
+          ucscene design-system-create /tmp/asset-wp02-plan.json --variant VAR-02 --approve --evidence-ref CI-SYNTHETIC-APPROVAL --lock --out /tmp/asset-design-system.json
+          ucscene design-system-review /tmp/asset-design-system.json --plan /tmp/asset-wp02-plan.json
+          ucscene design-apply /tmp/asset-design-system.json benchmarks/new-products/new-asset-studio.wp02.brief.json --out /tmp/asset-consistent-plan.json
+          ucscene design-apply-review /tmp/asset-consistent-plan.json --system /tmp/asset-design-system.json --brief benchmarks/new-products/new-asset-studio.wp02.brief.json
+          ucscene design-system-revise /tmp/asset-design-system.json --key ui.layout --value 'A test-only revised layout' --approve --evidence-ref CI-SYNTHETIC-REAPPROVAL --override-lock --out /tmp/asset-revised.json
+          ucscene design-system-diff /tmp/asset-design-system.json /tmp/asset-revised.json --out /tmp/asset-design-diff.json
+          ucscene design-system-create /tmp/game-wp02-plan.json --variant VAR-03 --approve --evidence-ref CI-SYNTHETIC-GAME-APPROVAL --lock --out /tmp/game-design-system.json
+          ucscene design-apply /tmp/game-design-system.json benchmarks/new-products/new-hamlet-builder.wp02.brief.json --out /tmp/game-consistent-plan.json
+          ucscene design-apply-review /tmp/game-consistent-plan.json --system /tmp/game-design-system.json --brief benchmarks/new-products/new-hamlet-builder.wp02.brief.json
           ucscene design-export /tmp/game-wp02-plan.json --variant VAR-02 --out /tmp/game-wp02-prompts.json
           ucscene brief-init --product-id ci-demo --name "CI Demo" --category web --prompt "新的协作软件" --use-case "用户创建任务" --out /tmp/ci-brief.json
           ucscene design-scaffold /tmp/ci-brief.json --out /tmp/ci-design-bundle.json

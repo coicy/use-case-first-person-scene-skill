@@ -35,3 +35,12 @@ No new v0.7 feature should be marked implemented until code and tests verify it.
 WP-01 and WP-02 are implemented. WP-02 includes new-product design-plan/review/export commands, 2–3 variant original interface proposals, MUST/MAY/UNKNOWN requirement classification, source-bound per-step interaction design and SHA-256 prompt verification. Offline deterministic heuristics are tested; optional model ideation requires explicit `--ai` and has not been live-validated.
 
 **Still planned:** WP-03 approval and frozen DesignSystem; WP-04 image output for new-product plans; WP-05 real visual-quality acceptance benchmark. Read [WP02_IMPLEMENTATION.md](WP02_IMPLEMENTATION.md) and [V07_WORK_PLAN.md](V07_WORK_PLAN.md). Older roadmap phases above are historical and do not supersede PRODUCT-002.
+
+
+## v0.7 WP-03 — implemented, offline only
+
+- User-acknowledged selected candidate → versioned product DesignSystem, optional frozen keys.
+- Explicitly authorized revision with predecessor digest and affected-key diff.
+- Consistent new-use-case scene plan using approved layout/navigation/style and step-specific feedback.
+- Schema/CLI/integrity tests. See [WP03_IMPLEMENTATION.md](WP03_IMPLEMENTATION.md).
+- Actual PNG images, visual authenticity and user acceptance are **not** established here. WP-04 remains next.

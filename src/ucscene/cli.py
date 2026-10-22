@@ -17,6 +17,8 @@ from .benchmark import run_benchmark, export_benchmark_plans, make_prompt_lock, 
 from .benchmark_human import rating_template, score_human_packet
 from .acceptance import create_gallery, verify_gallery
 from .design import (init_brief, migrate_legacy_case, create_bundle, validate_product_brief, validate_design_decision, validate_scene_design, validate_design_bundle, create_design_plan, validate_design_plan, export_design_prompts)
+from .design.system import create_design_system, validate_design_system, revise_design_system, compare_design_system
+from .design.continuity import apply_design_system, validate_consistent_plan
 
 def run(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="ucscene", description="Use-case first-person scenario planning and image generation")
@@ -133,8 +135,74 @@ def run(argv: list[str] | None = None) -> int:
     designer_export.add_argument("plan")
     designer_export.add_argument("--variant", help="Optional candidate ID such as VAR-01")
     designer_export.add_argument("--out", default="out/design-prompts.json")
+    system_create = sub.add_parser("design-system-create", help="Record explicitly USER-approved design variant as reusable product DesignSystem")
+    system_create.add_argument("plan")
+    system_create.add_argument("--variant", required=True, help="Selected candidate ID, e.g. VAR-01")
+    system_create.add_argument("--approve", required=True, action="store_true", help="Assert actual user has explicitly approved this selection")
+    system_create.add_argument("--evidence-ref", required=True, help="Reference to the user approval message or record")
+    system_create.add_argument("--lock", action="store_true", help="Freeze approved layout/navigation/style (revisions require override)")
+    system_create.add_argument("--out", default="out/product-design-system.json")
+    system_check = sub.add_parser("design-system-review", help="Verify approved design baseline integrity and optionally its source plan")
+    system_check.add_argument("system")
+    system_check.add_argument("--plan", help="Optional original candidate plan for provenance validation")
+    system_revise = sub.add_parser("design-system-revise", help="Explicitly re-approve ONE changed design field; blocked on locked baselines by default")
+    system_revise.add_argument("system")
+    system_revise.add_argument("--key", required=True, choices=["ui.layout", "ui.navigation", "ui.visual_style"])
+    system_revise.add_argument("--value", required=True)
+    system_revise.add_argument("--approve", required=True, action="store_true")
+    system_revise.add_argument("--evidence-ref", required=True)
+    system_revise.add_argument("--override-lock", action="store_true", help="Assert explicit authorization to change a frozen design")
+    system_revise.add_argument("--out", default="out/revised-design-system.json")
+    system_diff = sub.add_parser("design-system-diff", help="Check consecutive approved revisions and report affected design property")
+    system_diff.add_argument("before")
+    system_diff.add_argument("after")
+    system_diff.add_argument("--out", default="out/design-system-diff.json")
+    consistent = sub.add_parser("design-apply", help="Generate consistent NEW use-case prompts from an approved product DesignSystem")
+    consistent.add_argument("system")
+    consistent.add_argument("brief", help="New product brief with one or more existing/new use-case steps")
+    consistent.add_argument("--out", default="out/consistent-scene-plan.json")
+    consistent_check = sub.add_parser("design-apply-review", help="Recompile and verify a consistent scene plan against its DesignSystem and source Brief")
+    consistent_check.add_argument("plan")
+    consistent_check.add_argument("--system", required=True)
+    consistent_check.add_argument("--brief", required=True)
     args = parser.parse_args(argv)
     try:
+        if args.command == "design-system-create":
+            system = create_design_system(load_json(args.plan), args.variant, evidence_ref=args.evidence_ref, locked=args.lock)
+            save_json(args.out, system)
+            print(json.dumps({"ok": True, "path": args.out, "variant": args.variant,
+                              "locked": system['locked'], "revision": system['revision'],
+                              "approval": "self-attested-user-approval", "digest": system['digest_sha256']}, ensure_ascii=False))
+            return 0
+        if args.command == "design-system-review":
+            system = validate_design_system(load_json(args.system), plan=load_json(args.plan) if args.plan else None)
+            print(json.dumps({"ok": True, "path": args.system, "revision": system['revision'],
+                              "locked": system['locked'], "digest": system['digest_sha256']}, ensure_ascii=False))
+            return 0
+        if args.command == "design-system-revise":
+            system = revise_design_system(load_json(args.system), args.key, args.value, evidence_ref=args.evidence_ref,
+                                          override_lock=args.override_lock)
+            save_json(args.out, system)
+            print(json.dumps({"ok": True, "path": args.out, "revision": system['revision'],
+                              "locked": system['locked'], "digest": system['digest_sha256']}, ensure_ascii=False))
+            return 0
+        if args.command == "design-system-diff":
+            diff = compare_design_system(load_json(args.before), load_json(args.after))
+            save_json(args.out, diff)
+            print(json.dumps({"ok": True, "path": args.out, "changes": len(diff['changes']),
+                              "requires_scene_review": diff['requires_scene_review']}, ensure_ascii=False))
+            return 0
+        if args.command == "design-apply":
+            plan = apply_design_system(load_json(args.system), load_json(args.brief))
+            save_json(args.out, plan)
+            print(json.dumps({"ok": True, "path": args.out, "scenes": len(plan['scenes']),
+                              "design_revision": plan['design_system_revision'], "images": 0}, ensure_ascii=False))
+            return 0
+        if args.command == "design-apply-review":
+            p = validate_consistent_plan(load_json(args.plan), system=load_json(args.system), brief=load_json(args.brief))
+            print(json.dumps({"ok": True, "path": args.plan, "scenes": len(p['scenes']),
+                              "design_revision": p['design_system_revision']}, ensure_ascii=False))
+            return 0
         if args.command == "design-plan":
             planned = create_design_plan(load_json(args.source), variants=args.variants, ai=args.ai, model=args.model)
             save_json(args.out, planned)

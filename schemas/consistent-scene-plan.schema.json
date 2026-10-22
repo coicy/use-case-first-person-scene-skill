@@ -1,0 +1,179 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/ucscene/v0.7/consistent-scene-plan.schema.json",
+  "title": "ConsistentScenePlan v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format_version",
+    "kind",
+    "product_id",
+    "source_brief_sha256",
+    "design_system_sha256",
+    "design_system_revision",
+    "approved_layout",
+    "approved_navigation",
+    "approved_visual_style",
+    "approval",
+    "scenes",
+    "generated_images",
+    "warning"
+  ],
+  "properties": {
+    "format_version": {
+      "const": "1.0"
+    },
+    "kind": {
+      "const": "consistent-scene-plan"
+    },
+    "product_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_brief_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "design_system_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "design_system_revision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "approved_layout": {
+      "type": "string",
+      "minLength": 1
+    },
+    "approved_navigation": {
+      "type": "string",
+      "minLength": 1
+    },
+    "approved_visual_style": {
+      "type": "string",
+      "minLength": 1
+    },
+    "approval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "by",
+        "evidence_ref"
+      ],
+      "properties": {
+        "by": {
+          "const": "user"
+        },
+        "evidence_ref": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "scenes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "scene_id",
+          "use_case_id",
+          "step_id",
+          "state",
+          "flow",
+          "requirement_ids",
+          "required_evidence",
+          "required_ui_text",
+          "design_status",
+          "design_decision_ids",
+          "interaction",
+          "prompt",
+          "prompt_sha256"
+        ],
+        "properties": {
+          "scene_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "use_case_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "step_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "state": {
+            "enum": [
+              "start",
+              "in-progress",
+              "waiting",
+              "success",
+              "failure"
+            ]
+          },
+          "flow": {
+            "enum": [
+              "main",
+              "alternative",
+              "exception"
+            ]
+          },
+          "requirement_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required_evidence": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required_ui_text": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "design_status": {
+            "const": "approved-baseline"
+          },
+          "design_decision_ids": {
+            "type": "array",
+            "minItems": 3,
+            "maxItems": 3,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "interaction": {
+            "type": "object"
+          },
+          "prompt": {
+            "type": "string",
+            "minLength": 1
+          },
+          "prompt_sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        }
+      }
+    },
+    "generated_images": {
+      "const": 0
+    },
+    "warning": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

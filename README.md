@@ -169,3 +169,21 @@ ucscene design-plan benchmarks/new-products/new-asset-studio.wp02.brief.json --a
 ```
 
 Plans classify requirements as MUST/MAY/UNKNOWN, attach 2–3 candidate approaches, propose per-step controls and feedback, and compile prompts with SHA-256 hashes. The default is a **rule-based baseline**, not AI creativity; `--ai` uses the Responses API explicitly. All proposal decisions stay unapproved and unlocked. No new-product PNG is generated in WP-02; WP-03 will govern design acceptance/freeze and WP-04 image generation. See [implementation and limitations](docs/WP02_IMPLEMENTATION.md).
+
+
+## v0.7 WP-03 — 产品设计规范与跨用例继承（已实现）
+
+从 WP-02 的 2～3 个候选中，**只有得到真实用户明确确认**之后，才可建立批准版 DesignSystem；命令行的 `--approve --evidence-ref` 是调用方对该批准的自我声明，CLI 无法独立核实身份或聊天记录。
+
+```bash
+ucscene design-plan benchmarks/new-products/new-asset-studio.wp02.brief.json --variants 2 --out out/design-plan.json
+# 用户明确批准 VAR-02 后：
+ucscene design-system-create out/design-plan.json --variant VAR-02 --approve --evidence-ref USER-CONFIRMATION-REF --lock --out out/design-system.json
+ucscene design-system-review out/design-system.json --plan out/design-plan.json
+ucscene design-apply out/design-system.json benchmarks/new-products/new-asset-studio.wp02.brief.json --out out/consistent-plan.json
+ucscene design-apply-review out/consistent-plan.json --system out/design-system.json --brief benchmarks/new-products/new-asset-studio.wp02.brief.json
+```
+
+冻结规范只能通过显式授权标记 `--override-lock` 加新 `--evidence-ref` 重新批准后修订。用 `design-system-diff` 识别需要重新验收的设计变化。新增 Schema：`schemas/design-system.schema.json` 和 `schemas/consistent-scene-plan.schema.json`。详细说明见 [WP-03 实施记录](docs/WP03_IMPLEMENTATION.md)。
+
+**重要：WP-03 只输出带批准设计基线的多步骤生图提示词，不自动生图，不代表任何候选已经获得本用户真实批准。** 下一阶段 WP-04 才实现真实原创软件图片与视觉验收。

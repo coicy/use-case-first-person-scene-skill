@@ -68,8 +68,9 @@ def edit_openai_image(
     pieces: list[bytes] = []
     for name, value in (("model", model), ("prompt", prompt), ("size", size), ("quality", quality)):
         pieces.append(f'--{boundary}\r\nContent-Disposition: form-data; name="{name}"\r\n\r\n{value}\r\n'.encode("utf-8"))
+    filename = {'image/png': 'reference.png', 'image/jpeg': 'reference.jpg', 'image/webp': 'reference.webp'}[mime]
     pieces.append((
-        f'--{boundary}\r\nContent-Disposition: form-data; name="image"; filename="reference.png"\r\n'
+        f'--{boundary}\r\nContent-Disposition: form-data; name="image"; filename="{filename}"\r\n'
         f'Content-Type: {mime}\r\n\r\n'
     ).encode("utf-8") + img + b"\r\n")
     pieces.append(f"--{boundary}--\r\n".encode("ascii"))

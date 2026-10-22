@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Human-approved scene reference anchor manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["format_version", "use_case_id", "plan_anchor_sha256", "reference_image", "reference_sha256", "width", "height", "approved_by_operator", "approval_note", "scene_anchor"],
+  "properties": {
+    "format_version": {"const": "1.0"},
+    "use_case_id": {"type": "string", "minLength": 1},
+    "plan_anchor_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "reference_image": {"type": "string", "minLength": 1},
+    "reference_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "width": {"type": "integer", "minimum": 16},
+    "height": {"type": "integer", "minimum": 16},
+    "approved_by_operator": {"type": "boolean"},
+    "approval_note": {"type": "string"},
+    "scene_anchor": {
+      "type": "object",
+      "required": ["actor", "environment", "device", "style", "viewpoint", "continuity"],
+      "properties": {
+        "actor": {"type": "string"},
+        "environment": {"type": "string"},
+        "device": {"type": "string"},
+        "style": {"type": "string"},
+        "viewpoint": {"type": "string"},
+        "continuity": {"type": "string"}
+      }
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Normalized device-screen quadrilateral",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["coordinate_system", "points"],
+  "properties": {
+    "coordinate_system": {"const": "normalized"},
+    "points": {
+      "type": "array", "minItems": 4, "maxItems": 4,
+      "items": {
+        "type": "array", "minItems": 2, "maxItems": 2,
+        "items": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    }
+  },
+  "$comment": "Point order is TL, TR, BR, BL. Runtime validation additionally rejects concave, inverted, tiny or self-intersecting quadrilaterals."
+}

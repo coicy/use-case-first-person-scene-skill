@@ -4,11 +4,14 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "use-case-first-person-scene-skill"
-version = "0.2.0"
+version = "0.3.0"
 description = "Use-case grounded first-person scenario planner and optional image generator"
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
+
+[project.optional-dependencies]
+ui = ["Pillow>=10,<13"]
 
 [project.scripts]
 ucscene = "ucscene.cli:main"

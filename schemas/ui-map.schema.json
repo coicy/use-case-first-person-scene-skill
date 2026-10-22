@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Per-step UI screenshots and perspective quadrilateral mapping",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["format_version", "screens"],
+  "properties": {
+    "format_version": {"const": "1.0"},
+    "screens": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object", "additionalProperties": false,
+        "required": ["ui", "quad"],
+        "properties": {
+          "ui": {"type": "string", "minLength": 1},
+          "quad": {"type": "string", "minLength": 1}
+        }
+      }
+    }
+  }
+}

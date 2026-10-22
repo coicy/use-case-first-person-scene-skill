@@ -10,6 +10,9 @@ from .provider import ProviderError, generate_openai_image, edit_openai_image
 from .extractor import extract_markdown
 from .ai_extract import extract_with_ai
 from .vision import review_image
+from .anchors import create_anchor, verify_anchor
+from .composite import compose_ui, compose_batch
+from .imaging import inspect_image
 
 def run(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="ucscene", description="Use-case first-person scenario planning and image generation")
@@ -38,6 +41,29 @@ def run(argv: list[str] | None = None) -> int:
     generate.add_argument("--step", action="append", dest="steps", default=None)
     generate.add_argument("--reference-image", help="Apply the same reference image to all generated scenes")
     generate.add_argument("--chain", action="store_true", help="Edit every later scene using the previous generated scene as reference (potential drift)")
+    generate.add_argument("--anchor", help="Approved, integrity-checked anchor manifest used as fixed reference for every scene")
+    anchor_create = sub.add_parser("anchor-create", help="Write a reusable visual anchor manifest with image digest")
+    anchor_create.add_argument("plan")
+    anchor_create.add_argument("--image", required=True)
+    anchor_create.add_argument("--out", required=True)
+    anchor_create.add_argument("--approved", action="store_true", help="Record the operator's explicit visual approval")
+    anchor_create.add_argument("--note", default="", help="Explain which reference details were manually verified")
+    anchor_verify = sub.add_parser("anchor-verify", help="Verify anchor provenance, source integrity and optional plan compatibility")
+    anchor_verify.add_argument("anchor")
+    anchor_verify.add_argument("--plan")
+    anchor_verify.add_argument("--require-approved", action="store_true")
+    composite = sub.add_parser("compose-ui", help="Offline overlay of an exact UI screenshot in a normalized screen quadrilateral")
+    composite.add_argument("--scene", required=True)
+    composite.add_argument("--ui", required=True)
+    composite.add_argument("--quad", required=True)
+    composite.add_argument("--out", required=True)
+    composite.add_argument("--report", help="Optional provenance JSON report")
+    batch = sub.add_parser("compose-batch", help="Overlay per-step UI screenshots onto generated scenes (offline)")
+    batch.add_argument("plan")
+    batch.add_argument("--images", required=True, help="Directory containing generated scene PNGs")
+    batch.add_argument("--map", required=True, help="JSON mapping from step ID to screenshot and quad")
+    batch.add_argument("--out", required=True, help="Separate output directory for composited scenes")
+    batch.add_argument("--strict", action="store_true", help="Require a mapping for every scene")
     inspect = sub.add_parser("review-image", help="Opt-in visual QA of a generated scene (paid vision API)")
     inspect.add_argument("plan")
     inspect.add_argument("--step", required=True)
@@ -77,6 +103,18 @@ def run(argv: list[str] | None = None) -> int:
             errors = review_plan(load_json(args.plan))
             print(json.dumps({"ok": not errors, "errors": errors}, ensure_ascii=False, indent=2))
             return 2 if errors else 0
+        elif args.command == "anchor-create":
+            anchor = create_anchor(load_json(args.plan), args.image, args.out, approved=args.approved, note=args.note)
+            print(json.dumps({"ok": True, "path": args.out, "approved": anchor["approved_by_operator"], "reference_sha256": anchor["reference_sha256"]}, ensure_ascii=False))
+        elif args.command == "anchor-verify":
+            anchor, image_path = verify_anchor(args.anchor, plan=load_json(args.plan) if args.plan else None, require_approved=args.require_approved)
+            print(json.dumps({"ok": True, "approved": anchor["approved_by_operator"], "reference_image": str(image_path)}, ensure_ascii=False))
+        elif args.command == "compose-ui":
+            result = compose_ui(args.scene, args.ui, args.quad, args.out, report_path=args.report)
+            print(json.dumps({"ok": True, "path": args.out, "output_sha256": result["output_sha256"], "report": args.report}, ensure_ascii=False))
+        elif args.command == "compose-batch":
+            report = compose_batch(load_json(args.plan), args.images, args.map, args.out, strict=args.strict)
+            print(json.dumps({"ok": True, "images": len(report["items"]), "unmapped": report["unmapped_step_ids"], "path": str(Path(args.out) / "composition-report.json")}, ensure_ascii=False))
         elif args.command == "generate":
             p = load_json(args.plan)
             problems = review_plan(p)
@@ -94,6 +132,15 @@ def run(argv: list[str] | None = None) -> int:
                 raise SceneError("--chain requires an ordered full plan; omit --step")
             if args.chain and args.reference_image:
                 raise SceneError("Choose --reference-image or --chain, not both")
+            if args.anchor and (args.chain or args.reference_image):
+                raise SceneError("--anchor is exclusive with --reference-image and --chain")
+            approved_anchor = None
+            verified_reference = None
+            if args.anchor:
+                approved_anchor, verified_reference = verify_anchor(args.anchor, plan=p, require_approved=True)
+            if args.reference_image:
+                # Fail missing/invalid reference BEFORE any paid image API calls.
+                inspect_image(args.reference_image)
             report = []
             previous_image = None
             for s in scenes:
@@ -101,7 +148,7 @@ def run(argv: list[str] | None = None) -> int:
                 if not safe_id:
                     raise SceneError("Unsafe empty scene file name")
                 path = Path(args.out) / (safe_id + ".png")
-                source_reference = args.reference_image or (str(previous_image) if args.chain and previous_image else None)
+                source_reference = str(verified_reference) if verified_reference else args.reference_image or (str(previous_image) if args.chain and previous_image else None)
                 if source_reference:
                     item = edit_openai_image(s["prompt"], source_reference, path, model=args.model, size=args.size, quality=args.quality)
                 else:
@@ -109,7 +156,7 @@ def run(argv: list[str] | None = None) -> int:
                 previous_image = path
                 report.append({"scene_id": s["id"], "prompt_sha256": s["prompt_sha256"], **item})
                 print("Generated:", item["path"], file=sys.stderr)
-            save_json(Path(args.out) / "generation-report.json", {"images": report, "continuity_mode": "fixed-reference" if args.reference_image else "sequential-chain" if args.chain else "prompt-only", "warning": "Visual continuity is not guaranteed. Use review-image and inspect manually."})
+            save_json(Path(args.out) / "generation-report.json", {"images": report, "continuity_mode": "verified-manifest-anchor" if args.anchor else "fixed-reference" if args.reference_image else "sequential-chain" if args.chain else "prompt-only", "anchor_reference_sha256": approved_anchor["reference_sha256"] if approved_anchor else None, "warning": "Visual continuity is not guaranteed. Use review-image and inspect manually. Compositing exact UI screenshots is available offline with compose-ui."})
             print(json.dumps({"ok": True, "images": len(report)}, ensure_ascii=False))
         elif args.command == "review-image":
             p = load_json(args.plan)

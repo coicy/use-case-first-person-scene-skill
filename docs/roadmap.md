@@ -1,31 +1,35 @@
-# Roadmap
+# Product Roadmap
 
-## v0.1.0 — initial working skill
+## Implemented — v0.1.0
 
-- Structured use case JSON, deterministic prompt plans, POV constraints, generation provider, offline tests and CI.
+- Structured use-case JSON to reproducible first-person scene prompts and step-specific evidence.
+- Optional image-generation provider and offline tests.
 
-## v0.2.0 — grounded extraction and visual QA (implemented)
+## Implemented — v0.2.0
 
-- Offline Chinese/English Markdown extraction with unready draft mechanism.
-- Opt-in freeform AI extraction with exact source quote checks.
-- Reference-based image editing and optional sequential chaining.
-- Vision-based advisory image quality check for POV, visible evidence, exact UI text and optional reference continuity.
-- Mocked provider tests and CI smoke test.
+- Bilingual structured Markdown input; opt-in AI free-prose extraction with source quote checks.
+- Fixed-reference/chain image edits, model-assisted POV/evidence review (advisory).
 
-## v0.3.0 — higher-fidelity representation
+## Implemented — v0.3.0
 
-- Support for document/PRD import, explicit source provenance spans and image archetypes by use case type.
-- Reusable manually reviewed scene anchor asset library, style manifests and composition maps.
-- Verified UI screenshots composited into generated scene frames to avoid synthetic/incorrect lettering.
-- Visual QA metrics with multiple independent reviewers and stability experiments.
+- Explicitly human-approved, use-case-bound reference image manifests with SHA-256 file integrity checks.
+- Offline perspective mapping of a **real provided UI screenshot** into four user-chosen screen corners on any generated scene; pixel preservation outside projected device screen.
+- Batch per-step screenshots, input preflight, provenance reports and a completely offline reproducible demonstration.
+- Python optional Pillow extra, CI matrix and offline tests for anchors, composition and invalid inputs.
 
-## v1.0 — engineering integration
+## Not yet implemented (candidates for v0.4 and beyond)
 
-- Incremental regeneration after requirement changes; trace from cases to assets and release reports.
-- Optional design review workflows, versioned image anchors, cost ceilings and budget reporting.
+- Automatic detection/interactive editing of device screen quadrilateral; occlusion behind hands and reflections.
+- Source-aware Markdown/PRD references with filename and line-level traceability.
+- Specialized game/editor/warehouse/POS archetypes with empirically evaluated prompt libraries.
+- End-to-end real API acceptance suite using a limited authorized test budget.
+- Repeatable quantitative comparison of visual anchor fidelity and multi-step visual consistency.
+- Batch visual QA with independent reviewers, cost ceilings, image regeneration on targeted errors.
+- Diff-based regeneration and repository CI for changing requirements/assets.
 
-## Non-goals
+## Non-goals / limitations
 
-- Generated images are not proof of functioning software or business logic.
-- Model-generated exact text is not reliable and cannot replace verified UI overlays.
-- The skill does not guarantee background, object, or identity consistency between images.
+- No guarantee a model's images follow the requested camera geometry.
+- Approved reference manifests express a human assertion, not independent certification or tamper-resistant signature.
+- Composited UI screenshots do not establish functional correctness; tiny text may become unreadable after resampling.
+- Generated imagery must not replace executable acceptance tests.

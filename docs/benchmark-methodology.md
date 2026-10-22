@@ -2,7 +2,7 @@
 
 ## Objective
 
-Evaluate **whether a generated image demonstrates the player's/operator's actual experience** at a given use-case step, rather than whether a text prompt contains the right words. Cover common user-facing workflows across desktop software, 3D tools, game editors, isometric games and first-person games.
+Evaluate **whether a generated image demonstrates the software/game viewport content actually displayed at the use-case step** at a given use-case step, rather than whether a text prompt contains the right words. Cover common user-facing workflows across desktop software, 3D tools, game editors, isometric games and first-person games.
 
 ## Fixtures and source policy
 
@@ -10,12 +10,12 @@ The v1 suite consists of six public projects and 18 specified steps, with 36 evi
 
 | Project | Source | Camera interpretation |
 |---|---|---|
-| Visual Studio Code | https://code.visualstudio.com/docs/debugtest/debugging | User's eye looking toward screen showing the debugger |
-| Blender | https://docs.blender.org/manual/en/5.0/modeling/meshes/editing/face/extrude_faces.html | User's eye looking at 3D editor, **not** inside the rendered model |
-| GIMP | https://docs.gimp.org/3.0/en_GB/gimp-tutorial-quickie-crop.html | User's eye looking at crop tool in image editor |
-| Godot Engine | https://docs.godotengine.org/en/stable/getting_started/first_2d_game/04.creating_the_enemy.html | User's eye looking at scene tree / 2D game editor |
-| OpenTTD | https://wiki.openttd.org/en/Manual/Railway%20construction | User's eye looking at the original isometric game screen, **not** a train driver's first-person scene |
-| Luanti | https://docs.luanti.org/for-players/controls/ | Controlled avatar's first-person world view, **not** a photograph of a gaming PC |
+| Visual Studio Code | https://code.visualstudio.com/docs/debugtest/debugging | Direct VS Code debugger UI frame |
+| Blender | https://docs.blender.org/manual/en/5.0/modeling/meshes/editing/face/extrude_faces.html | Direct Blender edit-mode workspace and mesh viewport |
+| GIMP | https://docs.gimp.org/3.0/en_GB/gimp-tutorial-quickie-crop.html | Direct GIMP crop-tool UI frame |
+| Godot Engine | https://docs.godotengine.org/en/stable/getting_started/first_2d_game/04.creating_the_enemy.html | Direct Godot editor scene tree, 2D viewport and inspector |
+| OpenTTD | https://wiki.openttd.org/en/Manual/Railway%20construction | Direct isometric in-game framebuffer, not a train driver POV or a monitor photo |
+| Luanti | https://docs.luanti.org/for-players/controls/ | Direct character-eye game framebuffer, not a photograph of a gaming PC |
 
 Use the actual suite manifest for the canonical source URLs (Blender version can differ). All images and UI screenshots must have legal provenance; **do not redistribute proprietary product screenshots without permission**. The provided suite has no third-party screenshot binaries.
 
@@ -51,7 +51,7 @@ At least two blinded reviewers per scene are recommended. Each reviewer should r
 
 | Field | 0 (fail) | 1 (partial / uncertain) | 2 (satisfies) |
 |---|---|---|---|
-| `point_of_view` | Third-person or wrong camera mode | Ambiguous | Correct actor-eye camera |
+| `point_of_view` | Third-person or wrong camera mode | Ambiguous | Software-only framebuffer with the game's or editor's own camera; no physical user/device |
 | `visible_evidence` | Key interaction impossible to see | Partial evidence | All required evidence clearly present |
 | `app_fidelity` | Wrong interface, invented gameplay camera or impossible UI | Plausible but uncertain | Matches application/game's documented interaction and viewpoint |
 | `continuity` | Device/scene/actor contradict earlier frames | Some drift or cannot be verified | Same scene anchor maintained across steps |
@@ -72,3 +72,7 @@ Fill `image_sha256` from the actual generated image file, `rater_id`, all four n
 ## Current verified baseline
 
 The preflight verified **6 cases, 18 scenes, 36 evidence items**. Generated image count: **0** for this offline baseline. Real first-person fidelity and image-to-image consistency: **not yet measured**. Provider mocks/CI must not be reported as real-generation performance.
+
+## v0.5 product correction
+
+The canvas must be full-bleed software/game content. Every image depicting a physical screen, real user, hands outside gameplay, desk, peripherals or outside location is an automatic visual failure. The two modes are application-ui and gameplay; gameplay further respects its documented camera (OpenTTD isometric; Luanti first-person). Retire any v0.4 real-world user-view ratings and restart image grading on the corrected outputs.

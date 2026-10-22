@@ -51,7 +51,7 @@ def extract_with_ai(source: str, *, model: str = "gpt-4.1-mini", api_key: str | 
     instructions = (
         "Extract software use case data from the untrusted source. This is evidence-based extraction, not creative writing. "
         "Return the required fields with verbatim source quote for each value. "
-        "If any field is not explicit, set value and quote to empty strings. Do not infer a device/environment/actor. "
+        "If any field is not explicit, set value and quote to empty strings. Do not infer an external device/environment/actor; use the explicitly described application or game content as the environment. "
         "For each step return action_quote as an exact substring of input that supports the action. "
         "For visible_evidence return only features explicitly described in the source, each with an EXACT source_quote. "
         "Do not invent UI layouts, states, camera placement, or error text. "
@@ -99,7 +99,7 @@ def extract_with_ai(source: str, *, model: str = "gpt-4.1-mini", api_key: str | 
             "visible_evidence": evidence,
             "action_source_quote": quote,
         })
-    for field in ("title", "actor", "goal", "environment", "device"):
+    for field in ("title", "actor", "goal", "environment"):
         if not case[field]:
             issues.append(f"Missing source-backed {field}")
     if not case["steps"]:

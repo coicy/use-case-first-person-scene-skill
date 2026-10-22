@@ -27,26 +27,30 @@ class TestOfficialBenchmarks(unittest.TestCase):
         verify_prompt_lock(report, LOCK)
         self.assertEqual(make_prompt_lock(report), load_json(LOCK))
 
-    def test_physical_game_does_not_invent_first_person_game_world(self):
+    def test_openttd_stays_isometric_in_software_only_frame(self):
         case = load_json(SUITE.parent / 'cases' / 'openttd-rail.json')
         p = build_plan(case)
         for scene in p['scenes']:
-            self.assertIn('POV MODE: physical-user', scene['prompt'])
-            self.assertIn('isometric/top-down/2D', scene['prompt'])
-            self.assertIn('OpenTTD', scene['prompt'])
-        self.assertEqual(p['anchor']['viewpoint_mode'], 'physical-user')
+            self.assertIn('POV MODE: gameplay', scene['prompt'])
+            self.assertIn('GAME CAMERA: isometric', scene['prompt'])
+            self.assertIn('FULL-BLEED SOFTWARE CONTENT', scene['prompt'])
+            self.assertNotIn('ACTOR EYES looking at display', scene['prompt'])
+        self.assertEqual(p['anchor']['frame_scope'], 'software-only')
 
-    def test_avatar_game_has_no_external_monitor(self):
+    def test_luanti_stays_direct_gameplay_not_monitor(self):
         case = load_json(SUITE.parent / 'cases' / 'luanti-mining.json')
         p = build_plan(case)
         for scene in p['scenes']:
-            self.assertIn('POV MODE: avatar-eyes', scene['prompt'])
-            self.assertIn('No monitor', scene['prompt'])
-        self.assertEqual(p['anchor']['viewpoint_mode'], 'avatar-eyes')
+            self.assertIn('POV MODE: gameplay', scene['prompt'])
+            self.assertIn('GAME CAMERA: first-person', scene['prompt'])
+            self.assertIn('physical monitor', scene['prompt'])  # prohibited, never required
+        self.assertEqual(p['anchor']['viewpoint_mode'], 'gameplay')
 
-    def test_legacy_use_cases_keep_physical_viewpoint(self):
+    def test_default_is_application_ui_not_real_user(self):
         case = load_json(ROOT / 'examples' / 'warehouse-scan.json')
-        self.assertEqual(build_plan(case)['anchor']['viewpoint_mode'], 'physical-user')
+        p = build_plan(case)
+        self.assertEqual(p['anchor']['viewpoint_mode'], 'application-ui')
+        self.assertEqual(p['anchor']['frame_scope'], 'software-only')
 
     def test_reject_unknown_viewpoint(self):
         case = load_json(SUITE.parent / 'cases' / 'openttd-rail.json')
@@ -54,10 +58,13 @@ class TestOfficialBenchmarks(unittest.TestCase):
         with self.assertRaises(SceneError):
             validate_use_case(case)
 
-    def test_reject_physical_monitor_with_avatar_eye_mode(self):
+    def test_deprecated_real_user_camera_is_rejected(self):
         case = load_json(SUITE.parent / 'cases' / 'luanti-mining.json')
-        case['device'] = 'computer monitor'
-        with self.assertRaises(SceneError):
+        case['viewpoint_mode'] = 'physical-user'
+        with self.assertRaisesRegex(SceneError, 'Deprecated viewpoint_mode'):
+            validate_use_case(case)
+        case['viewpoint_mode'] = 'avatar-eyes'
+        with self.assertRaisesRegex(SceneError, 'Deprecated viewpoint_mode'):
             validate_use_case(case)
 
     def test_export_plans_and_cli(self):
@@ -122,8 +129,8 @@ class TestOfficialBenchmarks(unittest.TestCase):
         with TemporaryDirectory() as temp:
             suite, file = self._minimal_suite(Path(temp))
             case = load_json(file)
-            case['viewpoint_mode'] = 'avatar-eyes'
-            case['device'] = 'gameplay viewport'
+            case['viewpoint_mode'] = 'gameplay'
+            case['game_camera'] = 'isometric'
             save_json(file, case)
             with self.assertRaisesRegex(SceneError, 'camera does not match'):
                 run_benchmark(suite)

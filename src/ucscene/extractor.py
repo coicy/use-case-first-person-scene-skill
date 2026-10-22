@@ -16,7 +16,7 @@ _FIELDS: dict[str, tuple[str, ...]] = {
     "actor": ("参与者", "用户角色", "主要参与者", "actor", "role"),
     "goal": ("用例目标", "业务目标", "目标", "goal", "purpose"),
     "environment": ("所处环境", "场景环境", "环境", "environment", "location"),
-    "device": ("交互设备", "设备", "终端", "device", "interface"),
+    "device": ("交互设备", "设备", "终端", "device"),
 }
 _ALIASES = {alias.lower(): field for field, aliases in _FIELDS.items() for alias in aliases}
 _TITLE = re.compile(r"^\s*#{1,6}\s+(.*?)\s*$")
@@ -97,7 +97,7 @@ def extract_markdown(source: str, *, overrides: dict[str, str] | None = None) ->
     if not case["id"]:
         case["id"] = "DRAFT-" + hashlib.sha256(source.encode("utf-8")).hexdigest()[:10].upper()
     issues: list[str] = []
-    for field in ("actor", "goal", "environment", "device"):
+    for field in ("actor", "goal", "environment"):
         if not case[field]:
             issues.append(f"Missing explicit {field}; edit the draft or use --{field}")
     if not case["steps"]:

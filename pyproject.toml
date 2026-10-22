@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "use-case-first-person-scene-skill"
-version = "0.4.0"
-description = "Use-case grounded first-person scenario planner and optional image generator"
+version = "0.5.0"
+description = "Use-case grounded software-only scenario planner and optional image generator"
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}

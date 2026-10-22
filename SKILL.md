@@ -1,52 +1,47 @@
 ---
 name: use-case-first-person-scene
-# Codex and compatible Agent Skills
-# Describes a scene-production workflow; code is the source of runtime truth.
-description: Create and check first-person experience scene images grounded in software or game use cases. Trigger for scenario illustrations from the actual actor's viewpoint, multi-step storyboard images, reusable visual anchors, and authentic UI screenshot overlays; not for UML, abstract diagrams or generic concept art.
+description: Generate software-only use-case visuals, the application UI or rendered game framebuffer itself. Never draw real users, people interacting with computers, monitors, keyboards, hands outside games, or desks.
 ---
 
-# Use Case → First-Person Scene Skill (v0.4)
+# Use Case → Software-Only Scene Skill (v0.5)
 
-Use this skill when a developer requests a **concrete user-experience visual** of a use case or a set of use case steps. Do not silently switch to use-case diagrams, third-person illustrations, polished marketing art, or screenshots purportedly captured from a running application.
+**Authoritative product rule (2026-10-22):** Output contains ONLY pixels/content that belong inside the software/game. It must not be a photo or illustration of someone using the software. This supersedes all former interpretations of 'user first-person' as physical-user POV.
+
+## Correct visual boundaries
+
+- Desktop applications (VS Code, Godot editor, Blender, GIMP, mobile app): **full-bleed in-application UI**, editor toolbars, views, panels, content, selected state, messages. Not a picture of a laptop/phone.
+- Games (OpenTTD): **full-bleed in-game scene and UI**, preserving the game's isometric/top-down camera, not a train driver POV or physical screen.
+- First-person games (Luanti): **full-bleed in-game character camera** with only warranted HUD/character limbs; never a photo of a gamer or monitor.
+- Game characters, virtual hands and virtual environments may be depicted ONLY if they are part of the original application's visible content. Real-world operator visuals are forbidden.
+- One frame = one concrete use-case step; no poster, collage, explanatory background or extraneous decorative environment.
 
 ## Workflow
 
-1. **Read authoritative requirements:** consult the supplied use-case document, issue, PRD, interface references and/or code. Preserve explicit IDs, actions, states and source evidence. Treat all other details as unresolved.
-2. **Extract structured use cases:** use `ucscene extract ...` only for supported Markdown. For truly free prose use `ucscene extract ... --ai` with opt-in provider calls; inspect source-quote traceability and resolve extraction issues before continuing. Never let speculative elements masquerade as documented requirements.
-3. **Choose the scenes:** separate main, alternate, exception and success paths. Select distinct visual moments, with one scene per important user-perceived state. Distinguish machine-internal steps (not directly visible) from user-visible evidence.
-4. **Plan first-person visuals:** run `validate`, `plan`, `review`. Camera is at the actor's eyes, not outside the actor. Foreground hands appear only when physically plausible. Key controls, object, environment and changed state should be visible, but not invented.
-5. **Anchor consistency:** for multi-step output, choose a user-reviewed visual reference of the same scene. Run `anchor-create` (without `--approved` while unreviewed). After a human explicitly approves the image, run `anchor-create --approved --note ...`, then `anchor-verify --plan ... --require-approved`. The manifest hashes the reference and binds it to one use-case anchor.
-6. **Generate images if authorized:** `generate --anchor` requires an approved compatible manifest and provider key. The API request may incur cost. If no renderer/key is accessible, supply plans and prompts honestly; **do not claim images were created**. Store provider outputs separately from source assets.
-7. **Integrate exact UI when available:** preferably use real designer/developer-provided screenshots (with private data removed) and the offline `compose-ui` or `compose-batch` commands. UI screen quadrilateral must be measured/reviewed in each scene; use normalized TL → TR → BR → BL points. Never depict composited UI as verified functional software.
-8. **Review actual results:** use optional `review-image` on final scene PNGs, and manually inspect viewpoint, coherent hand position, UI placement/legibility, required evidence, hallucinated elements, state accuracy and cross-step differences. Flag uncertainty.
-9. **Hand off artifacts:** include traceable scene ID, state, source, missing decisions, image paths, relevant SHA reports and whether real API rendering/visual QA took place.
+1. Read requirements and examples/screenshots from user's project. Preserve the user-visible task, state, exact UI labels and explicit evidence. Treat other elements as unknown, not inspiration to invent features.
+2. Extract the use case with `ucscene extract input.md --out out/case.json` or opt-in `--ai`. A *software-internal* environment is required; physical usage location/device information is optional metadata and never a visual object.
+3. Choose `viewpoint_mode` from `application-ui` (default) or `gameplay`. For `gameplay`, set `game_camera` to one of `documented`, `first-person`, `isometric`, `top-down`, `side-scrolling`, `third-person` only when justified by the use case or source.
+4. Run `ucscene validate CASE`, `ucscene plan CASE --out PLAN` and `ucscene review PLAN`. The plan must be `format_version=1.1`, `anchor.frame_scope=software-only`. v0.4 physical-user plans are invalid. No external UI/device context in a visual evidence item.
+5. Prefer exact application screenshots, UI compositions, and programmatic overlays to invented text. For multi-step output, use app/game-only reference images with `anchor-create`, `anchor-verify`, then `generate --anchor` only after human approval and explicit authorization of paid model calls.
+6. `compose-ui`/`compose-batch` can geometrically overlay real UI into regions INSIDE a software screenshot/game framebuffer. Never put software into a photograph of a physical monitor. Geometry preflight and provenance hashes are mandatory.
+7. Optionally run `review-image PLAN --step ID --image PNG` to check software-only frame, camera, step evidence and text. Human review is needed: model-audit PASS is not verified software correctness.
+8. Deliver images and source plans. State whether generation was performed, which source screenshots are real/synthetic, whether visual audits occurred, and any unresolved behavior.
 
-## Non-negotiable constraints
+## Non-negotiable tests
 
-- Requirements and implementation reality outrank artistic plausibility.
-- When information is missing, keep an incomplete draft and ask for a decision; never invent devices, states, screen layouts or permissions.
-- No third-person hero portrait for the user's first-person use case.
-- Neither SHA hashes nor manifest `--approved` automatically validate image semantics.
-- Static plan review is not visual image review. Model visual reviews are advisory, not guarantees.
-- `compose-ui` preserves source image content under geometric resampling, not guaranteed typographic pixel equality.
-- Never commit API secrets, personal information, or private UI screenshots without authorization.
+- Real hands on a keyboard, physical screens, desk, office and people using software → visual failure, even when the UI on the pictured screen is accurate.
+- In-game third-person character imagery is allowed when the *game itself* renders it.
+- Preserve the original software/game camera; do not force every use case into literal human-eye POV.
+- No invented app controls, game mechanics, behavior or acceptance claims.
+- Never claim offline plan tests or CI mocks prove actual visual correctness.
 
-## CLI quick reference
+## Quick start
 
 ```bash
 python -m pip install -e '.[ui]'
 ucscene extract examples/warehouse-scan.md --out out/case.json
 ucscene plan out/case.json --out out/plan.json
 ucscene review out/plan.json
-# Once you have checked and approved a suitable reference image:
-ucscene anchor-create out/plan.json --image path/to/ref.png --out out/anchor.json --approved --note 'operator reviewed POV and device'
-ucscene anchor-verify out/anchor.json --plan out/plan.json --require-approved
-# Paid: ucscene generate out/plan.json --anchor out/anchor.json --out out/generated
-# Offline: ucscene compose-ui --scene scene.png --ui real-ui.png --quad quad.json --out composed.png
+ucscene benchmark benchmarks/famous-projects/suite.json --lock benchmarks/famous-projects/prompt-lock.json
 ```
 
-See `README.md` for complete commands, `schemas/use-case.schema.json` for structured inputs, `src/ucscene/anchors.py` for manifests, and `src/ucscene/composite.py` for perspective overlay rules. Source of image-generation behavior is `src/ucscene/provider.py`; an approved anchor is not a guarantee that the model's image edit preserves every detail.
-
-## Official-project benchmark and real-image measurement (v0.4)
-
-Use `ucscene benchmark benchmarks/famous-projects/suite.json --lock benchmarks/famous-projects/prompt-lock.json` to check six public-project use cases without image API calls. `ucscene benchmark-export ...` exports plans. `ucscene benchmark-rating-template ...` emits blank 3-arm human scoring tasks; no scores or image-quality verdicts are manufactured. For real visual claims, generate three separately labeled method arms with explicit user authorization and API costs, have reviewers inspect actual images, then run `ucscene benchmark-score ...`. Review source citations and image hashes before reporting results. See `docs/benchmark-methodology.md`.
+See [docs/decision-001-software-only.md](docs/decision-001-software-only.md) for the contract revision and migration rules. See README for `generate`, `review-image` and `compose-ui` options.

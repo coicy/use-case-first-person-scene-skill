@@ -1,8 +1,8 @@
 {
   "format_version": "1.0",
   "suite_id": "official-software-and-games-v1",
-  "title": "Publicly documented software/game first-person scene benchmark",
-  "methodology": "curated manual test inputs based on linked official documentation; visual scene framing is an explicitly declared modeling assumption, not quoted app requirement; no screenshots redistributed",
+  "title": "Public software/game direct-viewport scene benchmark",
+  "methodology": "official-document-grounded software-content-only frames; no camera outside software; no screenshots redistributed",
   "cases": [
     {
       "file": "cases/vscode-debugging.json",
@@ -15,7 +15,7 @@
           "paraphrase": "官方文档介绍：编辑器边栏设置红色断点、Run and Debug、Variables 面板查看变量。"
         }
       ],
-      "expected_camera": "physical-user"
+      "expected_camera": "application-ui"
     },
     {
       "file": "cases/blender-extrude.json",
@@ -28,7 +28,7 @@
           "paraphrase": "Blender 官方手册：Edit Mode 中选中面后按 E 进行 Extrude Faces，产生连接的几何面。"
         }
       ],
-      "expected_camera": "physical-user"
+      "expected_camera": "application-ui"
     },
     {
       "file": "cases/gimp-crop.json",
@@ -41,7 +41,7 @@
           "paraphrase": "GIMP 官方教程：Crop 工具以拖拽方式选择裁切矩形，随后调整矩形范围。"
         }
       ],
-      "expected_camera": "physical-user"
+      "expected_camera": "application-ui"
     },
     {
       "file": "cases/godot-mob-scene.json",
@@ -54,7 +54,7 @@
           "paraphrase": "Godot 官方 2D 教程：新建 Mob 场景，RigidBody2D 为根，AnimatedSprite2D、CollisionShape2D、VisibleOnScreenNotifier2D 为子节点。"
         }
       ],
-      "expected_camera": "physical-user"
+      "expected_camera": "application-ui"
     },
     {
       "file": "cases/openttd-rail.json",
@@ -67,7 +67,7 @@
           "paraphrase": "OpenTTD 官方 Wiki：点击 railway build 打开建造工具栏；可使用建造车站和 Autorail 工具。"
         }
       ],
-      "expected_camera": "physical-user"
+      "expected_camera": "gameplay"
     },
     {
       "file": "cases/luanti-mining.json",
@@ -85,7 +85,7 @@
           "paraphrase": "Luanti 文档介绍可被放置/挖掘的节点构成世界。"
         }
       ],
-      "expected_camera": "avatar-eyes"
+      "expected_camera": "gameplay"
     }
   ]
 }

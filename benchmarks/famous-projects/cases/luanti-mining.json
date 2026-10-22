@@ -3,14 +3,14 @@
   "title": "Luanti 第一人称体素采掘与放置",
   "actor": "第一人称视角的游戏角色",
   "goal": "在体素世界中采掘一个方块并放置方块",
-  "environment": "可交互的三维体素世界，游戏内视角指向地表方块",
-  "device": "直接呈现的游戏第一人称画面（gameplay viewport），不是外部电脑屏幕",
+  "environment": "Luanti 游戏内部的可交互 3D 体素世界",
   "style": "illustration",
-  "viewpoint_mode": "avatar-eyes",
+  "viewpoint_mode": "gameplay",
   "constraints": {
     "continuity": "同一游戏角色眼睛位置、同一体素区域和像素纹理风格；只改变采掘和放置结果",
     "must_not_show": [
-      "从外部拍摄正在操作的完整用户",
+      "显示器边框、键盘、鼠标、桌面或现实用户",
+      "软件外的实体场景或宣传拼贴",
       "无出处的功能按钮与系统状态"
     ]
   },
@@ -58,8 +58,10 @@
   "benchmark_context": {
     "project": "Luanti",
     "visualization_assumptions": [
-      "使用游戏第一人称视角进行采掘操作；具体 HUD/贴图未由官方文档给出"
+      "输出是软件本身的画面；不得出现显示器、用户、键鼠、办公环境或现实设备"
     ],
     "source_id": "LUANTI-CONTROLS"
-  }
+  },
+  "game_camera": "first-person",
+  "frame_scope": "software-only"
 }

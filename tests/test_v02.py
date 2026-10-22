@@ -36,10 +36,10 @@ class TestExtraction(unittest.TestCase):
         self.assertEqual(case["steps"][0]["visible_evidence"], [])
         with self.assertRaises(SceneError): build_plan(case)
 
-    def test_missing_device_fails_closed(self):
-        case = extract_markdown("# 测试\n参与者: 用户\n目标: 测试\n环境: 办公室\n## 主流程\n1. 点击按钮 | 画面: 用户手指触摸按钮")
-        self.assertFalse(case["extraction"]["ready"])
-        self.assertTrue(any("device" in x for x in case["extraction"]["issues"]))
+    def test_device_is_not_required_for_software_content(self):
+        case = extract_markdown("# 测试\n参与者: 用户\n目标: 测试\n环境: 软件界面\n## 主流程\n1. 点击按钮 | 画面: 软件内按钮的选中状态")
+        self.assertTrue(case["extraction"]["ready"])
+        self.assertEqual(build_plan(case)["anchor"]["frame_scope"], "software-only")
 
     def test_cli_extract_draft_exit_three(self):
         with TemporaryDirectory() as d:
@@ -86,12 +86,14 @@ class TestExtraction(unittest.TestCase):
 class TestVisualReview(unittest.TestCase):
     def setUp(self):
         self.scene = build_plan(load_json(ROOT / "examples" / "warehouse-scan.json"))["scenes"][1]
+        self.scene = dict(self.scene, exact_ui_text=[])
         self.case = self.scene
 
     def _findings(self, reference=False, failed=False):
         return {
             "point_of_view": "pass" if not failed else "fail",
-            "pov_reason": "eyes at actor",
+            "pov_reason": "software framebuffer",
+            "software_only": "pass", "outside_software_elements": [],
             "evidence": [{"requirement": evidence, "status": "pass", "reason": "visible"} for evidence in self.scene["evidence"]],
             "continuity": "pass" if reference else "not_checked",
             "continuity_reason": "compared" if reference else "no reference",

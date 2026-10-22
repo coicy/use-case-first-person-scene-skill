@@ -110,7 +110,7 @@ def run_benchmark(suite_path: str | Path, *, audits: str | Path | None = None, i
         all_ids.add(case["id"])
         if case.get("benchmark_context", {}).get("project") != entry.get("project"):
             raise SceneError(f"Case project metadata mismatch: {case['id']}")
-        if case.get("viewpoint_mode", "physical-user") != entry.get("expected_camera"):
+        if case.get("viewpoint_mode", "application-ui") != entry.get("expected_camera"):
             raise SceneError(f"Case camera does not match benchmark scenario: {case['id']}")
         case_evidence = _check_source(case, entry)
         plan = build_plan(case)
@@ -192,7 +192,7 @@ def export_benchmark_plans(suite_path: str | Path, output_directory: str | Path)
         if case_id in known_ids or not case_id.replace("-", "").replace("_", "").isalnum():
             raise SceneError(f"Duplicate or unsafe benchmark case ID: {case_id}")
         known_ids.add(case_id)
-        if case.get("viewpoint_mode", "physical-user") != entry.get("expected_camera"):
+        if case.get("viewpoint_mode", "application-ui") != entry.get("expected_camera"):
             raise SceneError(f"Camera mode mismatch: {case_id}")
         plan = build_plan(case)
         if review_plan(plan):

@@ -3,14 +3,14 @@
   "title": "OpenTTD 俯视铁路建设体验",
   "actor": "正在游玩 OpenTTD 的玩家",
   "goal": "在等距视角地图上选择工具并铺设铁路",
-  "environment": "玩家桌面显示器中的 OpenTTD 等距视角地图",
-  "device": "运行 OpenTTD 的电脑显示器和鼠标",
+  "environment": "OpenTTD 游戏内部等距地图与铁路建造工具栏",
   "style": "ui-focused",
-  "viewpoint_mode": "physical-user",
+  "viewpoint_mode": "gameplay",
   "constraints": {
     "continuity": "同一地图区域，同一 OpenTTD 等距视角和工具栏；绝不转换成列车司机视角或第一人称实景铁路",
     "must_not_show": [
-      "从外部拍摄正在操作的完整用户",
+      "显示器边框、键盘、鼠标、桌面或现实用户",
+      "软件外的实体场景或宣传拼贴",
       "无出处的功能按钮与系统状态"
     ]
   },
@@ -58,8 +58,10 @@
   "benchmark_context": {
     "project": "OpenTTD",
     "visualization_assumptions": [
-      "工作台、镜头与屏幕构图是演示性的视觉设计约定，不代表官方 UI 截图"
+      "输出是软件本身的画面；不得出现显示器、用户、键鼠、办公环境或现实设备"
     ],
     "source_id": "OPENTTD-RAIL"
-  }
+  },
+  "game_camera": "isometric",
+  "frame_scope": "software-only"
 }

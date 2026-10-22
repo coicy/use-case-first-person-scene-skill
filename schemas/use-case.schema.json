@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://example.invalid/ucscene/use-case.schema.json",
-  "title": "Use case for first-person scene planning",
+  "title": "Software-only in-application scene use case",
   "type": "object",
   "required": [
     "id",
@@ -9,7 +9,6 @@
     "actor",
     "goal",
     "environment",
-    "device",
     "steps"
   ],
   "properties": {
@@ -31,11 +30,13 @@
     },
     "environment": {
       "type": "string",
-      "minLength": 1
+      "minLength": 1,
+      "description": "Context INSIDE the application, such as a scene, level, document, or workspace; not a physical desk or external room."
     },
     "device": {
       "type": "string",
-      "minLength": 1
+      "minLength": 1,
+      "description": "Deprecated source metadata only. Never render external physical devices."
     },
     "style": {
       "enum": [
@@ -120,8 +121,22 @@
     "viewpoint_mode": {
       "type": "string",
       "enum": [
-        "physical-user",
-        "avatar-eyes"
+        "application-ui",
+        "gameplay"
+      ]
+    },
+    "frame_scope": {
+      "const": "software-only",
+      "description": "Output is exclusively software/game pixels with no users or external devices"
+    },
+    "game_camera": {
+      "enum": [
+        "documented",
+        "first-person",
+        "isometric",
+        "top-down",
+        "side-scrolling",
+        "third-person"
       ]
     }
   }

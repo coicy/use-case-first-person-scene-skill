@@ -3,14 +3,14 @@
   "title": "VS Code 调试时设置断点并查看变量",
   "actor": "程序开发者",
   "goal": "定位程序错误并查看断点暂停时的变量",
-  "environment": "室内办公桌前，显示器运行 Visual Studio Code 编辑器",
-  "device": "桌面电脑显示器、键盘与鼠标",
+  "environment": "Visual Studio Code 内的编辑区、断点、运行与调试面板",
   "style": "ui-focused",
-  "viewpoint_mode": "physical-user",
+  "viewpoint_mode": "application-ui",
   "constraints": {
-    "continuity": "同一 VS Code 编辑器窗口、同一调试文件、同一显示器；不同步骤仅修改对应 UI 状态",
+    "continuity": "同一 VS Code 编辑器窗口、同一调试文件、同一软件窗口；不同步骤仅修改对应 UI 状态",
     "must_not_show": [
-      "从外部拍摄正在操作的完整用户",
+      "显示器边框、键盘、鼠标、桌面或现实用户",
+      "软件外的实体场景或宣传拼贴",
       "无出处的功能按钮与系统状态"
     ]
   },
@@ -58,8 +58,9 @@
   "benchmark_context": {
     "project": "Visual Studio Code",
     "visualization_assumptions": [
-      "工作台、镜头与屏幕构图是演示性的视觉设计约定，不代表官方 UI 截图"
+      "输出是软件本身的画面；不得出现显示器、用户、键鼠、办公环境或现实设备"
     ],
     "source_id": "VS-DEBUG"
-  }
+  },
+  "frame_scope": "software-only"
 }

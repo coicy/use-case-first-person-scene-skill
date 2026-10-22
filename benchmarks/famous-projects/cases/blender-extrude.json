@@ -3,14 +3,14 @@
   "title": "Blender 编辑模式挤出网格表面",
   "actor": "三维美术设计师",
   "goal": "在已有网格的选定面上挤出连接的三维结构",
-  "environment": "创作工作台，显示器呈现 Blender 的 3D Viewport",
-  "device": "桌面显示器、键盘和鼠标",
+  "environment": "Blender 内的 3D 建模工作区和 Edit Mode 视口",
   "style": "ui-focused",
-  "viewpoint_mode": "physical-user",
+  "viewpoint_mode": "application-ui",
   "constraints": {
     "continuity": "同一 Blender 编辑器与模型，保持模型位置、网格拓扑和视口布局一致",
     "must_not_show": [
-      "从外部拍摄正在操作的完整用户",
+      "显示器边框、键盘、鼠标、桌面或现实用户",
+      "软件外的实体场景或宣传拼贴",
       "无出处的功能按钮与系统状态"
     ]
   },
@@ -58,8 +58,9 @@
   "benchmark_context": {
     "project": "Blender",
     "visualization_assumptions": [
-      "工作台、镜头与屏幕构图是演示性的视觉设计约定，不代表官方 UI 截图"
+      "输出是软件本身的画面；不得出现显示器、用户、键鼠、办公环境或现实设备"
     ],
     "source_id": "BLENDER-EXTRUDE"
-  }
+  },
+  "frame_scope": "software-only"
 }

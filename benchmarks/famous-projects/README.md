@@ -1,21 +1,21 @@
-# 知名软件与游戏用例基准（v0.4）
+# 知名软件与游戏用例基准（v0.5）
 
-本基准将**有公开官方文档的真实交互操作**转换成用户第一视角场景计划，检查规则和画面证据的结构完整性。它**不**将这些静态校验结果伪装成实际生成图片的成功率。
+本基准将**有公开官方文档的真实交互操作**转换成软件内部画面场景计划，检查规则和画面证据的结构完整性。它**不**将这些静态校验结果伪装成实际生成图片的成功率。
 
 ## 六个案例（不随项目版本变化自动更新）
 
 | 案例 | 用例 | 视角 | 官方依据 | 节点 |
 | --- | --- | --- | --- | ---: |
-| Visual Studio Code | 设置断点、启动调试、观察变量 | `physical-user`（实际开发者看显示器） | https://code.visualstudio.com/docs/debugtest/debugging | 3 |
-| Blender | 选择面、挤出、确认模型形状 | `physical-user` | https://docs.blender.org/manual/en/5.0/modeling/meshes/editing/face/extrude_faces.html | 3 |
-| GIMP | 选择裁剪工具、拖拽裁剪框、应用裁剪 | `physical-user` | https://docs.gimp.org/3.0/en_GB/gimp-tutorial-quickie-crop.html | 3 |
-| Godot Engine | 创建 Mob 的 RigidBody2D/子节点/重力属性 | `physical-user`（编辑器而非玩家世界） | https://docs.godotengine.org/en/stable/getting_started/first_2d_game/04.creating_the_enemy.html | 3 |
-| OpenTTD | 进入铁路建设工具栏、选择车站、使用 Autorail | `physical-user`（显示器内仍是等距地图） | https://wiki.openttd.org/en/Manual/Railway%20construction | 3 |
-| Luanti | 角色视角瞄准、挖掘方块、放置方块 | `avatar-eyes`（游戏角色眼睛） | https://docs.luanti.org/for-players/controls/ | 3 |
+| Visual Studio Code | 设置断点、启动调试、观察变量 | `application-ui`（直接显示编辑器） | https://code.visualstudio.com/docs/debugtest/debugging | 3 |
+| Blender | 选择面、挤出、确认模型形状 | `application-ui` | https://docs.blender.org/manual/en/5.0/modeling/meshes/editing/face/extrude_faces.html | 3 |
+| GIMP | 选择裁剪工具、拖拽裁剪框、应用裁剪 | `application-ui` | https://docs.gimp.org/3.0/en_GB/gimp-tutorial-quickie-crop.html | 3 |
+| Godot Engine | 创建 Mob 的 RigidBody2D/子节点/重力属性 | `application-ui`（仅 Godot 编辑器） | https://docs.godotengine.org/en/stable/getting_started/first_2d_game/04.creating_the_enemy.html | 3 |
+| OpenTTD | 进入铁路建设工具栏、选择车站、使用 Autorail | `gameplay`（等距地图） | https://wiki.openttd.org/en/Manual/Railway%20construction | 3 |
+| Luanti | 角色视角瞄准、挖掘方块、放置方块 | `gameplay` + `first-person`（游戏画面） | https://docs.luanti.org/for-players/controls/ | 3 |
 
 Luanti 的体素节点概念另参阅 https://docs.luanti.org/for-players/nodes/ 。这里的场景材料是**按文档手工整理的测试输入**，并非官方 PRD、官方图片、品牌授权素材或项目实际运行截图。
 
-**实测输入与视觉设计假设的边界：** 文档依据覆盖真实操作、工具名称与部分 UI 表现；工作台外观、手部构图、天气/灯光、具体纹理、相机摆位等均是方便说明用例的视觉假设，不应被称为官方事实。第三方截图没有再分发到本仓库。
+**实测输入与视觉设计假设的边界：** 文档依据覆盖真实操作、工具名称与部分 UI 表现；现实工作台、用户手部及实体设备不属于输出范围；虚拟场景纹理、内部镜头配置等仍可能是未经官方验证的视觉假设。第三方截图没有再分发到本仓库。
 
 ## 运行可复现结构测试（完全离线）
 
@@ -28,7 +28,7 @@ ucscene benchmark-export benchmarks/famous-projects/suite.json \
   --out-dir out/benchmark-plans
 ```
 
-`benchmark` 自动检查：每个步骤都有官方 URL 的来源 ID、用例格式通过校验、规定视角正确、计划和提示词可重复生成、prompt SHA-256 与批准的 golden lock 一致。发现来源丢失、视角不匹配、目录穿越或未经审批的提示词变更即失败。`benchmark-export` 在 **完整预检** 后导出六个可直接传给 `ucscene generate` 的 JSON 场景计划。
+`benchmark` 自动检查：每个步骤都有官方 URL 的来源 ID、用例格式通过校验、规定软件内部取景模式正确、计划和提示词可重复生成、prompt SHA-256 与批准的 golden lock 一致。发现来源丢失、视角不匹配、目录穿越或未经审批的提示词变更即失败。`benchmark-export` 在 **完整预检** 后导出六个可直接传给 `ucscene generate` 的 JSON 场景计划。
 
 静态报告期望 **6 个用例、18 个步骤、36 个证据项**。`visual_evaluation.status` 固定为 `not_evaluated`，除非显式提供完整的真实图片与审查结果。这些数字只是**规划素材的覆盖度**，不是视觉模型准确率。
 
@@ -59,7 +59,7 @@ ucscene benchmark benchmarks/famous-projects/suite.json \
 
 ### 独立人工评分（v0.4 已实现采集与统计）
 
-`benchmark-rating-template` 生成三种模式下 54 张场景图对应的**空白**人工评分模板；`benchmark-score` 对真实图像文件做解码及 SHA-256 检查，验证使用的是对应场景的原始提示词，并仅统计由实际人工评分者填写的 0/1/2 分。四项维度：POV、可见证据、应用界面/玩法符合度、跨步骤连续性。
+`benchmark-rating-template` 生成三种模式下 54 张场景图对应的**空白**人工评分模板；`benchmark-score` 对真实图像文件做解码及 SHA-256 检查，验证使用的是对应场景的原始提示词，并仅统计由实际人工评分者填写的 0/1/2 分。四项维度：软件内画面边界/原生视角、可见证据、应用界面/玩法符合度、跨步骤连续性。
 
 ```sh
 ucscene benchmark-rating-template benchmarks/famous-projects/suite.json --out out/ratings.json

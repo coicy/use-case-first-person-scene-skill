@@ -3,14 +3,14 @@
   "title": "GIMP 使用裁剪工具选择图片区域",
   "actor": "图片编辑者",
   "goal": "保留照片中的目标区域并裁去外围内容",
-  "environment": "工作台显示器呈现 GIMP 图像编辑器",
-  "device": "电脑显示器和鼠标",
+  "environment": "GIMP 内的图像画布、裁剪工具与选区状态",
   "style": "ui-focused",
-  "viewpoint_mode": "physical-user",
+  "viewpoint_mode": "application-ui",
   "constraints": {
     "continuity": "同一图片和 GIMP 工作区，原图主体不改变，只展示裁剪状态变更",
     "must_not_show": [
-      "从外部拍摄正在操作的完整用户",
+      "显示器边框、键盘、鼠标、桌面或现实用户",
+      "软件外的实体场景或宣传拼贴",
       "无出处的功能按钮与系统状态"
     ]
   },
@@ -58,8 +58,9 @@
   "benchmark_context": {
     "project": "GIMP",
     "visualization_assumptions": [
-      "工作台、镜头与屏幕构图是演示性的视觉设计约定，不代表官方 UI 截图"
+      "输出是软件本身的画面；不得出现显示器、用户、键鼠、办公环境或现实设备"
     ],
     "source_id": "GIMP-CROP"
-  }
+  },
+  "frame_scope": "software-only"
 }

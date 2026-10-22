@@ -35,3 +35,9 @@ The released v0.6 CLI still implements source-grounded scene prompting, referenc
 ## Engineering plan
 
 See docs/V07_WORK_PLAN.md for deliverables and acceptance gates. Retain the existing no-external-hardware boundary and no-silent-paid-API policy.
+
+## Implemented v0.7 WP-01 foundation (modeling only)
+
+The `ProductBrief`, `DesignDecision`, `UseCaseScene` and `DesignBundle` contracts are implemented under `src/ucscene/design/` with JSON Schemas and tests. Use `ucscene brief-init` for a brand-new software product, `ucscene migrate-legacy` for review-required historical cases, `ucscene design-scaffold` for an UNRESOLVED scene model, and `ucscene design-validate --kind brief|decision|scene|bundle` for static validation.
+
+A missing design detail is not a reason to require an existing software screenshot. The WP-01 scaffold is NOT a designed UI, a selected proposal, or a generated image. The AI-driven proposal/planning workflow is WP-02 (pending). Only describe WP-01 as implemented. See `docs/WP01_IMPLEMENTATION.md`.

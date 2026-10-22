@@ -16,6 +16,7 @@ from .imaging import inspect_image
 from .benchmark import run_benchmark, export_benchmark_plans, make_prompt_lock, verify_prompt_lock
 from .benchmark_human import rating_template, score_human_packet
 from .acceptance import create_gallery, verify_gallery
+from .design import (init_brief, migrate_legacy_case, create_bundle, validate_product_brief, validate_design_decision, validate_scene_design, validate_design_bundle)
 
 def run(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="ucscene", description="Use-case first-person scenario planning and image generation")
@@ -101,8 +102,49 @@ def run(argv: list[str] | None = None) -> int:
     inspect.add_argument("--reference-image")
     inspect.add_argument("--model", default="gpt-4.1-mini")
     inspect.add_argument("--out", default="out/visual-audit.json")
+    brief_init = sub.add_parser("brief-init", help="Initialize a new-product brief from a product prompt and one use case (offline)")
+    brief_init.add_argument("--product-id", required=True)
+    brief_init.add_argument("--name", required=True)
+    brief_init.add_argument("--category", required=True, choices=["desktop", "web", "mobile", "game", "other"])
+    brief_init.add_argument("--prompt", required=True)
+    brief_init.add_argument("--use-case", required=True)
+    brief_init.add_argument("--out", default="out/product-brief.json")
+    migrate = sub.add_parser("migrate-legacy", help="Convert a v0.6 use case to an explicitly UNREVIEWED v0.7 ProductBrief")
+    migrate.add_argument("use_case")
+    migrate.add_argument("--product-id", required=True)
+    migrate.add_argument("--name", required=True)
+    migrate.add_argument("--category", default="other", choices=["desktop", "web", "mobile", "game", "other"])
+    migrate.add_argument("--out", default="out/migrated-brief.json")
+    design_check = sub.add_parser("design-validate", help="Validate a v0.7 ProductBrief, DesignDecision, UseCaseScene or DesignBundle")
+    design_check.add_argument("document")
+    design_check.add_argument("--kind", required=True, choices=["brief", "decision", "scene", "bundle"])
+    design_scaffold = sub.add_parser("design-scaffold", help="Create UNRESOLVED scene skeletons, not final layouts or images")
+    design_scaffold.add_argument("brief")
+    design_scaffold.add_argument("--out", default="out/design-bundle.json")
     args = parser.parse_args(argv)
     try:
+        if args.command == "brief-init":
+            brief = init_brief(args.product_id, args.name, args.category, args.prompt, args.use_case)
+            save_json(args.out, brief)
+            print(json.dumps({"ok": True, "path": args.out, "unresolved": len(brief["unknowns"]), "approval": "none"}, ensure_ascii=False))
+            return 0
+        if args.command == "migrate-legacy":
+            brief = migrate_legacy_case(load_json(args.use_case), product_id=args.product_id, name=args.name, category=args.category)
+            save_json(args.out, brief)
+            print(json.dumps({"ok": True, "path": args.out, "migrated_requirements": len(brief["requirements"]), "approval": "review-required"}, ensure_ascii=False))
+            return 0
+        if args.command == "design-validate":
+            validators = {"brief": validate_product_brief, "decision": validate_design_decision,
+                          "scene": validate_scene_design, "bundle": validate_design_bundle}
+            validators[args.kind](load_json(args.document))
+            print(json.dumps({"ok": True, "kind": args.kind, "path": args.document}, ensure_ascii=False))
+            return 0
+        if args.command == "design-scaffold":
+            package = create_bundle(load_json(args.brief))
+            save_json(args.out, package)
+            print(json.dumps({"ok": True, "path": args.out, "scenes": len(package["scenes"]),
+                              "design_status": "unresolved"}, ensure_ascii=False))
+            return 0
         if args.command == "acceptance-gallery":
             packet = create_gallery(args.suite, args.selection, args.images, args.out_dir)
             print(json.dumps({"ok": True, "samples": packet["selected_samples"], "pending_human_review": True, "path": str(Path(args.out_dir) / "index.html")}, ensure_ascii=False))

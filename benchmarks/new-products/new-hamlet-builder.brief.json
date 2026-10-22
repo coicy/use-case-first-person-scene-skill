@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.0",
+  "product_id": "new-hamlet-builder",
+  "name": "Hamlet Builder",
+  "category": "game",
+  "concept": "一款原创等距视角建造经营游戏，玩家建造农场并规划居民劳动，视觉风格温暖清晰",
+  "requirements": [
+    {
+      "id": "REQ-001",
+      "text": "一款原创等距视角建造经营游戏，玩家建造农场并规划居民劳动，视觉风格温暖清晰",
+      "source": "user-prompt",
+      "authority": "source-stated",
+      "use_case_ids": []
+    },
+    {
+      "id": "REQ-002",
+      "text": "玩家选择农场并查看产量与已分配工人",
+      "source": "user-prompt",
+      "authority": "source-stated",
+      "use_case_ids": [
+        "UC-001"
+      ]
+    }
+  ],
+  "hard_constraints": [],
+  "use_cases": [
+    {
+      "id": "UC-001",
+      "title": "玩家选择农场并查看产量与已分配工人",
+      "actor": "unspecified",
+      "goal": "玩家选择农场并查看产量与已分配工人",
+      "steps": [
+        {
+          "id": "STEP-001",
+          "action": "玩家选择农场并查看产量与已分配工人",
+          "state": "in-progress",
+          "flow": "main",
+          "ui_text": [],
+          "visible_evidence": []
+        }
+      ]
+    }
+  ],
+  "unknowns": [
+    "actor",
+    "interaction design",
+    "UI layout",
+    "visual style",
+    "visible feedback"
+  ],
+  "origin": {
+    "mode": "direct-prompt",
+    "source_id": "CLI:brief-init"
+  }
+}

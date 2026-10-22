@@ -66,3 +66,9 @@ The GitHub Actions workflow must pass Python 3.10 and 3.12. Do not claim real AP
 - Distinguish benchmark reference prompts from the prompts actually used by external image generators; never infer equivalence.
 - Carry forward only sourced software state from earlier use-case steps (`carry_forward`), so later screenshots retain object/node/class identity.
 - A generated editor-looking image is never an official application screenshot unless provenance proves a real application capture.
+
+## v0.7 WP-01 model and test contract
+
+`src/ucscene/design/` is the current model layer for new products; four draft-2020-12 JSON Schemas under `schemas/` are its formal interface. The new CLI commands are `brief-init`, `design-scaffold`, `design-validate`, `migrate-legacy`. Preserve existing CLI contracts while extending the design layer. Do not allow AI-generated proposals to become approved/locked merely by creating a plan; explicit user decision evidence is mandatory and is still self-reported metadata until WP-03 establishes a controlled approval workflow. Preserve each source use-case action, flow, state, required evidence and exact UI labels. Reject structural conflicts with user hard constraints.
+
+Test `tests/test_new_product_design.py`, two original-product fixtures in `benchmarks/new-products/`, existing offline tests, and CI Python 3.10/3.12. Refer to `docs/WP01_IMPLEMENTATION.md`. WP-02 UI design, image rendering for v0.7 bundles and cross-use-case visual consistency remain unimplemented.

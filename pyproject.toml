@@ -12,6 +12,7 @@ license = {text = "MIT"}
 
 [project.optional-dependencies]
 ui = ["Pillow>=10,<13"]
+dev = ["jsonschema>=4.20,<5"]
 
 [project.scripts]
 ucscene = "ucscene.cli:main"

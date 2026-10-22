@@ -125,3 +125,9 @@ WP-05 的测试夹具可以在 WP-01 同步准备，但正式评分必须在 WP-
 ## F. 完成定义
 
 每个工作包必须拥有：代码、schema/接口文档、实际可运行测试、对应示例、与既有版本兼容结论和已观察到的限制。仅增加 Prompt 或 README 不能算作完成。所有合并报告必须提供 GitHub commit / Actions 链接及验收结果。
+
+## 实施记录：WP-01（2026-10-22）
+
+**已完成 WP-01 建模基础**，详见 [WP01_IMPLEMENTATION.md](WP01_IMPLEMENTATION.md)。已提交 JSON Schema（ProductBrief、DesignDecision、UseCaseScene、DesignBundle）、Python 校验与迁移层、四项 CLI 命令、两款原创产品输入与场景草案、回归测试和 CI 冒烟流程。源用例动作、分支、状态、视觉证据及 UI 文本在草案中不可被静默覆盖，AI 提案不能自动批准。
+
+**尚未完成**：WP-02 自动设计界面/交互候选，WP-03 确认/冻结操作工作流，WP-04 真实生成与验收新产品概念图片，WP-05 两款原创产品各三步骤视觉基准。因此只将 WP-01 标为完成，不提升整个 v0.7 的完成状态。

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/ucscene/v0.7/design-bundle.schema.json",
+  "title": "DesignBundle v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "brief",
+    "decisions",
+    "scenes"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "brief": {
+      "$ref": "product-brief.schema.json"
+    },
+    "decisions": {
+      "type": "array",
+      "items": {
+        "$ref": "design-decision.schema.json"
+      }
+    },
+    "scenes": {
+      "type": "array",
+      "items": {
+        "$ref": "scene-design.schema.json"
+      }
+    }
+  }
+}

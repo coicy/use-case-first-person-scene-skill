@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/ucscene/v0.7/design-decision.schema.json",
+  "title": "DesignDecision v1 — unapproved proposals by default",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "id",
+    "product_id",
+    "topic",
+    "proposal",
+    "rationale",
+    "status",
+    "locked",
+    "revision",
+    "source",
+    "related_use_case_ids",
+    "effects"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "product_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "topic": {
+      "type": "string",
+      "minLength": 1
+    },
+    "proposal": {
+      "type": "string",
+      "minLength": 1
+    },
+    "rationale": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "enum": [
+        "proposed",
+        "approved",
+        "rejected"
+      ]
+    },
+    "locked": {
+      "type": "boolean"
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "source": {
+      "enum": [
+        "ai-proposal",
+        "user-proposal",
+        "user-decision"
+      ]
+    },
+    "related_use_case_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "effects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "key",
+          "value"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "type": "string",
+            "minLength": 1
+          },
+          "value": {
+            "type": [
+              "string",
+              "number",
+              "boolean",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "approval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "by",
+        "evidence_ref"
+      ],
+      "properties": {
+        "by": {
+          "const": "user"
+        },
+        "evidence_ref": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "enum": [
+              "approved",
+              "rejected"
+            ]
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "then": {
+        "required": [
+          "approval"
+        ]
+      },
+      "else": {
+        "not": {
+          "required": [
+            "approval"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "locked": {
+            "const": true
+          }
+        },
+        "required": [
+          "locked"
+        ]
+      },
+      "then": {
+        "properties": {
+          "status": {
+            "const": "approved"
+          }
+        }
+      }
+    }
+  ]
+}

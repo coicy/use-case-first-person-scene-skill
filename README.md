@@ -131,3 +131,21 @@ python -m unittest discover -s tests -v
 GitHub Actions 在 Python 3.10 和 3.12 下验证本地安装、结构校验、六项目基准和离线图像合成。CI 不调用付费生图 API。真实视觉验收需检查是否有**任何**现实用户、显示器、办公桌或其他软件外物体；只要有，直接判不通过。
 
 详细基准定义参见 [`benchmarks/famous-projects/README.md`](benchmarks/famous-projects/README.md)，人工作业对比参见 [`docs/benchmark-methodology.md`](docs/benchmark-methodology.md)。许可证 MIT。
+
+## v0.7 WP-01 — 新产品建模基础已实现（不是完整 v0.7）
+
+WP-01 提供三个独立模型 `ProductBrief`、`DesignDecision`、`UseCaseScene`，以及组合校验 `DesignBundle`；允许从**一句原创产品构想 + 一个用例**开始，不要求已有软件或截图。AI/用户新设计方案默认 `proposed`，不会自动批准或冻结；原有 v0.6 用例迁移后标记 `review-required`。
+
+```bash
+ucscene brief-init --product-id new-studio --name "New Studio" --category desktop \
+  --prompt "设计一款原创素材管理软件" --use-case "用户筛选素材并查看详情" \
+  --out out/new-studio.brief.json
+ucscene design-validate out/new-studio.brief.json --kind brief
+ucscene design-scaffold out/new-studio.brief.json --out out/new-studio.bundle.json
+ucscene design-validate out/new-studio.bundle.json --kind bundle
+
+ucscene migrate-legacy examples/warehouse-scan.json --product-id warehouse-concept \
+  --name "Warehouse Concept" --category web --out out/legacy.brief.json
+```
+
+完整模型、原创新产品示例、离线校验范围和限制参见 [WP-01 实施说明](docs/WP01_IMPLEMENTATION.md)。**WP-02 的自动 UI 设计与正式图像提示词编译仍未实现**；`design-scaffold` 输出的是未定型结构，不应直接交给旧 `generate`。

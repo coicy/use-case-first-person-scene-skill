@@ -22,3 +22,9 @@ The v0.1–v0.6 features remain in the repository for compatibility: structured 
 - Actual image-generation and multi-scene design consistency cannot be established from unit tests or mocked API calls alone.
 
 No new v0.7 feature should be marked implemented until code and tests verify it.
+
+## v0.7 implementation progress — WP-01 completed (2026-10-22)
+
+- Implemented: ProductBrief / DesignDecision / UseCaseScene / DesignBundle model contracts and validation, safe v0.6 migration, new commands `brief-init`, `design-scaffold`, `design-validate`, `migrate-legacy`, original-product fixtures, and regression tests.
+- See [WP01_IMPLEMENTATION.md](WP01_IMPLEMENTATION.md).
+- **Still planned:** WP-02 AI-based interface decisions and variants; WP-03 design system approvals/locks; WP-04 actual v0.7 rendered images; WP-05 human-reviewed new-product image benchmarks. Model scaffolds are not designed or rendered images.

@@ -1,0 +1,143 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/ucscene/v0.7/scene-design.schema.json",
+  "title": "UseCaseScene design scaffold v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "id",
+    "product_id",
+    "use_case_id",
+    "step_id",
+    "action",
+    "state",
+    "frame_scope",
+    "viewpoint_mode",
+    "design_status",
+    "requirement_ids",
+    "design_decision_ids",
+    "visible_evidence",
+    "proposed_elements",
+    "flow",
+    "expected_ui_text"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "product_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "use_case_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "step_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "action": {
+      "type": "string",
+      "minLength": 1
+    },
+    "state": {
+      "enum": [
+        "start",
+        "in-progress",
+        "waiting",
+        "success",
+        "failure"
+      ]
+    },
+    "frame_scope": {
+      "const": "software-only"
+    },
+    "viewpoint_mode": {
+      "enum": [
+        "application-ui",
+        "gameplay"
+      ]
+    },
+    "design_status": {
+      "enum": [
+        "unresolved",
+        "proposed",
+        "approved"
+      ]
+    },
+    "requirement_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "design_decision_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "visible_evidence": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "proposed_elements": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "flow": {
+      "enum": [
+        "main",
+        "alternative",
+        "exception"
+      ]
+    },
+    "expected_ui_text": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "design_status": {
+            "const": "approved"
+          }
+        },
+        "required": [
+          "design_status"
+        ]
+      },
+      "then": {
+        "properties": {
+          "design_decision_ids": {
+            "minItems": 1
+          }
+        }
+      }
+    }
+  ]
+}

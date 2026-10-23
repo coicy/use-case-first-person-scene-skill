@@ -21,7 +21,7 @@ from ..design.continuity import validate_consistent_plan
 PACKET_VERSION = '1.1'
 LEGACY_PACKET_VERSION = '1.0'
 MODES = ('explore', 'draft', 'consistent', 'revise')
-ORIGINS = ('ucscene-cli', 'conversation-image-generation', 'external-image-model', 'manual-artwork')
+ORIGINS = ('ucscene-cli', 'conversation-image-generation', 'external-image-model', 'manual-artwork', 'agent-native-image-tool')
 
 # Applied to EVERY individual request, including a plan with multiple candidates.
 # This constrains the request; provider compliance still requires real-image QA.

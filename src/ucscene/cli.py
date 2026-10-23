@@ -19,6 +19,7 @@ from .acceptance import create_gallery, verify_gallery
 from .design import (init_brief, migrate_legacy_case, create_bundle, validate_product_brief, validate_design_decision, validate_scene_design, validate_design_bundle, create_design_plan, validate_design_plan, export_design_prompts)
 from .design.system import create_design_system, validate_design_system, revise_design_system, compare_design_system
 from .design.continuity import apply_design_system, validate_consistent_plan
+from .rendering.agent import export_agent_handoff, verify_agent_handoff, import_agent_images, verify_agent_import
 from .rendering import make_render_packet, verify_render_packet, render_concepts, verify_generation_report, build_concept_gallery, verify_concept_gallery, audit_concept_image, create_retry_packet, verify_retry_manifest, record_visual_observation
 
 def run(argv: list[str] | None = None) -> int:
@@ -175,7 +176,7 @@ def run(argv: list[str] | None = None) -> int:
     concept_packet.add_argument('--change-request', help='Only in revise mode; never overwrites source plan')
     concept_packet.add_argument('--step', dest='steps', action='append', help='Optional step IDs to render')
     concept_packet.add_argument('--out', default='out/concept-render-packet.json')
-    concept_render = sub.add_parser('concept-render', help='Prepare requests offline, or explicitly spend on real PNG generation')
+    concept_render = sub.add_parser('concept-render', help='Standalone paid API FALLBACK; prefer native Agent image tools')
     concept_render.add_argument('packet')
     concept_render.add_argument('--out', default='out/concept-images')
     concept_render.add_argument('--execute', action='store_true', help='EXPLICIT paid OpenAI Images API opt-in')
@@ -185,6 +186,19 @@ def run(argv: list[str] | None = None) -> int:
     concept_render.add_argument('--quality', default='medium')
     concept_render.add_argument('--reference-image', help='Optional verified image used as consistent style reference')
     concept_render.add_argument('--chain', action='store_true', help='Optional sequential edit references; has visual drift risk')
+    agent_export = sub.add_parser('concept-agent-export', help='PREFERRED: export independent native-Agent scene image tasks, no key')
+    agent_export.add_argument('packet')
+    agent_export.add_argument('--out-dir', required=True)
+    agent_verify = sub.add_parser('concept-agent-verify', help='Verify native Agent handoff and image files')
+    agent_verify.add_argument('packet')
+    agent_verify.add_argument('--handoff', required=True)
+    agent_verify.add_argument('--import-manifest')
+    agent_import = sub.add_parser('concept-agent-import', help='Import actual native-Agent PNGs (no standalone API key)')
+    agent_import.add_argument('packet')
+    agent_import.add_argument('--handoff', required=True)
+    agent_import.add_argument('--mapping', required=True)
+    agent_import.add_argument('--images', required=True)
+    agent_import.add_argument('--out-dir', required=True)
     concept_gallery = sub.add_parser('concept-gallery', help='Build a human-review gallery of actual original-product image files')
     concept_gallery.add_argument('packet')
     concept_gallery.add_argument('--images', required=True)
@@ -267,6 +281,22 @@ def run(argv: list[str] | None = None) -> int:
             save_json(args.out,packet)
             print(json.dumps({'ok':True,'path':args.out,'mode':packet['mode'],
                 'images_planned':len(packet['items']),'generated_images':0},ensure_ascii=False))
+            return 0
+        if args.command == 'concept-agent-export':
+            m=export_agent_handoff(load_json(args.packet),args.out_dir)
+            print(json.dumps({'ok':True,'tasks':len(m['tasks']),'generated_images':0,
+                'native_provider_preferred':True,'path':str(Path(args.out_dir)/'manifest.json')},ensure_ascii=False))
+            return 0
+        if args.command == 'concept-agent-import':
+            m=import_agent_images(load_json(args.packet),args.handoff,args.mapping,args.images,args.out_dir)
+            print(json.dumps({'ok':True,'images_imported':len(m['images']),
+                'pending_human_review':True,'path':str(Path(args.out_dir)/'manifest.json')},ensure_ascii=False))
+            return 0
+        if args.command == 'concept-agent-verify':
+            p=load_json(args.packet)
+            result=(verify_agent_import(p,args.handoff,args.import_manifest) if args.import_manifest
+                    else {'tasks_verified':len(verify_agent_handoff(p,args.handoff)['tasks'])})
+            print(json.dumps({'ok':True,**result},ensure_ascii=False))
             return 0
         if args.command == 'concept-render':
             report=render_concepts(load_json(args.packet),args.out,execute=args.execute,

@@ -48,6 +48,11 @@ jobs:
           ucscene concept-render /tmp/asset-consistent-packet.json --out /tmp/asset-consistent-dry-run
           ucscene concept-packet /tmp/game-wp02-plan.json --mode draft --variant VAR-03 --out /tmp/game-concept-draft.json
           ucscene concept-render /tmp/game-concept-draft.json --out /tmp/game-concept-dry-run
+          # Agent-native is preferred and keyless. Task export does NOT call a paid image API.
+          ucscene concept-agent-export /tmp/asset-concept-draft.json --out-dir /tmp/asset-agent-tasks
+          ucscene concept-agent-verify /tmp/asset-concept-draft.json --handoff /tmp/asset-agent-tasks/manifest.json
+          ucscene concept-agent-export /tmp/game-concept-draft.json --out-dir /tmp/game-agent-tasks
+          ucscene concept-agent-verify /tmp/game-concept-draft.json --handoff /tmp/game-agent-tasks/manifest.json
           ucscene brief-init --product-id ci-demo --name "CI Demo" --category web --prompt "新的协作软件" --use-case "用户创建任务" --out /tmp/ci-brief.json
           ucscene design-scaffold /tmp/ci-brief.json --out /tmp/ci-design-bundle.json
           ucscene design-validate /tmp/ci-design-bundle.json --kind bundle

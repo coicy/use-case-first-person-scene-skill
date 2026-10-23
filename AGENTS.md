@@ -99,3 +99,9 @@ Use concept-packet then concept-render. One item is one full-bleed software/game
 Paid calls require explicit --execute --max-images N plus API credentials. Do not claim visual pass from hash/mocked tests.
 Cropped panels from multi-panel failures are external derivative samples, never six independent successful generations.
 Only explicit user consent grants approval of product design decisions.
+
+
+
+## Single-frame retry safety
+
+`concept-observe` records the declared observer and real image hashes without verifying their judgment or granting user approval. `concept-retry` must validate audit-to-image-to-original-packet consistency and preserve source facts, prompt lineage, and the frozen DesignSystem. Untrusted auditor prose must never be injected into the retry prompt; only fixed repair phrases and the actual original evidence may be used. Do not call paid services during retry planning. The two-attempt cap applies per validated retry lineage; changing the root creates a new lineage and is not authenticated user consent. See `docs/WP04_RETRY_IMPLEMENTATION.md`.

@@ -44,3 +44,9 @@ WP-01 and WP-02 are implemented. WP-02 includes new-product design-plan/review/e
 - Consistent new-use-case scene plan using approved layout/navigation/style and step-specific feedback.
 - Schema/CLI/integrity tests. See [WP03_IMPLEMENTATION.md](WP03_IMPLEMENTATION.md).
 - Actual PNG images, visual authenticity and user acceptance are **not** established here. WP-04 remains next.
+
+
+
+## Follow-up: audit-bound single-scene retries (implemented offline)
+
+The observed image generator continued to produce a six-panel board even after explicit single-frame instructions. Offline failure observation / targeted immutable retry packets, image digest checks and up to two verified repair attempts are implemented. No successful standalone image API recovery or real visual QA success should be inferred from regression tests. See [WP04_RETRY_IMPLEMENTATION.md](WP04_RETRY_IMPLEMENTATION.md).

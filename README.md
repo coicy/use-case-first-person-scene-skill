@@ -207,3 +207,9 @@ See docs/WP04_IMPLEMENTATION.md and docs/WP04_STATUS.md.
 
 ### Optional image-composition review
 Use `ucscene concept-audit PACKET --image IMAGE.png --variant VAR-01 --scene SCENE-ID --out out/visual-audit.json` to opt in to a potentially paid visual QA call. It checks whether the actual image is a single full-bleed application/game state or a montage of independent screenshots, plus in-software boundary and step evidence. The result is **advisory** and is not human approval. Calls require `OPENAI_API_KEY`.
+
+
+
+## WP-04: 单场景失败后的定向重试
+
+新增 `concept-observe`（离线记录明确观察，非视觉模型、非用户批准）、`concept-retry`（来源哈希与设计约束绑定的离线修复包）及 `concept-retry-verify`（重试谱系验证）。继续使用 `concept-render` 的显式 `--execute --max-images 1` 才可能触发付费生图。每条可验证链最多两次修复；不保证视觉模型遵守单帧规则。详见 [WP04_RETRY_IMPLEMENTATION.md](docs/WP04_RETRY_IMPLEMENTATION.md)。

@@ -60,3 +60,9 @@ Compile one new-product candidate with ucscene concept-packet PLAN --mode draft 
 Paid rendering requires explicit --execute --max-images N and a configured API key. concept-gallery and concept-verify bind real files to prompts and hashes, not to automatic design approvals.
 Inspect actual output and reject any montage, storyboard, contact sheet, or non-software surrounding. Each image must show exactly one use-case step.
 See docs/WP04_IMPLEMENTATION.md for mode and provenance details.
+
+
+
+## Failed-image recovery (WP-04)
+
+When the image is a storyboard or a multi-screen presentation board, record it with `concept-audit` (optional paid advisory) or `concept-observe` (self-attested, offline), then generate a single-scene, hash-bound retry through `concept-retry`. Never claim a montage crop is an independently generated image or a human acceptance. The retry is only a prompt request until an explicitly authorized `concept-render --execute --max-images 1`; keep user requirements and frozen DesignSystem unchanged. See `docs/WP04_RETRY_IMPLEMENTATION.md`.

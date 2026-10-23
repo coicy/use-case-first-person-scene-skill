@@ -19,7 +19,7 @@ from .acceptance import create_gallery, verify_gallery
 from .design import (init_brief, migrate_legacy_case, create_bundle, validate_product_brief, validate_design_decision, validate_scene_design, validate_design_bundle, create_design_plan, validate_design_plan, export_design_prompts)
 from .design.system import create_design_system, validate_design_system, revise_design_system, compare_design_system
 from .design.continuity import apply_design_system, validate_consistent_plan
-from .rendering import make_render_packet, verify_render_packet, render_concepts, verify_generation_report, build_concept_gallery, verify_concept_gallery, audit_concept_image
+from .rendering import make_render_packet, verify_render_packet, render_concepts, verify_generation_report, build_concept_gallery, verify_concept_gallery, audit_concept_image, create_retry_packet, verify_retry_manifest, record_visual_observation
 
 def run(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="ucscene", description="Use-case first-person scenario planning and image generation")
@@ -199,6 +199,25 @@ def run(argv: list[str] | None = None) -> int:
     concept_audit.add_argument('--scene', required=True)
     concept_audit.add_argument('--model', default='gpt-4.1-mini')
     concept_audit.add_argument('--out', default='out/concept-visual-audit.json')
+    observe = sub.add_parser('concept-observe', help='OFFLINE: record a self-attested composition observation (not vision QA or design approval)')
+    observe.add_argument('packet')
+    observe.add_argument('--image', required=True)
+    observe.add_argument('--variant', required=True)
+    observe.add_argument('--scene', required=True)
+    observe.add_argument('--composition', choices=['single-frame','multi-frame-board','uncertain'], required=True)
+    observe.add_argument('--software-only', choices=['pass','fail','uncertain'], default='uncertain')
+    observe.add_argument('--observer', required=True, help='Identify who actually inspected the image; cannot establish user approval')
+    observe.add_argument('--out', default='out/concept-observation.json')
+    retry = sub.add_parser('concept-retry', help='OFFLINE: prepare one targeted retry request from a verified failed visual audit; no image API call')
+    retry.add_argument('packet', help='The render packet originally audited')
+    retry.add_argument('--audit', required=True, help='Saved concept-audit JSON of the failed image')
+    retry.add_argument('--image', required=True, help='The exact previously audited PNG')
+    retry.add_argument('--previous-manifest', help='Mandatory to build second retry; audit packet must match the first retry')
+    retry.add_argument('--out', default='out/concept-retry-packet.json')
+    retry.add_argument('--manifest', default='out/concept-retry-manifest.json')
+    retry_verify = sub.add_parser('concept-retry-verify', help='Check digest-bound retry manifest and single-scene packet')
+    retry_verify.add_argument('packet')
+    retry_verify.add_argument('--manifest', required=True)
     concept_verify = sub.add_parser('concept-verify', help='Check saved concept gallery image hashes; NOT semantic or user approval')
     concept_verify.add_argument('manifest')
     args = parser.parse_args(argv)
@@ -268,6 +287,33 @@ def run(argv: list[str] | None = None) -> int:
             save_json(args.out,audit)
             print(json.dumps({'ok':audit['visual_gate']=='advisory-pass','path':args.out,'gate':audit['visual_gate'],'human_design_approval':'not_checked'},ensure_ascii=False))
             return 0 if audit['visual_gate']=='advisory-pass' else 4
+        if args.command == 'concept-observe':
+            audit = record_visual_observation(load_json(args.packet), args.image, variant_id=args.variant,
+                scene_id=args.scene, composition=args.composition, software_only=args.software_only, observer=args.observer)
+            if Path(args.out).exists():
+                raise SceneError('Observation output already exists; refusing to overwrite')
+            save_json(args.out,audit)
+            print(json.dumps({'ok':True,'path':args.out,'method':audit['method'],
+                'visual_gate':audit['visual_gate'],'human_design_approval':'not_checked'},ensure_ascii=False))
+            return 0
+        if args.command == 'concept-retry':
+            retry_packet, lineage = create_retry_packet(load_json(args.packet), load_json(args.audit), args.image,
+                previous_manifest=load_json(args.previous_manifest) if args.previous_manifest else None)
+            if Path(args.out).resolve() == Path(args.manifest).resolve():
+                raise SceneError('Retry packet and manifest must use distinct output files')
+            if Path(args.out).exists() or Path(args.manifest).exists():
+                raise SceneError('Retry outputs must be new files; refusing to overwrite existing lineage')
+            save_json(args.out, retry_packet)
+            save_json(args.manifest, lineage)
+            print(json.dumps({'ok':True,'packet':args.out,'manifest':args.manifest,
+                'scene':lineage['scene_id'],'attempt':lineage['attempt'],
+                'repairs':lineage['repair_categories'],'generated_images':0},ensure_ascii=False))
+            return 0
+        if args.command == 'concept-retry-verify':
+            m = verify_retry_manifest(load_json(args.manifest), load_json(args.packet))
+            print(json.dumps({'ok':True,'attempt':m['attempt'],'scene':m['scene_id'],
+                'retry_packet_sha256':m['retry_packet_sha256']},ensure_ascii=False))
+            return 0
         if args.command == 'concept-verify':
             verified=verify_concept_gallery(args.manifest)
             print(json.dumps({'ok':True,**verified},ensure_ascii=False))

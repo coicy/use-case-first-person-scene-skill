@@ -2,7 +2,24 @@
 
 > **当前正式产品定义：为尚未开发或仍在设计的新软件/游戏，根据提示词和用例生成原创的软件内部场景概念图。** AI 可以主动设计 UI、交互和场景，但必须区分用户需求与 AI 提案，并保持跨用例一致性。已确认的产品规则见 [PRODUCT_REQUIREMENTS.md](docs/PRODUCT_REQUIREMENTS.md)，下一步计划见 [V07_WORK_PLAN.md](docs/V07_WORK_PLAN.md)。
 >
-> **实施状态：** v0.6 CLI 仍是旧的用例到场景规划/生图工具；新产品概念设计流程属于 v0.7 待开发能力。以下保留 v0.6 命令文档作为兼容说明，不应将复刻既有软件当成后续默认目标。
+> **实施状态：** WP-01 至 WP-04 已实现原创新产品设计和生成编排；WP-05 真实视觉验收仍未完成。Agent 自带生图为首选。以下保留 v0.6 命令文档作为兼容说明，不应将复刻既有软件当成后续默认目标。
+
+## 生成方式优先级：Agent 自带生图（PRODUCT-003）
+
+**本仓库是 Agent Skill。** 宿主 Agent 有图像生成工具时，优先直接调用该工具生成原创软件/游戏用例图；默认**无需 OPENAI_API_KEY**。Python CLI 只负责导出单场景任务和导入实际图片，无法直接调用任意 Agent 的私有生图工具。
+
+```bash
+ucscene design-plan benchmarks/new-products/new-asset-studio.wp02.brief.json --variants 2 --out out/plan.json
+ucscene concept-packet out/plan.json --mode draft --variant VAR-01 --step STEP-001 --out out/packet.json
+ucscene concept-agent-export out/packet.json --out-dir out/tasks
+# Agent 自己调用生图工具：仅使用 tasks/ 内一个步骤的 TXT，保存真实 PNG
+# 创建包含 variant_id、scene_id、file 和 tool 的 out/results.json
+ucscene concept-agent-import out/packet.json --handoff out/tasks/manifest.json --mapping out/results.json --images out/images --out-dir out/received
+ucscene concept-agent-verify out/packet.json --handoff out/tasks/manifest.json --import-manifest out/received/manifest.json
+ucscene concept-gallery out/packet.json --images out/received/images --selection out/received/gallery-selection.json --out-dir out/gallery
+```
+
+独立 concept-render --execute 是**用户明确选择并授权费用**时才使用的备用 API 路径。导出任务不等于生图；导入哈希不等于验证实际提示词或图片质量；最终用例视觉验收和设计批准仍需单独进行。详细说明：[正式决策](docs/decision-003-agent-native-generation.md) · [操作指南](docs/AGENT_NATIVE_IMAGE_WORKFLOW.md)。
 
 ## v0.6 已实现功能与兼容说明
 

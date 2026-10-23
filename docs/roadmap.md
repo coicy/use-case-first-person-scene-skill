@@ -1,3 +1,7 @@
+## PRODUCT-003: host-Agent image generation comes first
+
+Agent native generation is preferred. Portable CLI supports independent task export, PNG import and hash verification with no extra API key. Actual generation happens in the host Agent; separate paid API remains opt-in fallback. Image quality and user approval are separate acceptance gates. See decision-003-agent-native-generation.md.
+
 # Product Roadmap
 
 > **2026-10-22 Product decision 002:** The primary purpose is to **design original new-software use-case scene visuals from prompts**, not to reproduce existing application screenshots. [Authoritative requirements](PRODUCT_REQUIREMENTS.md) · [v0.7 execution plan](V07_WORK_PLAN.md).

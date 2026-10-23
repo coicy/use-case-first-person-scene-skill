@@ -9,6 +9,18 @@ description: Design software-only concept visuals for NEW or not-yet-built softw
 
 Read docs/PRODUCT_REQUIREMENTS.md (PRODUCT-002) before planning or developing features. This product creates **new software / game use-case concept images**, based on user requirements and AI design proposals. It does not require actual app screenshots. The older v0.6 screenshot-fidelity objective is superseded as a primary use case.
 
+## Provider priority (PRODUCT-003 — required)
+
+**ALWAYS prefer the host Agent's own image-generation tool** when available. Do not demand OPENAI_API_KEY just to generate a scene for a new product.
+
+1. Compile a concept-packet and run concept-agent-export to obtain independent, product/step-bound prompt text files.
+2. Read ONE prompt file and call the host Agent's own image-generation tool with ONLY this one product/use-case step. Never pass the entire packet, storyboard, multiple screens, unrelated past image requests, or another product to one image generation call.
+3. Save actual image bytes as PNG; import using concept-agent-import and verify with concept-agent-verify. Image file hashes and declared tool ID prove neither the tool invocation nor exact submitted prompt, so report actual prompt as not_verified unless recorded.
+4. Use the Agent's visual capability for an honest visual check and, if needed, concept-observe (self-reported, NOT user approval). Human/owner approval remains separate.
+5. concept-render --execute with a separately billed API and key is a FALLBACK on explicit user choice; never silently choose it or make credentials a primary prerequisite.
+
+Portable Python cannot directly call unknown host-private image tools. The Agent is responsible for actual invocation between export and import. Read docs/decision-003-agent-native-generation.md and docs/AGENT_NATIVE_IMAGE_WORKFLOW.md.
+
 ## Visual boundary inherited from PRODUCT-001
 
 Each generated image must be entirely **inside the target software or game**. No actual users, monitor/phone hardware, keyboards, desk or promotional mockup. For a game show the game's designed camera; it need not be first-person gameplay. Virtual hands are acceptable when part of the in-game image.

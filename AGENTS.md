@@ -5,6 +5,12 @@
 **Before any implementation or prompt change, read docs/PRODUCT_REQUIREMENTS.md and docs/V07_WORK_PLAN.md.** The project designs visual use-case concepts for **NEW, not-yet-built software and games**. Inventing missing interface arrangements, components and interactions is a REQUIRED design capability when labeled as an AI proposal; it is not automatically a hallucination. Confirmed user requirements override AI proposals; a proposal may not silently become locked. Existing software is a design reference, not the required replication target. Maintain the software-only output boundary of PRODUCT-001. Legacy v0.6 behaviors below remain compatibility constraints until explicitly migrated, not v0.7 product requirements.
 
 
+## PRODUCT-003 — Host Agent native image tools FIRST
+
+This project is an Agent Skill. When the host Agent exposes image generation, it must generate concepts with that native capability instead of requiring a separate OpenAI Images API key. The CLI exports per-scene prompts via concept-agent-export; the Agent invokes its own image tool once per scene; concept-agent-import then binds actual PNG bytes to product/variant/scene/step and preserves checksums.
+
+Never claim export/import proves the host invoked a particular model, submitted an exact prompt, generated a semantically correct scene, or received user approval. If the host cannot provide PNG bytes or is missing an image tool, report this limitation; standalone concept-render --execute is an explicit separately billed fallback, never an automatic step. Do not merge multiple products or steps into a single generation request. See docs/decision-003-agent-native-generation.md.
+
 ## Scope
 
 This repository implements a source-grounded **software-only** use-case-to-scene pipeline. The entire output must be application/editor/game pixels; never real-world user POV, external monitors, keyboard, desk, device or physical surroundings. It is **not** a UML generator, working UX frontend, asset licensing system, or guarantee of model accuracy. Do not add features or claims to the README unless the code and tests verify them.

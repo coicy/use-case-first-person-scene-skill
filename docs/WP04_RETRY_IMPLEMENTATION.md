@@ -65,3 +65,9 @@ If a new image also fails, run a **fresh** `concept-audit` or `concept-observe` 
 `tests/test_concept_retry.py`: actual saved PNG inspection, single-item retry, prompt injection isolation, strict packet/manifest digests, stale image rejection, unchanged approved DesignSystem, two-attempt chain cap, unclear findings, CLI observation/retry/review, and no paid calls during offline planning.
 
 `python -m unittest discover -s tests -v`; GitHub Actions Python 3.10/3.12. The visual reference-image failure should be kept as an external review artifact rather than committed binary benchmark ground truth; source requirements for the original product must remain independent of this image.
+
+## Issue #3 extension — wrong product despite valid single frame
+
+The 2026-10-24 test demonstrated correct `single-frame` framing but **wrong product** for two requested game images. See [ISSUE03_PRODUCT_MATCH.md](ISSUE03_PRODUCT_MATCH.md).
+
+`concept-audit` now separately reports `target_product_match`. `concept-observe` supports `--product-match fail` (default: `uncertain`); `concept-retry` can produce a `wrong-product` repair without treating successful composition as successful product identity. New paid API submissions use identity-bound render packet 1.1. Historical 1.0 packets are readable but not executable; rebuild them through `concept-packet`.

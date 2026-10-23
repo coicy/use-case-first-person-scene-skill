@@ -38,6 +38,7 @@ class RetryTest(unittest.TestCase):
         bad_statuses=statuses or ['pass']*len(x['required_evidence'])
         payload={
           'composition':composition,'software_only':scope,
+          'target_product_match':'pass','product_match_reason':unexpected,
           'distinct_screens':3 if composition=='multi-frame-board' else 1,
           'external_presentation_chrome':composition=='multi-frame-board',
           'composition_reason':unexpected,

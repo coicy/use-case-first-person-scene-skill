@@ -18,7 +18,8 @@ from ..imaging import inspect_image
 from ..design.planner import _json_hash, validate_design_plan
 from ..design.continuity import validate_consistent_plan
 
-PACKET_VERSION = '1.0'
+PACKET_VERSION = '1.1'
+LEGACY_PACKET_VERSION = '1.0'
 MODES = ('explore', 'draft', 'consistent', 'revise')
 ORIGINS = ('ucscene-cli', 'conversation-image-generation', 'external-image-model', 'manual-artwork')
 
@@ -39,6 +40,18 @@ SINGLE_FRAME_SUFFIX = (
     'no collage, no infographic, no outside-software captions.'
 )
 
+
+
+def _identity_line(product_id: str, item: dict[str, Any]) -> str:
+    """Exact, machine-verifiable route from a chosen new product to one request.
+
+    Encode values as JSON, so a newline in a user-supplied ID cannot silently
+    make a second prompt directive. The line itself is not a permission token.
+    """
+    binding = {key: str(item[key]) for key in ('variant_id', 'scene_id', 'step_id')}
+    binding['product_id'] = product_id
+    return 'TARGET IDENTITY JSON: ' + json.dumps(binding, ensure_ascii=False,
+                                                 sort_keys=True, separators=(',', ':'))
 
 
 def _digest(d: dict[str, Any]) -> str:
@@ -100,7 +113,8 @@ def make_render_packet(plan: dict[str, Any], *, mode: str,
             if mode == 'revise':
                 prompt += ('\nTARGETED REVISION REQUEST (UNAPPROVED PROPOSAL; preserve original source requirements'
                            ' and the selected candidate layout/navigation): ' + change_request.strip())
-            prompt = SINGLE_FRAME_PREFIX + prompt + SINGLE_FRAME_SUFFIX
+            identity = {'variant_id': candidate_id, 'scene_id': screen['scene_id'], 'step_id': screen['step_id']}
+            prompt = SINGLE_FRAME_PREFIX + _identity_line(product_id, identity) + '\n' + prompt + SINGLE_FRAME_SUFFIX
             pid = hashlib.sha256(prompt.encode('utf-8')).hexdigest()
             items.append({
                 'variant_id': candidate_id,
@@ -137,7 +151,7 @@ def verify_render_packet(packet: dict[str, Any]) -> dict[str, Any]:
         'format_version','kind','product_id','mode','source_plan_sha256',
         'design_system_sha256','design_system_revision','design_authority',
         'change_request','items','image_generation_status','note','packet_sha256',
-    } or packet['format_version'] != PACKET_VERSION or packet['kind'] != 'concept-render-packet':
+    } or packet['format_version'] not in (PACKET_VERSION, LEGACY_PACKET_VERSION) or packet['kind'] != 'concept-render-packet':
         raise SceneError('Invalid concept render packet')
     if packet['mode'] not in MODES or packet['image_generation_status'] != 'not_started':
         raise SceneError('Invalid render mode/status')
@@ -169,6 +183,10 @@ def verify_render_packet(packet: dict[str, Any]) -> dict[str, Any]:
             raise SceneError('Render item requirement fields invalid')
         if not i['prompt'].startswith(SINGLE_FRAME_PREFIX) or not i['prompt'].endswith(SINGLE_FRAME_SUFFIX):
             raise SceneError('Single-frame render contract missing; regenerate the concept packet')
+        if packet['format_version'] == PACKET_VERSION:
+            expected_prefix = SINGLE_FRAME_PREFIX + _identity_line(packet['product_id'],i) + '\n'
+            if not i['prompt'].startswith(expected_prefix):
+                raise SceneError('Target product/scene/step identity mismatch in submitted prompt')
         if 'software-only' not in i['prompt'].lower():
             raise SceneError('Rendered frame must remain entirely in software')
     if packet['packet_sha256'] != _digest(packet):
@@ -195,6 +213,8 @@ def render_concepts(packet: dict[str, Any], out_dir: str | Path, *,
     Callable injection is for local tests; CLI always uses real provider calls.
     """
     verify_render_packet(packet)
+    if execute and packet['format_version'] != PACKET_VERSION:
+        raise SceneError('Legacy render packet has no target identity lock; regenerate packet before paid API execution')
     if type(execute) is not bool or type(chain) is not bool:
         raise SceneError('execute/chain must be boolean')
     count = len(packet['items'])
@@ -255,7 +275,10 @@ def render_concepts(packet: dict[str, Any], out_dir: str | Path, *,
             img=inspect_image(filename)
             images.append({
                 'variant_id':item['variant_id'],'scene_id':item['scene_id'],
-                'step_id':item['step_id'],'prompt_sha256':item['prompt_sha256'],
+                'step_id':item['step_id'],'product_id':packet['product_id'],
+                'identity_bound':packet['format_version']==PACKET_VERSION,
+                'step_prompt_sha256':hashlib.sha256(item['prompt'].encode('utf-8')).hexdigest(),
+                'prompt_sha256':item['prompt_sha256'],
                 'path':name, 'status':'generated', 'sha256':img['sha256'],
                 'width':img['width'],'height':img['height'],
                 'reference_sha256':inspect_image(source)['sha256'] if source else None,
@@ -284,6 +307,11 @@ def verify_generation_report(packet: dict[str, Any], report: dict[str, Any], ima
         key=(item.get('variant_id'),item.get('scene_id'))
         if key not in expected or item.get('prompt_sha256')!=expected[key]['prompt_sha256']:
             raise SceneError('Generated image does not match an original scene prompt')
+        if item.get('status')=='generated' and packet['format_version']==PACKET_VERSION:
+            if (item.get('product_id')!=packet['product_id']
+                    or item.get('identity_bound') is not True
+                    or item.get('step_prompt_sha256')!=expected[key]['prompt_sha256']):
+                raise SceneError('Generated image lacks matching product identity or actual submitted prompt')
         if item.get('status')=='generated':
             path=Path(item.get('path',''))
             if path.is_absolute() or path.name!=str(path) or path.suffix.lower()!='.png':

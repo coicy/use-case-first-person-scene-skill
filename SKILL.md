@@ -66,3 +66,7 @@ See docs/WP04_IMPLEMENTATION.md for mode and provenance details.
 ## Failed-image recovery (WP-04)
 
 When the image is a storyboard or a multi-screen presentation board, record it with `concept-audit` (optional paid advisory) or `concept-observe` (self-attested, offline), then generate a single-scene, hash-bound retry through `concept-retry`. Never claim a montage crop is an independently generated image or a human acceptance. The retry is only a prompt request until an explicitly authorized `concept-render --execute --max-images 1`; keep user requirements and frozen DesignSystem unchanged. See `docs/WP04_RETRY_IMPLEMENTATION.md`.
+
+## Target-product isolation (Issue #3)
+
+For every ORIGINAL product scene, identify the selected **product, variant, scene and step** separately. Treat `single-frame` and `target_product_match` as **independent acceptance criteria**. A pretty UI for the wrong product is a failed image. New packets have exact `TARGET IDENTITY JSON`; reject mismatches before API calls. Record a wrong-product observation with `concept-observe --product-match fail` and build a one-scene `concept-retry` packet. Do not reuse earlier product screens or freeform visual-auditor text as source facts, and do not claim an offline retry proves the next image will be correct. See `docs/ISSUE03_PRODUCT_MATCH.md`.

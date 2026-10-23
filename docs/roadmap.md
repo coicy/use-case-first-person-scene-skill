@@ -50,3 +50,7 @@ WP-01 and WP-02 are implemented. WP-02 includes new-product design-plan/review/e
 ## Follow-up: audit-bound single-scene retries (implemented offline)
 
 The observed image generator continued to produce a six-panel board even after explicit single-frame instructions. Offline failure observation / targeted immutable retry packets, image digest checks and up to two verified repair attempts are implemented. No successful standalone image API recovery or real visual QA success should be inferred from regression tests. See [WP04_RETRY_IMPLEMENTATION.md](WP04_RETRY_IMPLEMENTATION.md).
+
+## Issue #3 implementation — 2026-10-24
+
+Implemented product-identity binding for new render packets, independent visual product-match QA, self-attested `--product-match` observations, and `wrong-product` corrective retry. These are **engineering** safeguards, not proof of actual paid-model image compliance. The WP-05 release gate remains: real Images API generation for two original products, separate per-step visual acceptance, and cross-step consistency evidence. See [ISSUE03_PRODUCT_MATCH.md](ISSUE03_PRODUCT_MATCH.md).

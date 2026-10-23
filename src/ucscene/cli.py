@@ -206,6 +206,7 @@ def run(argv: list[str] | None = None) -> int:
     observe.add_argument('--scene', required=True)
     observe.add_argument('--composition', choices=['single-frame','multi-frame-board','uncertain'], required=True)
     observe.add_argument('--software-only', choices=['pass','fail','uncertain'], default='uncertain')
+    observe.add_argument('--product-match', choices=['pass','fail','uncertain'], default='uncertain', help='Explicit observed target-product match; wrong-product needs fail')
     observe.add_argument('--observer', required=True, help='Identify who actually inspected the image; cannot establish user approval')
     observe.add_argument('--out', default='out/concept-observation.json')
     retry = sub.add_parser('concept-retry', help='OFFLINE: prepare one targeted retry request from a verified failed visual audit; no image API call')
@@ -289,7 +290,8 @@ def run(argv: list[str] | None = None) -> int:
             return 0 if audit['visual_gate']=='advisory-pass' else 4
         if args.command == 'concept-observe':
             audit = record_visual_observation(load_json(args.packet), args.image, variant_id=args.variant,
-                scene_id=args.scene, composition=args.composition, software_only=args.software_only, observer=args.observer)
+                scene_id=args.scene, composition=args.composition, software_only=args.software_only,
+                observer=args.observer, target_product_match=args.product_match)
             if Path(args.out).exists():
                 raise SceneError('Observation output already exists; refusing to overwrite')
             save_json(args.out,audit)

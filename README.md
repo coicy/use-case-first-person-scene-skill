@@ -213,3 +213,7 @@ Use `ucscene concept-audit PACKET --image IMAGE.png --variant VAR-01 --scene SCE
 ## WP-04: 单场景失败后的定向重试
 
 新增 `concept-observe`（离线记录明确观察，非视觉模型、非用户批准）、`concept-retry`（来源哈希与设计约束绑定的离线修复包）及 `concept-retry-verify`（重试谱系验证）。继续使用 `concept-render` 的显式 `--execute --max-images 1` 才可能触发付费生图。每条可验证链最多两次修复；不保证视觉模型遵守单帧规则。详见 [WP04_RETRY_IMPLEMENTATION.md](docs/WP04_RETRY_IMPLEMENTATION.md)。
+
+## v0.7 Issue #3 — 目标产品身份与错误产品重试
+
+新版本概念渲染请求（`concept-render-packet` 1.1）会把 `product_id`、`variant_id`、`scene_id`、`step_id` 绑定到**实际发给图片 API 的单场景提示词**；旧 1.0 请求包只能校验与归档，付费生成前须使用 `concept-packet` 重新构建。单帧软件画面**不等于**目标产品正确，`concept-audit` 独立审核 `target_product_match`；`concept-observe --product-match fail` 可记录人工观察到的串场并通过 `concept-retry` 生成 `wrong-product` 定向重试包（无自动付费调用）。详见 [Issue #3 修复与真实失败样本复测](docs/ISSUE03_PRODUCT_MATCH.md)。模型是否真的遵守新提示词仍需真人验收和实际 API 测试。

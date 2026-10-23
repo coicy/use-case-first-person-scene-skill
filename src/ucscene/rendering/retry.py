@@ -14,7 +14,7 @@ from typing import Any
 from ..core import SceneError
 from ..imaging import inspect_image
 from .concept import SINGLE_FRAME_PREFIX, SINGLE_FRAME_SUFFIX, _digest, verify_render_packet
-from .audit import AUDIT_SCHEMA
+from .audit import AUDIT_SCHEMA, AUDIT_VERSION
 
 MAX_RETRY_ATTEMPTS = 2
 RETRY_FORMAT = '1.0'
@@ -56,7 +56,7 @@ def create_retry_packet(packet: dict[str, Any], audit: dict[str, Any], image_pat
     along a verified chain. User approval remains distinct from visual QA.
     """
     verify_render_packet(packet)
-    if not isinstance(audit, dict) or audit.get('kind') != 'concept-visual-audit' or audit.get('format_version') != '1.0':
+    if not isinstance(audit, dict) or audit.get('kind') != 'concept-visual-audit' or audit.get('format_version') not in ('1.0', AUDIT_VERSION):
         raise SceneError('Retry requires a concept-audit report')
     if audit.get('packet_sha256') != packet['packet_sha256']:
         raise SceneError('Audit belongs to a different render packet')
@@ -74,6 +74,14 @@ def create_retry_packet(packet: dict[str, Any], audit: dict[str, Any], image_pat
         raise SceneError('Missing audit findings')
     comp = findings.get('composition')
     scope = findings.get('software_only')
+    product_match = findings.get('target_product_match', 'uncertain')  # legacy audit 1.0
+    if product_match not in ('pass','fail','uncertain'):
+        raise SceneError('Invalid target-product match verdict')
+    if audit.get('format_version') == AUDIT_VERSION:
+        if set(findings) != set(AUDIT_SCHEMA['properties']):
+            raise SceneError('Incomplete current visual audit findings')
+        if not isinstance(findings.get('product_match_reason'),str):
+            raise SceneError('Invalid target-product reason')
     if comp not in ('single-frame', 'multi-frame-board', 'uncertain') or scope not in ('pass', 'fail', 'uncertain'):
         raise SceneError('Invalid audit status')
     evidence = findings.get('step_evidence')
@@ -89,14 +97,17 @@ def create_retry_packet(packet: dict[str, Any], audit: dict[str, Any], image_pat
     # A CONFIRMED issue (e.g., multi-frame board) can be repaired even when
     # unrelated evidence items are unknown; unknowns themselves never become
     # proof of failure or pass. If nothing is clearly broken, fail closed.
-    if comp == 'uncertain' and scope != 'fail' and 'fail' not in status_by_evidence.values():
+    if comp == 'uncertain' and scope != 'fail' and product_match != 'fail' and 'fail' not in status_by_evidence.values():
         raise SceneError('Uncertain visual findings require human inspection before any retry')
     if comp == 'single-frame' and (findings.get('distinct_screens') != 1 or findings.get('external_presentation_chrome') is not False):
         raise SceneError('Audit contains internally contradictory single-frame findings')
-    if comp != 'multi-frame-board' and scope != 'fail' and all(s != 'fail' for s in status_by_evidence.values()):
+    if comp != 'multi-frame-board' and scope != 'fail' and product_match != 'fail' and all(s != 'fail' for s in status_by_evidence.values()):
         raise SceneError('Audit has no confirmed failure to repair')
     repairs = []
     categories = []
+    if product_match == 'fail':
+        categories.append('wrong-product')
+        repairs.append('PRODUCT IDENTITY REPAIR: This MUST depict the target ORIGINAL product identified by product_id='+json.dumps(packet['product_id'],ensure_ascii=False)+', for exactly scene_id='+json.dumps(item['scene_id'],ensure_ascii=False)+', step_id='+json.dumps(item['step_id'],ensure_ascii=False)+'. Render the required action and evidence from the existing source prompt; DO NOT reuse imagery, layout, logos, filenames or controls from any unrelated product or earlier image. The output remains ONE software/game frame.')
     if comp == 'multi-frame-board':
         categories.append('multi-frame-board')
         repairs.append('COMPOSITION REPAIR: This is NOT a storyboard or comparative presentation. Produce only ONE standalone full-bleed screen for the EXACT requested scene/step; do not include any other steps, screenshots, or external titles. Normal UI panels INSIDE the same application are permitted.')
@@ -151,7 +162,8 @@ def create_retry_packet(packet: dict[str, Any], audit: dict[str, Any], image_pat
 
 def record_visual_observation(packet: dict[str, Any], image_path: str | Path, *,
                               variant_id: str, scene_id: str, composition: str,
-                              software_only: str = 'uncertain', observer: str) -> dict[str, Any]:
+                              software_only: str = 'uncertain', observer: str,
+                              target_product_match: str = 'uncertain') -> dict[str, Any]:
     """Record a *self-attested* visible composition assessment without AI calls.
 
     This is explicitly an operator/assistant observation, NOT a vision-model
@@ -163,6 +175,8 @@ def record_visual_observation(packet: dict[str, Any], image_path: str | Path, *,
         raise SceneError('Invalid manual composition verdict')
     if software_only not in ('pass', 'fail', 'uncertain'):
         raise SceneError('Invalid software-only verdict')
+    if target_product_match not in ('pass','fail','uncertain'):
+        raise SceneError('Invalid target-product match verdict')
     if not isinstance(observer,str) or not observer.strip() or len(observer)>120:
         raise SceneError('Visual observer identification is required')
     items=[x for x in packet['items'] if x['variant_id']==variant_id and x['scene_id']==scene_id]
@@ -172,6 +186,8 @@ def record_visual_observation(packet: dict[str, Any], image_path: str | Path, *,
     info=inspect_image(image_path)
     findings={
         'composition':composition, 'software_only':software_only,
+        'target_product_match':target_product_match,
+        'product_match_reason':'Self-attested product match by '+observer.strip()+'; not independently verified',
         'distinct_screens':2 if composition=='multi-frame-board' else 1,
         'external_presentation_chrome':composition=='multi-frame-board',
         'composition_reason':'Self-attested observation by '+observer.strip()+'; not independently verified',
@@ -182,7 +198,7 @@ def record_visual_observation(packet: dict[str, Any], image_path: str | Path, *,
     }
     assert set(findings)==set(AUDIT_SCHEMA['properties'])
     return {
-        'format_version':'1.0','kind':'concept-visual-audit',
+        'format_version':AUDIT_VERSION,'kind':'concept-visual-audit',
         'variant_id':variant_id,'scene_id':scene_id,'step_id':target['step_id'],
         'packet_sha256':packet['packet_sha256'],'prompt_sha256':target['prompt_sha256'],
         'image_sha256':info['sha256'],'image_width':info['width'],'image_height':info['height'],

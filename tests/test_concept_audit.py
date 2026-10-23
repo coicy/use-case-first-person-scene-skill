@@ -21,7 +21,9 @@ class AuditTests(unittest.TestCase):
         cls.item=cls.packet['items'][0]
 
     def _review(self, composition='single-frame', count=1, chrome=False, software='pass'):
-        return {'composition':composition,'software_only':software,'distinct_screens':count,
+        return {'composition':composition,'software_only':software,
+                'target_product_match':'pass','product_match_reason':'matches the expected original product',
+                'distinct_screens':count,
                 'external_presentation_chrome':chrome,'composition_reason':'looked at panel edges',
                 'software_only_reason':'only UI','step_evidence':[
                     {'requirement':e,'status':'pass','reason':'visible'} for e in self.item['required_evidence']],

@@ -105,3 +105,11 @@ Only explicit user consent grants approval of product design decisions.
 ## Single-frame retry safety
 
 `concept-observe` records the declared observer and real image hashes without verifying their judgment or granting user approval. `concept-retry` must validate audit-to-image-to-original-packet consistency and preserve source facts, prompt lineage, and the frozen DesignSystem. Untrusted auditor prose must never be injected into the retry prompt; only fixed repair phrases and the actual original evidence may be used. Do not call paid services during retry planning. The two-attempt cap applies per validated retry lineage; changing the root creates a new lineage and is not authenticated user consent. See `docs/WP04_RETRY_IMPLEMENTATION.md`.
+
+## v0.7 target-product correctness regression gate
+
+- New `concept-render-packet` v1.1 prompts must bind exact `product_id`, `variant_id`, `scene_id` and `step_id` and verify those identities before paying for generation. Legacy 1.0 packets are read-compatible but not executable for paid generation; recompile.
+- AI visual QA and operator observation must report `target_product_match` **independently** from single-frame composition and software-only boundary. Fail or uncertain is not `advisory-pass`.
+- A confirmed `wrong-product` failure may trigger bounded offline retry with original requirements preserved and untrusted auditor text excluded.
+- Keep user design approval separate from operator/auditor image inspection; human approval must never be inferred.
+- Regression tests must include cross-product request isolation, prompt/report ID tampering, and real wrong-product image replay via offline CLI.

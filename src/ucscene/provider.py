@@ -11,6 +11,24 @@ from typing import Any
 class ProviderError(RuntimeError):
     pass
 
+def _safe_image_response_summary(result: dict[str, Any]) -> dict[str, Any]:
+    """Persist only bounded response metadata; never store base64 or API secrets."""
+    response_id = result.get("id")
+    if not isinstance(response_id, str) or len(response_id)>160:
+        response_id = None
+    created = result.get("created")
+    if type(created) is not int or created < 0:
+        created = None
+    usage = result.get("usage")
+    safe_usage = None
+    if isinstance(usage, dict):
+        safe_usage = {k: usage[k] for k in ("total_tokens","input_tokens","output_tokens")
+                      if type(usage.get(k)) is int and usage[k] >= 0}
+    data = result.get("data")
+    return {"response_id": response_id, "created_unix": created,
+            "image_items_returned": len(data) if isinstance(data,list) else None,
+            "usage": safe_usage, "raw_response_stored": False}
+
 def generate_openai_image(prompt: str, output: str | Path, *, model: str = "gpt-image-1.5", size: str = "1536x1024", quality: str = "medium", api_key: str | None = None, endpoint: str = "https://api.openai.com/v1/images/generations") -> dict[str, Any]:
     key = api_key or os.environ.get("OPENAI_API_KEY")
     if not key:
@@ -37,7 +55,8 @@ def generate_openai_image(prompt: str, output: str | Path, *, model: str = "gpt-
     destination = Path(output)
     destination.parent.mkdir(parents=True, exist_ok=True)
     destination.write_bytes(image)
-    return {"path": str(destination), "bytes": len(image), "model": model, "size": size, "quality": quality, "verified_image_content": False}
+    return {"path": str(destination), "bytes": len(image), "model": model, "size": size, "quality": quality, "verified_image_content": False,
+            "api_response_summary": _safe_image_response_summary(result)}
 
 
 def edit_openai_image(
@@ -97,4 +116,5 @@ def edit_openai_image(
         "path": str(destination), "bytes": len(image), "model": model,
         "size": size, "quality": quality, "reference_image": str(ref),
         "continuity_verified": False, "verified_image_content": False,
+        "api_response_summary": _safe_image_response_summary(result),
     }

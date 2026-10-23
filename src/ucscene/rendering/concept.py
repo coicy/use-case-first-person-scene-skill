@@ -282,6 +282,7 @@ def render_concepts(packet: dict[str, Any], out_dir: str | Path, *,
                 'path':name, 'status':'generated', 'sha256':img['sha256'],
                 'width':img['width'],'height':img['height'],
                 'reference_sha256':inspect_image(source)['sha256'] if source else None,
+                'api_response_summary': meta.get('api_response_summary') if isinstance(meta,dict) else None,
             })
             previous=filename
             save_json(output/'generation-report.json',report)

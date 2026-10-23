@@ -1,0 +1,73 @@
+name: WP05 Manual Original-Product API Probe
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm_paid_calls:
+        description: 'Type YES to authorize 2 image API requests plus 2 advisory visual audits'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    if: ${{ inputs.confirm_paid_calls == 'YES' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        include:
+          - product: new-asset-studio
+            brief: benchmarks/new-products/new-asset-studio.wp02.brief.json
+            scene: new-asset-studio--UC-001--STEP-001
+          - product: new-hamlet-builder
+            brief: benchmarks/new-products/new-hamlet-builder.wp02.brief.json
+            scene: new-hamlet-builder--UC-001--STEP-001
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install
+        run: python -m pip install -e '.[ui]'
+      - name: API key preflight
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          if [ -z "$OPENAI_API_KEY" ]; then
+            echo 'Repository secret OPENAI_API_KEY is missing; no request sent.' >&2
+            exit 3
+          fi
+      - name: Create one exact step and preserve prompt identity
+        run: |
+          mkdir -p out/wp05
+          ucscene design-plan '${{ matrix.brief }}' --variants 2 --out out/wp05/design-plan.json
+          ucscene design-plan-review out/wp05/design-plan.json
+          ucscene concept-packet out/wp05/design-plan.json --mode draft --variant VAR-01 --step STEP-001 --out out/wp05/probe-packet.json
+          ucscene concept-render out/wp05/probe-packet.json --out out/wp05/offline-preview --model gpt-image-1.5 --size 1536x1024 --quality medium
+      - name: Real Images API call (exactly one image for this product)
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          ucscene concept-render out/wp05/probe-packet.json --execute --max-images 1 --model gpt-image-1.5 --size 1536x1024 --quality medium --out out/wp05/generated
+      - name: Real visual model audit and review gallery
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          IMAGE=$(find out/wp05/generated -maxdepth 1 -type f -name '*.png' -print -quit)
+          test -n "$IMAGE"
+          ucscene concept-audit out/wp05/probe-packet.json --image "$IMAGE" --variant VAR-01 --scene '${{ matrix.scene }}' --out out/wp05/visual-model-audit.json
+          ucscene concept-gallery out/wp05/probe-packet.json --images out/wp05/generated --report out/wp05/generated/generation-report.json --out-dir out/wp05/gallery
+          ucscene concept-verify out/wp05/gallery/manifest.json
+      - name: Upload request, API output, PNG, and review evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wp05-probe-${{ matrix.product }}
+          path: out/wp05/
+          if-no-files-found: warn
+          retention-days: 14

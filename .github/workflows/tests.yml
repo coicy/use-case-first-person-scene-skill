@@ -75,3 +75,12 @@ jobs:
           ucscene anchor-verify /tmp/demo-anchor.json --plan /tmp/scene-plan.json
           ucscene compose-ui --scene out/demo/scene.png --ui out/demo/ui.png --quad examples/screen-quad.demo.json --out /tmp/composited.png --report /tmp/composited-report.json
           # Actual acceptance gallery paths, input integrity and HTML review are exercised in tests/test_acceptance.py.
+      - name: Semantic SVG authority smoke (no image API)
+        run: |
+          ucscene scene-compile benchmarks/new-products/scenegraph/new-asset-studio.plan.json --spec benchmarks/new-products/scenegraph/new-asset-studio.spec.json --out /tmp/asset-semantic-graph.json
+          ucscene scene-verify /tmp/asset-semantic-graph.json --plan benchmarks/new-products/scenegraph/new-asset-studio.plan.json
+          ucscene svg-render /tmp/asset-semantic-graph.json --plan benchmarks/new-products/scenegraph/new-asset-studio.plan.json --out-dir /tmp/asset-svg
+          ucscene svg-verify /tmp/asset-semantic-graph.json --manifest /tmp/asset-svg/manifest.json
+          ucscene scene-compile benchmarks/new-products/scenegraph/new-hamlet-builder.plan.json --spec benchmarks/new-products/scenegraph/new-hamlet-builder.spec.json --out /tmp/hamlet-semantic-graph.json
+          ucscene svg-render /tmp/hamlet-semantic-graph.json --out-dir /tmp/hamlet-svg
+          ucscene svg-verify /tmp/hamlet-semantic-graph.json --manifest /tmp/hamlet-svg/manifest.json

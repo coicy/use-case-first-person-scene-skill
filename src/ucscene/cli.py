@@ -21,6 +21,7 @@ from .design.system import create_design_system, validate_design_system, revise_
 from .design.continuity import apply_design_system, validate_consistent_plan
 from .rendering.host_guard import preflight_host_agent
 from .rendering.agent import export_agent_handoff, verify_agent_handoff, import_agent_images, verify_agent_import
+from .scenegraph import compile_scene_graph, validate_scene_graph, render_scene_graph, verify_scene_svgs
 from .rendering import make_render_packet, verify_render_packet, render_concepts, verify_generation_report, build_concept_gallery, verify_concept_gallery, audit_concept_image, create_retry_packet, verify_retry_manifest, record_visual_observation
 
 def run(argv: list[str] | None = None) -> int:
@@ -168,6 +169,20 @@ def run(argv: list[str] | None = None) -> int:
     consistent_check.add_argument("plan")
     consistent_check.add_argument("--system", required=True)
     consistent_check.add_argument("--brief", required=True)
+    sg_compile = sub.add_parser('scene-compile', help='Compile an authored semantic Scene Graph spec against a DesignPlan')
+    sg_compile.add_argument('plan')
+    sg_compile.add_argument('--spec', required=True)
+    sg_compile.add_argument('--out', required=True)
+    sg_verify = sub.add_parser('scene-verify', help='Verify structured scene identity, bindings, layout and transitions')
+    sg_verify.add_argument('graph')
+    sg_verify.add_argument('--plan')
+    svg_render = sub.add_parser('svg-render', help='Render authoritative per-step SVG files from a validated Scene Graph')
+    svg_render.add_argument('graph')
+    svg_render.add_argument('--plan')
+    svg_render.add_argument('--out-dir', required=True)
+    svg_verify = sub.add_parser('svg-verify', help='Verify SVG bytes match structured Scene Graph exactly')
+    svg_verify.add_argument('graph')
+    svg_verify.add_argument('--manifest', required=True)
     concept_packet = sub.add_parser('concept-packet', help='Compile original-software DesignPlan/ConsistentScenePlan into verifiable image requests (offline)')
     concept_packet.add_argument('plan')
     concept_packet.add_argument('--mode', required=True, choices=['explore','draft','consistent','revise'])
@@ -242,6 +257,29 @@ def run(argv: list[str] | None = None) -> int:
     concept_verify.add_argument('manifest')
     args = parser.parse_args(argv)
     try:
+        if args.command == 'scene-compile':
+            graph = compile_scene_graph(load_json(args.plan), load_json(args.spec))
+            save_json(args.out, graph)
+            print(json.dumps({'ok':True,'path':args.out,'product_id':graph['product_id'],
+                  'scenes':len(graph['scenes']),'graph_sha256':graph['graph_sha256'],
+                  'authority':graph['authority']},ensure_ascii=False))
+            return 0
+        if args.command == 'scene-verify':
+            graph = validate_scene_graph(load_json(args.graph),
+                                         plan=load_json(args.plan) if args.plan else None)
+            print(json.dumps({'ok':True,'product_id':graph['product_id'],'scenes':len(graph['scenes']),
+                  'graph_sha256':graph['graph_sha256'],'authority':graph['authority']},ensure_ascii=False))
+            return 0
+        if args.command == 'svg-render':
+            result = render_scene_graph(load_json(args.graph), args.out_dir,
+                                        plan=load_json(args.plan) if args.plan else None)
+            print(json.dumps({'ok':True,'path':str(Path(args.out_dir)/'manifest.json'),
+                  'svgs':len(result['images']),'authority':result['authority']},ensure_ascii=False))
+            return 0
+        if args.command == 'svg-verify':
+            result = verify_scene_svgs(load_json(args.graph), args.manifest)
+            print(json.dumps({'ok':True,**result},ensure_ascii=False))
+            return 0
         if args.command == "design-system-create":
             system = create_design_system(load_json(args.plan), args.variant, evidence_ref=args.evidence_ref, locked=args.lock)
             save_json(args.out, system)

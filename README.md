@@ -1,5 +1,20 @@
 # Use-Case Driven Software Concept Designer
 
+## WP-06 Stage 1: Semantic Scene Graph → deterministic SVG
+
+**Implemented:** A typed, source-bound semantic UI scene graph is compiled from a DesignPlan plus an Agent/designer-authored structural specification. The `scene-compile`, `scene-verify`, `svg-render` and `svg-verify` commands protect product identity, stable region geometry, object/UI bindings, action effects and consecutive step states. Each SVG carries component IDs and graph hashes, and can be regenerated exactly.
+
+The first scope supports fictional desktop asset management and isometric builder examples, each with three distinct SVG scenes. The authored values are **proposed**, not user-approved. It does **not** implement Agent image art-slot compositing, a runnable app, or general arbitrary UI layouts. See [WP-06 implementation](docs/WP06_STRUCTURED_SVG_INTEGRATION.md).
+
+```bash
+ucscene scene-compile benchmarks/new-products/scenegraph/new-hamlet-builder.plan.json \
+  --spec benchmarks/new-products/scenegraph/new-hamlet-builder.spec.json \
+  --out out/hamlet-scene-graph.json
+ucscene svg-render out/hamlet-scene-graph.json --out-dir out/hamlet-svg
+ucscene svg-verify out/hamlet-scene-graph.json --manifest out/hamlet-svg/manifest.json
+```
+
+
 > **当前正式产品定义：为尚未开发或仍在设计的新软件/游戏，根据提示词和用例生成原创的软件内部场景概念图。** AI 可以主动设计 UI、交互和场景，但必须区分用户需求与 AI 提案，并保持跨用例一致性。已确认的产品规则见 [PRODUCT_REQUIREMENTS.md](docs/PRODUCT_REQUIREMENTS.md)，下一步计划见 [V07_WORK_PLAN.md](docs/V07_WORK_PLAN.md)。
 >
 > **PRODUCT-004 真实性硬约束：** 无论图片是单张界面、分镜还是对照图，画出的软件必须忠实符合目标产品的布局、组件结构、可用功能和实际操作状态。已选/冻结设计不得静默改变；未定义的新设计可以作为提案但必须合理自洽。图片组织形式单独服从请求，不能以构图正确掩盖功能错误。参见 [真实性产品决策](docs/decision-004-semantic-fidelity.md) 和 [验收准则](docs/VISUAL_FIDELITY_ACCEPTANCE.md)。

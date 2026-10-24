@@ -1,0 +1,644 @@
+{
+  "plan_version": "1.0",
+  "product_id": "new-asset-studio",
+  "source_brief_sha256": "6ee987eed23eca53ef9146e64c80da53a42cd8dff8da6351fbe1898f68a9cec4",
+  "generator": "offline-heuristic",
+  "model": null,
+  "requirement_classification": {
+    "must": [
+      {
+        "id": "REQ-001",
+        "text": "一款面向独立游戏团队的全新资产管理应用，集中管理贴图、模型和音频，并支持标签筛选",
+        "authority": "source-stated"
+      },
+      {
+        "id": "REQ-002",
+        "text": "用户按类型和标签筛选游戏资产，选择素材查看详情",
+        "authority": "source-stated"
+      }
+    ],
+    "may": [
+      "Navigation and layout can be proposed unless explicitly constrained.",
+      "Control positions, interaction feedback, colors and visual hierarchy are design proposals."
+    ],
+    "unknown": [
+      "actor",
+      "interaction design",
+      "UI layout",
+      "visual style",
+      "visible feedback"
+    ],
+    "use_case_steps": [
+      "UC-001:STEP-001",
+      "UC-001:STEP-002",
+      "UC-001:STEP-003"
+    ]
+  },
+  "design_bundle": {
+    "schema_version": "1.0",
+    "brief": {
+      "schema_version": "1.0",
+      "product_id": "new-asset-studio",
+      "name": "Asset Studio",
+      "category": "desktop",
+      "concept": "一款面向独立游戏团队的全新资产管理应用，集中管理贴图、模型和音频，并支持标签筛选",
+      "requirements": [
+        {
+          "id": "REQ-001",
+          "text": "一款面向独立游戏团队的全新资产管理应用，集中管理贴图、模型和音频，并支持标签筛选",
+          "source": "user-prompt",
+          "authority": "source-stated",
+          "use_case_ids": []
+        },
+        {
+          "id": "REQ-002",
+          "text": "用户按类型和标签筛选游戏资产，选择素材查看详情",
+          "source": "user-prompt",
+          "authority": "source-stated",
+          "use_case_ids": [
+            "UC-001"
+          ]
+        }
+      ],
+      "hard_constraints": [],
+      "use_cases": [
+        {
+          "id": "UC-001",
+          "title": "用户按类型和标签筛选游戏资产，选择素材查看详情",
+          "actor": "unspecified",
+          "goal": "用户按类型和标签筛选游戏资产，选择素材查看详情",
+          "steps": [
+            {
+              "id": "STEP-001",
+              "action": "用户按标签筛选游戏素材，查看匹配的贴图和模型",
+              "state": "in-progress",
+              "flow": "main",
+              "ui_text": [
+                "筛选"
+              ],
+              "visible_evidence": [
+                "筛选条件",
+                "筛选后的素材列表"
+              ]
+            },
+            {
+              "id": "STEP-002",
+              "action": "用户选中一条模型素材并查看缩略预览和元数据",
+              "state": "in-progress",
+              "flow": "main",
+              "ui_text": [
+                "详情"
+              ],
+              "visible_evidence": [
+                "当前素材选中态",
+                "素材预览区域",
+                "素材属性区"
+              ]
+            },
+            {
+              "id": "STEP-003",
+              "action": "用户保存素材标签修改时发生命名冲突，界面提示保存失败",
+              "state": "failure",
+              "flow": "exception",
+              "ui_text": [
+                "保存失败"
+              ],
+              "visible_evidence": [
+                "被编辑的素材标签",
+                "与当前素材关联的错误提示"
+              ]
+            }
+          ]
+        }
+      ],
+      "unknowns": [
+        "actor",
+        "interaction design",
+        "UI layout",
+        "visual style",
+        "visible feedback"
+      ],
+      "origin": {
+        "mode": "curated",
+        "source_id": "benchmarks/new-products/fictional-WP02"
+      }
+    },
+    "decisions": [
+      {
+        "schema_version": "1.0",
+        "id": "DES-01-01",
+        "product_id": "new-asset-studio",
+        "topic": "Layout and panel structure",
+        "proposal": "工作区主视图与左侧导航、右侧上下文属性面板",
+        "rationale": "信息密集，便于查看对象细节；主视图空间略小",
+        "status": "proposed",
+        "locked": false,
+        "revision": 1,
+        "source": "ai-proposal",
+        "related_use_case_ids": [],
+        "effects": [
+          {
+            "key": "ui.layout",
+            "value": "工作区主视图与左侧导航、右侧上下文属性面板"
+          }
+        ]
+      },
+      {
+        "schema_version": "1.0",
+        "id": "DES-01-02",
+        "product_id": "new-asset-studio",
+        "topic": "Navigation and interaction pattern",
+        "proposal": "sidebar-workspace-inspector",
+        "rationale": "信息密集，便于查看对象细节；主视图空间略小",
+        "status": "proposed",
+        "locked": false,
+        "revision": 1,
+        "source": "ai-proposal",
+        "related_use_case_ids": [],
+        "effects": [
+          {
+            "key": "ui.navigation",
+            "value": "sidebar-workspace-inspector"
+          }
+        ]
+      },
+      {
+        "schema_version": "1.0",
+        "id": "DES-01-03",
+        "product_id": "new-asset-studio",
+        "topic": "Visual styling and rendering language",
+        "proposal": "原创桌面/网页软件的纯应用内部界面，信息层级清晰、主任务突出、文本对比合理",
+        "rationale": "信息密集，便于查看对象细节；主视图空间略小",
+        "status": "proposed",
+        "locked": false,
+        "revision": 1,
+        "source": "ai-proposal",
+        "related_use_case_ids": [],
+        "effects": [
+          {
+            "key": "ui.visual_style",
+            "value": "原创桌面/网页软件的纯应用内部界面，信息层级清晰、主任务突出、文本对比合理"
+          }
+        ]
+      },
+      {
+        "schema_version": "1.0",
+        "id": "DES-02-01",
+        "product_id": "new-asset-studio",
+        "topic": "Layout and panel structure",
+        "proposal": "顶部全局搜索和居中结果工作区、可展开详情抽屉",
+        "rationale": "搜索效率高且聚焦内容；依赖抽屉组织高级操作",
+        "status": "proposed",
+        "locked": false,
+        "revision": 1,
+        "source": "ai-proposal",
+        "related_use_case_ids": [],
+        "effects": [
+          {
+            "key": "ui.layout",
+            "value": "顶部全局搜索和居中结果工作区、可展开详情抽屉"
+          }
+        ]
+      },
+      {
+        "schema_version": "1.0",
+        "id": "DES-02-02",
+        "product_id": "new-asset-studio",
+        "topic": "Navigation and interaction pattern",
+        "proposal": "search-grid-detail-drawer",
+        "rationale": "搜索效率高且聚焦内容；依赖抽屉组织高级操作",
+        "status": "proposed",
+        "locked": false,
+        "revision": 1,
+        "source": "ai-proposal",
+        "related_use_case_ids": [],
+        "effects": [
+          {
+            "key": "ui.navigation",
+            "value": "search-grid-detail-drawer"
+          }
+        ]
+      },
+      {
+        "schema_version": "1.0",
+        "id": "DES-02-03",
+        "product_id": "new-asset-studio",
+        "topic": "Visual styling and rendering language",
+        "proposal": "原创桌面/网页软件的纯应用内部界面，信息层级清晰、主任务突出、文本对比合理",
+        "rationale": "搜索效率高且聚焦内容；依赖抽屉组织高级操作",
+        "status": "proposed",
+        "locked": false,
+        "revision": 1,
+        "source": "ai-proposal",
+        "related_use_case_ids": [],
+        "effects": [
+          {
+            "key": "ui.visual_style",
+            "value": "原创桌面/网页软件的纯应用内部界面，信息层级清晰、主任务突出、文本对比合理"
+          }
+        ]
+      }
+    ],
+    "scenes": [
+      {
+        "schema_version": "1.0",
+        "id": "new-asset-studio--UC-001--STEP-001",
+        "product_id": "new-asset-studio",
+        "use_case_id": "UC-001",
+        "step_id": "STEP-001",
+        "action": "用户按标签筛选游戏素材，查看匹配的贴图和模型",
+        "state": "in-progress",
+        "flow": "main",
+        "frame_scope": "software-only",
+        "viewpoint_mode": "application-ui",
+        "design_status": "unresolved",
+        "requirement_ids": [
+          "REQ-001",
+          "REQ-002"
+        ],
+        "design_decision_ids": [],
+        "visible_evidence": [
+          "筛选条件",
+          "筛选后的素材列表"
+        ],
+        "expected_ui_text": [
+          "筛选"
+        ],
+        "proposed_elements": []
+      },
+      {
+        "schema_version": "1.0",
+        "id": "new-asset-studio--UC-001--STEP-002",
+        "product_id": "new-asset-studio",
+        "use_case_id": "UC-001",
+        "step_id": "STEP-002",
+        "action": "用户选中一条模型素材并查看缩略预览和元数据",
+        "state": "in-progress",
+        "flow": "main",
+        "frame_scope": "software-only",
+        "viewpoint_mode": "application-ui",
+        "design_status": "unresolved",
+        "requirement_ids": [
+          "REQ-001",
+          "REQ-002"
+        ],
+        "design_decision_ids": [],
+        "visible_evidence": [
+          "当前素材选中态",
+          "素材预览区域",
+          "素材属性区"
+        ],
+        "expected_ui_text": [
+          "详情"
+        ],
+        "proposed_elements": []
+      },
+      {
+        "schema_version": "1.0",
+        "id": "new-asset-studio--UC-001--STEP-003",
+        "product_id": "new-asset-studio",
+        "use_case_id": "UC-001",
+        "step_id": "STEP-003",
+        "action": "用户保存素材标签修改时发生命名冲突，界面提示保存失败",
+        "state": "failure",
+        "flow": "exception",
+        "frame_scope": "software-only",
+        "viewpoint_mode": "application-ui",
+        "design_status": "unresolved",
+        "requirement_ids": [
+          "REQ-001",
+          "REQ-002"
+        ],
+        "design_decision_ids": [],
+        "visible_evidence": [
+          "被编辑的素材标签",
+          "与当前素材关联的错误提示"
+        ],
+        "expected_ui_text": [
+          "保存失败"
+        ],
+        "proposed_elements": []
+      }
+    ]
+  },
+  "candidates": [
+    {
+      "id": "VAR-01",
+      "status": "proposed",
+      "label": "workspace-sidebar",
+      "design_decision_ids": [
+        "DES-01-01",
+        "DES-01-02",
+        "DES-01-03"
+      ],
+      "tradeoff": "信息密集，便于查看对象细节；主视图空间略小",
+      "layout": "工作区主视图与左侧导航、右侧上下文属性面板",
+      "navigation": "sidebar-workspace-inspector",
+      "visual_style": "原创桌面/网页软件的纯应用内部界面，信息层级清晰、主任务突出、文本对比合理",
+      "controls": [
+        "当前用例的核心操作控件",
+        "任务对象及必要属性视图",
+        "操作结果或异常反馈区域"
+      ],
+      "information_priority": [
+        "当前任务对象或结果",
+        "用例所需属性、筛选或编辑信息",
+        "可执行操作及系统反馈"
+      ],
+      "feedback": "根据当前步骤的实际 state 和 flow 表达操作反馈，不预设成功；起始步骤示例：用户按标签筛选游戏素材，查看匹配的贴图和模型",
+      "screens": [
+        {
+          "scene_id": "new-asset-studio--UC-001--STEP-001",
+          "use_case_id": "UC-001",
+          "step_id": "STEP-001",
+          "state": "in-progress",
+          "flow": "main",
+          "required_evidence": [
+            "筛选条件",
+            "筛选后的素材列表"
+          ],
+          "required_ui_text": [
+            "筛选"
+          ],
+          "requirement_ids": [
+            "REQ-001",
+            "REQ-002"
+          ],
+          "design_decision_ids": [
+            "DES-01-01",
+            "DES-01-02",
+            "DES-01-03"
+          ],
+          "interaction": {
+            "purpose": "搜索与筛选",
+            "primary_object": "用户按标签筛选游戏素材，查看匹配的贴图和模型",
+            "proposed_controls": [
+              "搜索输入区",
+              "分类/标签筛选控件",
+              "匹配结果视图"
+            ],
+            "proposed_feedback": "根据条件即时更新结果",
+            "priority": [
+              "筛选条件",
+              "筛选后的素材列表",
+              "当前任务对象或结果",
+              "用例所需属性、筛选或编辑信息",
+              "可执行操作及系统反馈"
+            ],
+            "status": "proposed"
+          },
+          "prompt": "CREATE ONE ORIGINAL USE-CASE CONCEPT IMAGE FOR A NEW SOFTWARE PRODUCT. Do not reproduce an existing application's screenshot.\nOUTPUT FRAME: SOFTWARE-ONLY; full-bleed app UI or in-game pixels; never a photograph of users, monitors, keyboard, desks, physical devices or surrounding room.\nPRODUCT: Asset Studio (desktop). PRODUCT CONCEPT: 一款面向独立游戏团队的全新资产管理应用，集中管理贴图、模型和音频，并支持标签筛选\nTARGET USE CASE: UC-001: 用户按类型和标签筛选游戏资产，选择素材查看详情\nEXACT STEP: STEP-001: 用户按标签筛选游戏素材，查看匹配的贴图和模型 | state=in-progress | flow=main\nCANONICAL VIEW: the native in-app interface, without hardware framing\nSOURCE REQUIREMENTS AND HARD FACTS (must not be contradicted):\n- REQ-001 [source-stated] 一款面向独立游戏团队的全新资产管理应用，集中管理贴图、模型和音频，并支持标签筛选\n- REQ-002 [source-stated] 用户按类型和标签筛选游戏资产，选择素材查看详情\n\nREQUIRED VISIBLE EVIDENCE:\n- 筛选条件\n- 筛选后的素材列表\nEXACT UI TEXT WHEN PROVIDED:\n- 筛选\nSELECTED DESIGN CANDIDATE: VAR-01. THIS DESIGN IS A PROPOSAL, NOT USER-APPROVED.\nPROPOSED SPATIAL LAYOUT: 工作区主视图与左侧导航、右侧上下文属性面板\nPROPOSED NAVIGATION AND INTERACTION FLOW: sidebar-workspace-inspector\nPROPOSED INTERACTIVE ELEMENTS: 当前用例的核心操作控件; 任务对象及必要属性视图; 操作结果或异常反馈区域\nVISUAL INFORMATION PRIORITY: 当前任务对象或结果 > 用例所需属性、筛选或编辑信息 > 可执行操作及系统反馈\nCURRENT-STEP INTERACTION DESIGN: 搜索与筛选 | target=用户按标签筛选游戏素材，查看匹配的贴图和模型\nPROPOSED CURRENT-STEP CONTROLS: 搜索输入区; 分类/标签筛选控件; 匹配结果视图\nPROPOSED CURRENT-STEP FEEDBACK: 根据条件即时更新结果\nCURRENT-STEP VISIBLE INFORMATION: 筛选条件; 筛选后的素材列表; 当前任务对象或结果; 用例所需属性、筛选或编辑信息; 可执行操作及系统反馈\nPROPOSED VISUAL LANGUAGE: 原创桌面/网页软件的纯应用内部界面，信息层级清晰、主任务突出、文本对比合理\nSTEP-SPECIFIC FEEDBACK: 根据当前步骤的实际 state 和 flow 表达操作反馈，不预设成功；起始步骤示例：用户按标签筛选游戏素材，查看匹配的贴图和模型; depict actual state=in-progress accurately, not a fabricated success\nThe scene should clearly show WHAT object is involved, WHAT action the user can take, and WHAT feedback corresponds to this exact step.\nAll UI/layout details not required by the source are design suggestions. Do not add unsupported product requirements or claim that the software is implemented.\nDeliver a single software-internal concept frame (not a storyboard, poster, wireframe-on-paper, lifestyle photo, or marketing mockup).",
+          "prompt_sha256": "f5cc0bdbb13bd1d1535c5416f83e893f1e9b104be8ca1af598598b58f42dfd95"
+        },
+        {
+          "scene_id": "new-asset-studio--UC-001--STEP-002",
+          "use_case_id": "UC-001",
+          "step_id": "STEP-002",
+          "state": "in-progress",
+          "flow": "main",
+          "required_evidence": [
+            "当前素材选中态",
+            "素材预览区域",
+            "素材属性区"
+          ],
+          "required_ui_text": [
+            "详情"
+          ],
+          "requirement_ids": [
+            "REQ-001",
+            "REQ-002"
+          ],
+          "design_decision_ids": [
+            "DES-01-01",
+            "DES-01-02",
+            "DES-01-03"
+          ],
+          "interaction": {
+            "purpose": "对象选择",
+            "primary_object": "用户选中一条模型素材并查看缩略预览和元数据",
+            "proposed_controls": [
+              "交互对象选中高亮",
+              "当前对象详情或数值视图",
+              "可执行上下文操作"
+            ],
+            "proposed_feedback": "状态变化应与所选对象绑定",
+            "priority": [
+              "当前素材选中态",
+              "素材预览区域",
+              "素材属性区",
+              "当前任务对象或结果",
+              "用例所需属性、筛选或编辑信息",
+              "可执行操作及系统反馈"
+            ],
+            "status": "proposed"
+          },
+          "prompt": "CREATE ONE ORIGINAL USE-CASE CONCEPT IMAGE FOR A NEW SOFTWARE PRODUCT. Do not reproduce an existing application's screenshot.\nOUTPUT FRAME: SOFTWARE-ONLY; full-bleed app UI or in-game pixels; never a photograph of users, monitors, keyboard, desks, physical devices or surrounding room.\nPRODUCT: Asset Studio (desktop). PRODUCT CONCEPT: 一款面向独立游戏团队的全新资产管理应用，集中管理贴图、模型和音频，并支持标签筛选\nTARGET USE CASE: UC-001: 用户按类型和标签筛选游戏资产，选择素材查看详情\nEXACT STEP: STEP-002: 用户选中一条模型素材并查看缩略预览和元数据 | state=in-progress | flow=main\nCANONICAL VIEW: the native in-app interface, without hardware framing\nSOURCE REQUIREMENTS AND HARD FACTS (must not be contradicted):\n- REQ-001 [source-stated] 一款面向独立游戏团队的全新资产管理应用，集中管理贴图、模型和音频，并支持标签筛选\n- REQ-002 [source-stated] 用户按类型和标签筛选游戏资产，选择素材查看详情\n\nREQUIRED VISIBLE EVIDENCE:\n- 当前素材选中态\n- 素材预览区域\n- 素材属性区\nEXACT UI TEXT WHEN PROVIDED:\n- 详情\nSELECTED DESIGN CANDIDATE: VAR-01. THIS DESIGN IS A PROPOSAL, NOT USER-APPROVED.\nPROPOSED SPATIAL LAYOUT: 工作区主视图与左侧导航、右侧上下文属性面板\nPROPOSED NAVIGATION AND INTERACTION FLOW: sidebar-workspace-inspector\nPROPOSED INTERACTIVE ELEMENTS: 当前用例的核心操作控件; 任务对象及必要属性视图; 操作结果或异常反馈区域\nVISUAL INFORMATION PRIORITY: 当前任务对象或结果 > 用例所需属性、筛选或编辑信息 > 可执行操作及系统反馈\nCURRENT-STEP INTERACTION DESIGN: 对象选择 | target=用户选中一条模型素材并查看缩略预览和元数据\nPROPOSED CURRENT-STEP CONTROLS: 交互对象选中高亮; 当前对象详情或数值视图; 可执行上下文操作\nPROPOSED CURRENT-STEP FEEDBACK: 状态变化应与所选对象绑定\nCURRENT-STEP VISIBLE INFORMATION: 当前素材选中态; 素材预览区域; 素材属性区; 当前任务对象或结果; 用例所需属性、筛选或编辑信息; 可执行操作及系统反馈\nPROPOSED VISUAL LANGUAGE: 原创桌面/网页软件的纯应用内部界面，信息层级清晰、主任务突出、文本对比合理\nSTEP-SPECIFIC FEEDBACK: 根据当前步骤的实际 state 和 flow 表达操作反馈，不预设成功；起始步骤示例：用户按标签筛选游戏素材，查看匹配的贴图和模型; depict actual state=in-progress accurately, not a fabricated success\nThe scene should clearly show WHAT object is involved, WHAT action the user can take, and WHAT feedback corresponds to this exact step.\nAll UI/layout details not required by the source are design suggestions. Do not add unsupported product requirements or claim that the software is implemented.\nDeliver a single software-internal concept frame (not a storyboard, poster, wireframe-on-paper, lifestyle photo, or marketing mockup).",
+          "prompt_sha256": "e2c8800f58f2fe0c578435f38c7b18edcef9b08dd1a764366b9c88e51ee46c22"
+        },
+        {
+          "scene_id": "new-asset-studio--UC-001--STEP-003",
+          "use_case_id": "UC-001",
+          "step_id": "STEP-003",
+          "state": "failure",
+          "flow": "exception",
+          "required_evidence": [
+            "被编辑的素材标签",
+            "与当前素材关联的错误提示"
+          ],
+          "required_ui_text": [
+            "保存失败"
+          ],
+          "requirement_ids": [
+            "REQ-001",
+            "REQ-002"
+          ],
+          "design_decision_ids": [
+            "DES-01-01",
+            "DES-01-02",
+            "DES-01-03"
+          ],
+          "interaction": {
+            "purpose": "保存提交",
+            "primary_object": "用户保存素材标签修改时发生命名冲突，界面提示保存失败",
+            "proposed_controls": [
+              "主要确认动作",
+              "待提交内容摘要",
+              "取消或返回操作"
+            ],
+            "proposed_feedback": "在操作目标附近明确标记未成功状态，展示原因或恢复入口；不得误画成功确认",
+            "priority": [
+              "被编辑的素材标签",
+              "与当前素材关联的错误提示",
+              "当前任务对象或结果",
+              "用例所需属性、筛选或编辑信息",
+              "可执行操作及系统反馈"
+            ],
+            "status": "proposed"
+          },
+          "prompt": "CREATE ONE ORIGINAL USE-CASE CONCEPT IMAGE FOR A NEW SOFTWARE PRODUCT. Do not reproduce an existing application's screenshot.\nOUTPUT FRAME: SOFTWARE-ONLY; full-bleed app UI or in-game pixels; never a photograph of users, monitors, keyboard, desks, physical devices or surrounding room.\nPRODUCT: Asset Studio (desktop). PRODUCT CONCEPT: 一款面向独立游戏团队的全新资产管理应用，集中管理贴图、模型和音频，并支持标签筛选\nTARGET USE CASE: UC-001: 用户按类型和标签筛选游戏资产，选择素材查看详情\nEXACT STEP: STEP-003: 用户保存素材标签修改时发生命名冲突，界面提示保存失败 | state=failure | flow=exception\nCANONICAL VIEW: the native in-app interface, without hardware framing\nSOURCE REQUIREMENTS AND HARD FACTS (must not be contradicted):\n- REQ-001 [source-stated] 一款面向独立游戏团队的全新资产管理应用，集中管理贴图、模型和音频，并支持标签筛选\n- REQ-002 [source-stated] 用户按类型和标签筛选游戏资产，选择素材查看详情\n\nREQUIRED VISIBLE EVIDENCE:\n- 被编辑的素材标签\n- 与当前素材关联的错误提示\nEXACT UI TEXT WHEN PROVIDED:\n- 保存失败\nSELECTED DESIGN CANDIDATE: VAR-01. THIS DESIGN IS A PROPOSAL, NOT USER-APPROVED.\nPROPOSED SPATIAL LAYOUT: 工作区主视图与左侧导航、右侧上下文属性面板\nPROPOSED NAVIGATION AND INTERACTION FLOW: sidebar-workspace-inspector\nPROPOSED INTERACTIVE ELEMENTS: 当前用例的核心操作控件; 任务对象及必要属性视图; 操作结果或异常反馈区域\nVISUAL INFORMATION PRIORITY: 当前任务对象或结果 > 用例所需属性、筛选或编辑信息 > 可执行操作及系统反馈\nCURRENT-STEP INTERACTION DESIGN: 保存提交 | target=用户保存素材标签修改时发生命名冲突，界面提示保存失败\nPROPOSED CURRENT-STEP CONTROLS: 主要确认动作; 待提交内容摘要; 取消或返回操作\nPROPOSED CURRENT-STEP FEEDBACK: 在操作目标附近明确标记未成功状态，展示原因或恢复入口；不得误画成功确认\nCURRENT-STEP VISIBLE INFORMATION: 被编辑的素材标签; 与当前素材关联的错误提示; 当前任务对象或结果; 用例所需属性、筛选或编辑信息; 可执行操作及系统反馈\nPROPOSED VISUAL LANGUAGE: 原创桌面/网页软件的纯应用内部界面，信息层级清晰、主任务突出、文本对比合理\nSTEP-SPECIFIC FEEDBACK: 根据当前步骤的实际 state 和 flow 表达操作反馈，不预设成功；起始步骤示例：用户按标签筛选游戏素材，查看匹配的贴图和模型; depict actual state=failure accurately, not a fabricated success\nThe scene should clearly show WHAT object is involved, WHAT action the user can take, and WHAT feedback corresponds to this exact step.\nAll UI/layout details not required by the source are design suggestions. Do not add unsupported product requirements or claim that the software is implemented.\nDeliver a single software-internal concept frame (not a storyboard, poster, wireframe-on-paper, lifestyle photo, or marketing mockup).",
+          "prompt_sha256": "2d26993b2514de66ff33a64f8a3e2a9be9a53c93cf18b73d8163eb3648f178b4"
+        }
+      ]
+    },
+    {
+      "id": "VAR-02",
+      "status": "proposed",
+      "label": "search-first",
+      "design_decision_ids": [
+        "DES-02-01",
+        "DES-02-02",
+        "DES-02-03"
+      ],
+      "tradeoff": "搜索效率高且聚焦内容；依赖抽屉组织高级操作",
+      "layout": "顶部全局搜索和居中结果工作区、可展开详情抽屉",
+      "navigation": "search-grid-detail-drawer",
+      "visual_style": "原创桌面/网页软件的纯应用内部界面，信息层级清晰、主任务突出、文本对比合理",
+      "controls": [
+        "当前用例的核心操作控件",
+        "任务对象及必要属性视图",
+        "操作结果或异常反馈区域"
+      ],
+      "information_priority": [
+        "当前任务对象或结果",
+        "用例所需属性、筛选或编辑信息",
+        "可执行操作及系统反馈"
+      ],
+      "feedback": "根据当前步骤的实际 state 和 flow 表达操作反馈，不预设成功；起始步骤示例：用户按标签筛选游戏素材，查看匹配的贴图和模型",
+      "screens": [
+        {
+          "scene_id": "new-asset-studio--UC-001--STEP-001",
+          "use_case_id": "UC-001",
+          "step_id": "STEP-001",
+          "state": "in-progress",
+          "flow": "main",
+          "required_evidence": [
+            "筛选条件",
+            "筛选后的素材列表"
+          ],
+          "required_ui_text": [
+            "筛选"
+          ],
+          "requirement_ids": [
+            "REQ-001",
+            "REQ-002"
+          ],
+          "design_decision_ids": [
+            "DES-02-01",
+            "DES-02-02",
+            "DES-02-03"
+          ],
+          "interaction": {
+            "purpose": "搜索与筛选",
+            "primary_object": "用户按标签筛选游戏素材，查看匹配的贴图和模型",
+            "proposed_controls": [
+              "搜索输入区",
+              "分类/标签筛选控件",
+              "匹配结果视图"
+            ],
+            "proposed_feedback": "根据条件即时更新结果",
+            "priority": [
+              "筛选条件",
+              "筛选后的素材列表",
+              "当前任务对象或结果",
+              "用例所需属性、筛选或编辑信息",
+              "可执行操作及系统反馈"
+            ],
+            "status": "proposed"
+          },
+          "prompt": "CREATE ONE ORIGINAL USE-CASE CONCEPT IMAGE FOR A NEW SOFTWARE PRODUCT. Do not reproduce an existing application's screenshot.\nOUTPUT FRAME: SOFTWARE-ONLY; full-bleed app UI or in-game pixels; never a photograph of users, monitors, keyboard, desks, physical devices or surrounding room.\nPRODUCT: Asset Studio (desktop). PRODUCT CONCEPT: 一款面向独立游戏团队的全新资产管理应用，集中管理贴图、模型和音频，并支持标签筛选\nTARGET USE CASE: UC-001: 用户按类型和标签筛选游戏资产，选择素材查看详情\nEXACT STEP: STEP-001: 用户按标签筛选游戏素材，查看匹配的贴图和模型 | state=in-progress | flow=main\nCANONICAL VIEW: the native in-app interface, without hardware framing\nSOURCE REQUIREMENTS AND HARD FACTS (must not be contradicted):\n- REQ-001 [source-stated] 一款面向独立游戏团队的全新资产管理应用，集中管理贴图、模型和音频，并支持标签筛选\n- REQ-002 [source-stated] 用户按类型和标签筛选游戏资产，选择素材查看详情\n\nREQUIRED VISIBLE EVIDENCE:\n- 筛选条件\n- 筛选后的素材列表\nEXACT UI TEXT WHEN PROVIDED:\n- 筛选\nSELECTED DESIGN CANDIDATE: VAR-02. THIS DESIGN IS A PROPOSAL, NOT USER-APPROVED.\nPROPOSED SPATIAL LAYOUT: 顶部全局搜索和居中结果工作区、可展开详情抽屉\nPROPOSED NAVIGATION AND INTERACTION FLOW: search-grid-detail-drawer\nPROPOSED INTERACTIVE ELEMENTS: 当前用例的核心操作控件; 任务对象及必要属性视图; 操作结果或异常反馈区域\nVISUAL INFORMATION PRIORITY: 当前任务对象或结果 > 用例所需属性、筛选或编辑信息 > 可执行操作及系统反馈\nCURRENT-STEP INTERACTION DESIGN: 搜索与筛选 | target=用户按标签筛选游戏素材，查看匹配的贴图和模型\nPROPOSED CURRENT-STEP CONTROLS: 搜索输入区; 分类/标签筛选控件; 匹配结果视图\nPROPOSED CURRENT-STEP FEEDBACK: 根据条件即时更新结果\nCURRENT-STEP VISIBLE INFORMATION: 筛选条件; 筛选后的素材列表; 当前任务对象或结果; 用例所需属性、筛选或编辑信息; 可执行操作及系统反馈\nPROPOSED VISUAL LANGUAGE: 原创桌面/网页软件的纯应用内部界面，信息层级清晰、主任务突出、文本对比合理\nSTEP-SPECIFIC FEEDBACK: 根据当前步骤的实际 state 和 flow 表达操作反馈，不预设成功；起始步骤示例：用户按标签筛选游戏素材，查看匹配的贴图和模型; depict actual state=in-progress accurately, not a fabricated success\nThe scene should clearly show WHAT object is involved, WHAT action the user can take, and WHAT feedback corresponds to this exact step.\nAll UI/layout details not required by the source are design suggestions. Do not add unsupported product requirements or claim that the software is implemented.\nDeliver a single software-internal concept frame (not a storyboard, poster, wireframe-on-paper, lifestyle photo, or marketing mockup).",
+          "prompt_sha256": "5bfd818097946c7b3236e1d08d6c97d8745ae3a3d90259f4012622f6eabfe809"
+        },
+        {
+          "scene_id": "new-asset-studio--UC-001--STEP-002",
+          "use_case_id": "UC-001",
+          "step_id": "STEP-002",
+          "state": "in-progress",
+          "flow": "main",
+          "required_evidence": [
+            "当前素材选中态",
+            "素材预览区域",
+            "素材属性区"
+          ],
+          "required_ui_text": [
+            "详情"
+          ],
+          "requirement_ids": [
+            "REQ-001",
+            "REQ-002"
+          ],
+          "design_decision_ids": [
+            "DES-02-01",
+            "DES-02-02",
+            "DES-02-03"
+          ],
+          "interaction": {
+            "purpose": "对象选择",
+            "primary_object": "用户选中一条模型素材并查看缩略预览和元数据",
+            "proposed_controls": [
+              "交互对象选中高亮",
+              "当前对象详情或数值视图",
+              "可执行上下文操作"
+            ],
+            "proposed_feedback": "状态变化应与所选对象绑定",
+            "priority": [
+              "当前素材选中态",
+              "素材预览区域",
+              "素材属性区",
+              "当前任务对象或结果",
+              "用例所需属性、筛选或编辑信息",
+              "可执行操作及系统反馈"
+            ],
+            "status": "proposed"
+          },
+          "prompt": "CREATE ONE ORIGINAL USE-CASE CONCEPT IMAGE FOR A NEW SOFTWARE PRODUCT. Do not reproduce an existing application's screenshot.\nOUTPUT FRAME: SOFTWARE-ONLY; full-bleed app UI or in-game pixels; never a photograph of users, monitors, keyboard, desks, physical devices or surrounding room.\nPRODUCT: Asset Studio (desktop). PRODUCT CONCEPT: 一款面向独立游戏团队的全新资产管理应用，集中管理贴图、模型和音频，并支持标签筛选\nTARGET USE CASE: UC-001: 用户按类型和标签筛选游戏资产，选择素材查看详情\nEXACT STEP: STEP-002: 用户选中一条模型素材并查看缩略预览和元数据 | state=in-progress | flow=main\nCANONICAL VIEW: the native in-app interface, without hardware framing\nSOURCE REQUIREMENTS AND HARD FACTS (must not be contradicted):\n- REQ-001 [source-stated] 一款面向独立游戏团队的全新资产管理应用，集中管理贴图、模型和音频，并支持标签筛选\n- REQ-002 [source-stated] 用户按类型和标签筛选游戏资产，选择素材查看详情\n\nREQUIRED VISIBLE EVIDENCE:\n- 当前素材选中态\n- 素材预览区域\n- 素材属性区\nEXACT UI TEXT WHEN PROVIDED:\n- 详情\nSELECTED DESIGN CANDIDATE: VAR-02. THIS DESIGN IS A PROPOSAL, NOT USER-APPROVED.\nPROPOSED SPATIAL LAYOUT: 顶部全局搜索和居中结果工作区、可展开详情抽屉\nPROPOSED NAVIGATION AND INTERACTION FLOW: search-grid-detail-drawer\nPROPOSED INTERACTIVE ELEMENTS: 当前用例的核心操作控件; 任务对象及必要属性视图; 操作结果或异常反馈区域\nVISUAL INFORMATION PRIORITY: 当前任务对象或结果 > 用例所需属性、筛选或编辑信息 > 可执行操作及系统反馈\nCURRENT-STEP INTERACTION DESIGN: 对象选择 | target=用户选中一条模型素材并查看缩略预览和元数据\nPROPOSED CURRENT-STEP CONTROLS: 交互对象选中高亮; 当前对象详情或数值视图; 可执行上下文操作\nPROPOSED CURRENT-STEP FEEDBACK: 状态变化应与所选对象绑定\nCURRENT-STEP VISIBLE INFORMATION: 当前素材选中态; 素材预览区域; 素材属性区; 当前任务对象或结果; 用例所需属性、筛选或编辑信息; 可执行操作及系统反馈\nPROPOSED VISUAL LANGUAGE: 原创桌面/网页软件的纯应用内部界面，信息层级清晰、主任务突出、文本对比合理\nSTEP-SPECIFIC FEEDBACK: 根据当前步骤的实际 state 和 flow 表达操作反馈，不预设成功；起始步骤示例：用户按标签筛选游戏素材，查看匹配的贴图和模型; depict actual state=in-progress accurately, not a fabricated success\nThe scene should clearly show WHAT object is involved, WHAT action the user can take, and WHAT feedback corresponds to this exact step.\nAll UI/layout details not required by the source are design suggestions. Do not add unsupported product requirements or claim that the software is implemented.\nDeliver a single software-internal concept frame (not a storyboard, poster, wireframe-on-paper, lifestyle photo, or marketing mockup).",
+          "prompt_sha256": "c5c5a8fdd6ba6558c1fa5064f7f9ca4b0a1e6f776913c289725def10f716e160"
+        },
+        {
+          "scene_id": "new-asset-studio--UC-001--STEP-003",
+          "use_case_id": "UC-001",
+          "step_id": "STEP-003",
+          "state": "failure",
+          "flow": "exception",
+          "required_evidence": [
+            "被编辑的素材标签",
+            "与当前素材关联的错误提示"
+          ],
+          "required_ui_text": [
+            "保存失败"
+          ],
+          "requirement_ids": [
+            "REQ-001",
+            "REQ-002"
+          ],
+          "design_decision_ids": [
+            "DES-02-01",
+            "DES-02-02",
+            "DES-02-03"
+          ],
+          "interaction": {
+            "purpose": "保存提交",
+            "primary_object": "用户保存素材标签修改时发生命名冲突，界面提示保存失败",
+            "proposed_controls": [
+              "主要确认动作",
+              "待提交内容摘要",
+              "取消或返回操作"
+            ],
+            "proposed_feedback": "在操作目标附近明确标记未成功状态，展示原因或恢复入口；不得误画成功确认",
+            "priority": [
+              "被编辑的素材标签",
+              "与当前素材关联的错误提示",
+              "当前任务对象或结果",
+              "用例所需属性、筛选或编辑信息",
+              "可执行操作及系统反馈"
+            ],
+            "status": "proposed"
+          },
+          "prompt": "CREATE ONE ORIGINAL USE-CASE CONCEPT IMAGE FOR A NEW SOFTWARE PRODUCT. Do not reproduce an existing application's screenshot.\nOUTPUT FRAME: SOFTWARE-ONLY; full-bleed app UI or in-game pixels; never a photograph of users, monitors, keyboard, desks, physical devices or surrounding room.\nPRODUCT: Asset Studio (desktop). PRODUCT CONCEPT: 一款面向独立游戏团队的全新资产管理应用，集中管理贴图、模型和音频，并支持标签筛选\nTARGET USE CASE: UC-001: 用户按类型和标签筛选游戏资产，选择素材查看详情\nEXACT STEP: STEP-003: 用户保存素材标签修改时发生命名冲突，界面提示保存失败 | state=failure | flow=exception\nCANONICAL VIEW: the native in-app interface, without hardware framing\nSOURCE REQUIREMENTS AND HARD FACTS (must not be contradicted):\n- REQ-001 [source-stated] 一款面向独立游戏团队的全新资产管理应用，集中管理贴图、模型和音频，并支持标签筛选\n- REQ-002 [source-stated] 用户按类型和标签筛选游戏资产，选择素材查看详情\n\nREQUIRED VISIBLE EVIDENCE:\n- 被编辑的素材标签\n- 与当前素材关联的错误提示\nEXACT UI TEXT WHEN PROVIDED:\n- 保存失败\nSELECTED DESIGN CANDIDATE: VAR-02. THIS DESIGN IS A PROPOSAL, NOT USER-APPROVED.\nPROPOSED SPATIAL LAYOUT: 顶部全局搜索和居中结果工作区、可展开详情抽屉\nPROPOSED NAVIGATION AND INTERACTION FLOW: search-grid-detail-drawer\nPROPOSED INTERACTIVE ELEMENTS: 当前用例的核心操作控件; 任务对象及必要属性视图; 操作结果或异常反馈区域\nVISUAL INFORMATION PRIORITY: 当前任务对象或结果 > 用例所需属性、筛选或编辑信息 > 可执行操作及系统反馈\nCURRENT-STEP INTERACTION DESIGN: 保存提交 | target=用户保存素材标签修改时发生命名冲突，界面提示保存失败\nPROPOSED CURRENT-STEP CONTROLS: 主要确认动作; 待提交内容摘要; 取消或返回操作\nPROPOSED CURRENT-STEP FEEDBACK: 在操作目标附近明确标记未成功状态，展示原因或恢复入口；不得误画成功确认\nCURRENT-STEP VISIBLE INFORMATION: 被编辑的素材标签; 与当前素材关联的错误提示; 当前任务对象或结果; 用例所需属性、筛选或编辑信息; 可执行操作及系统反馈\nPROPOSED VISUAL LANGUAGE: 原创桌面/网页软件的纯应用内部界面，信息层级清晰、主任务突出、文本对比合理\nSTEP-SPECIFIC FEEDBACK: 根据当前步骤的实际 state 和 flow 表达操作反馈，不预设成功；起始步骤示例：用户按标签筛选游戏素材，查看匹配的贴图和模型; depict actual state=failure accurately, not a fabricated success\nThe scene should clearly show WHAT object is involved, WHAT action the user can take, and WHAT feedback corresponds to this exact step.\nAll UI/layout details not required by the source are design suggestions. Do not add unsupported product requirements or claim that the software is implemented.\nDeliver a single software-internal concept frame (not a storyboard, poster, wireframe-on-paper, lifestyle photo, or marketing mockup).",
+          "prompt_sha256": "422acee3e3439c468eb4703f1e65c9c2ef7f020673abe51a519075cf5f179189"
+        }
+      ]
+    }
+  ],
+  "approval": "none",
+  "warning": "This is an unapproved original design proposal; static validation does not prove visual quality or software implementation."
+}

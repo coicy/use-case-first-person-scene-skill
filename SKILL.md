@@ -17,6 +17,12 @@ For a NEW software product, "real" means a plausible, implementable UI faithful 
 
 Before declaring an image valid, audit each depicted screen against its associated use case and design revision. Reject hard semantic conflicts regardless of visual quality, composition, or image hash. When the relevant facts or pixels are uncertain, report `uncertain` and request review; do not fabricate implementation proofs or user approval. See docs/decision-004-semantic-fidelity.md and docs/VISUAL_FIDELITY_ACCEPTANCE.md.
 
+## WP-06 structured visual authority (Stage 1 implemented)
+
+Before invoking image generation for an original software use case, represent the design as a typed semantic scene graph when exact UI/layout/state accuracy is required. An Agent/designer authors an explicit structural spec; `ucscene scene-compile PLAN --spec SPEC --out GRAPH` validates it against the DesignPlan and use-case evidence. `ucscene svg-render GRAPH --out-dir SVG_DIR` deterministically renders exact two-dimensional UI structure; `ucscene svg-verify GRAPH --manifest SVG_DIR/manifest.json` verifies the SVG bytes against graph data.
+
+UI component IDs, region positions, target-object bindings, action preconditions/effects and step state are canonical graph facts, **not raster-model guesses**. The output retains **proposed**, not user-approved, authority until user confirmation. Stage 1 supports only two layout archetypes and lacks hybrid art-slot compositing; do not tell users full art+SVG protected compositing already works. See `docs/WP06_STRUCTURED_SVG_INTEGRATION.md`.
+
 ## Provider priority (PRODUCT-003 — required)
 
 **Capability gate (WP-05):** Before attempting host-native image generation, verify the host can actually receive ONE exact, explicit scene prompt and isolate unrelated conversation content. Run `ucscene concept-agent-preflight PACKET --capabilities HOST.json --out PREFLIGHT.json`. If the route is `host-native-blocked`, do not repeatedly invoke this same unrouteable host and do not report images as successfully prompt-bound. A separate paid API is not automatically authorized. Details: `docs/WP05_AGENT_NATIVE_PREFLIGHT.md`.

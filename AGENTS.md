@@ -22,6 +22,10 @@ For a NEW software product, "real" means a plausible, implementable UI faithful 
 
 Before declaring an image valid, audit each depicted screen against its associated use case and design revision. Reject hard semantic conflicts regardless of visual quality, composition, or image hash. When the relevant facts or pixels are uncertain, report `uncertain` and request review; do not fabricate implementation proofs or user approval. See docs/decision-004-semantic-fidelity.md and docs/VISUAL_FIDELITY_ACCEPTANCE.md.
 
+## WP-06 executable semantic SVG architecture
+
+`src/ucscene/scenegraph.py` now compiles an Agent-authored component and action/state spec into a source DesignPlan-bound `Semantic Scene Graph`, then exports verifiable SVG per use-case step. Treat stable component IDs, parent region geometry, product/step identifiers, bound object fields, required evidence, user-visible text and action-driven state transitions as invariants. Never assert these proposal-only fixtures are user-approved. SVG and its hash are deterministic projections of the graph, not independent competing authority. Art generation within SVG-declared slots and compositing beneath protected UI layers are still **planned**, not implemented. Details: docs/WP06_STRUCTURED_SVG_INTEGRATION.md.
+
 ## Scope
 
 This repository implements a source-grounded **software-only** use-case-to-scene pipeline. The entire output must be application/editor/game pixels; never real-world user POV, external monitors, keyboard, desk, device or physical surroundings. It is **not** a UML generator, working UX frontend, asset licensing system, or guarantee of model accuracy. Do not add features or claims to the README unless the code and tests verify them.

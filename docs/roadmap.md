@@ -62,3 +62,8 @@ The observed image generator continued to produce a six-panel board even after e
 ## Issue #3 implementation — 2026-10-24
 
 Implemented product-identity binding for new render packets, independent visual product-match QA, self-attested `--product-match` observations, and `wrong-product` corrective retry. These are **engineering** safeguards, not proof of actual paid-model image compliance. The WP-05 release gate remains: real Images API generation for two original products, separate per-step visual acceptance, and cross-step consistency evidence. See [ISSUE03_PRODUCT_MATCH.md](ISSUE03_PRODUCT_MATCH.md).
+
+
+## WP-06 Stage 1 — structured UI/SVG authority integrated
+
+Typed Semantic Scene Graph compilation and deterministic SVG verification have been added to the CLI. Two fictional new products each have a three-step structured demo. This verifies internal layout, bindings and declared state transitions, **not** actual software executability or AI visual quality. Art-slot image generation/compositing and approved-design provenance are later WP-06 stages. See docs/WP06_STRUCTURED_SVG_INTEGRATION.md.

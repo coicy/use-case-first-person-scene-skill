@@ -1,0 +1,369 @@
+{
+  "kind": "scene-graph-spec",
+  "format_version": "1.0",
+  "product_id": "new-hamlet-builder",
+  "variant_id": "VAR-01",
+  "authority": "proposed",
+  "layout": "世界/关卡视口为主体、右侧情境信息面板及紧凑资源 HUD",
+  "navigation": "world-hud-right-panel",
+  "canvas": {
+    "width": 1200,
+    "height": 720
+  },
+  "regions": [
+    {
+      "id": "hud",
+      "role": "hud",
+      "rect": [
+        0,
+        0,
+        1200,
+        72
+      ],
+      "parent": null
+    },
+    {
+      "id": "world",
+      "role": "world",
+      "rect": [
+        0,
+        72,
+        855,
+        648
+      ],
+      "parent": null
+    },
+    {
+      "id": "inspector",
+      "role": "inspector",
+      "rect": [
+        855,
+        72,
+        345,
+        648
+      ],
+      "parent": null
+    }
+  ],
+  "elements": [
+    {
+      "id": "game-title",
+      "kind": "heading",
+      "region": "hud",
+      "rect": [
+        20,
+        14,
+        260,
+        45
+      ],
+      "label": "HAMLET BUILDER",
+      "binding": null,
+      "action_id": null,
+      "object_id": null,
+      "evidence_refs": []
+    },
+    {
+      "id": "free-workers",
+      "kind": "metric",
+      "region": "hud",
+      "rect": [
+        295,
+        8,
+        204,
+        57
+      ],
+      "label": "可用工人",
+      "binding": "app.available_workers",
+      "action_id": null,
+      "object_id": null,
+      "evidence_refs": []
+    },
+    {
+      "id": "world-art",
+      "kind": "art-slot",
+      "region": "world",
+      "rect": [
+        16,
+        95,
+        821,
+        521
+      ],
+      "label": "等距村庄世界",
+      "binding": null,
+      "action_id": null,
+      "object_id": null,
+      "evidence_refs": [
+        "等距建造游戏场景"
+      ]
+    },
+    {
+      "id": "selected-farm",
+      "kind": "world-object",
+      "region": "world",
+      "rect": [
+        318,
+        306,
+        285,
+        216
+      ],
+      "label": "farm-01",
+      "binding": "object.farm-01.name",
+      "action_id": null,
+      "object_id": "farm-01",
+      "evidence_refs": [
+        "选中的农场高亮状态",
+        "农场仍保持选中"
+      ]
+    },
+    {
+      "id": "commands",
+      "kind": "button",
+      "region": "world",
+      "rect": [
+        16,
+        657,
+        228,
+        48
+      ],
+      "label": "建筑",
+      "binding": null,
+      "action_id": null,
+      "object_id": null,
+      "evidence_refs": []
+    },
+    {
+      "id": "inspector-name",
+      "kind": "heading",
+      "region": "inspector",
+      "rect": [
+        875,
+        101,
+        290,
+        48
+      ],
+      "label": "农场",
+      "binding": null,
+      "action_id": null,
+      "object_id": null,
+      "evidence_refs": [
+        "农场详情面板"
+      ]
+    },
+    {
+      "id": "farm-tab",
+      "kind": "chip",
+      "region": "inspector",
+      "rect": [
+        880,
+        162,
+        137,
+        42
+      ],
+      "label": "生产",
+      "binding": null,
+      "action_id": null,
+      "object_id": null,
+      "evidence_refs": []
+    },
+    {
+      "id": "production",
+      "kind": "metric",
+      "region": "inspector",
+      "rect": [
+        881,
+        240,
+        294,
+        82
+      ],
+      "label": "产量",
+      "binding": "object.farm-01.production",
+      "action_id": null,
+      "object_id": "farm-01",
+      "evidence_refs": [
+        "当前产量"
+      ]
+    },
+    {
+      "id": "workers",
+      "kind": "metric",
+      "region": "inspector",
+      "rect": [
+        881,
+        344,
+        294,
+        82
+      ],
+      "label": "已分配工人",
+      "binding": "object.farm-01.workers",
+      "action_id": null,
+      "object_id": "farm-01",
+      "evidence_refs": [
+        "已分配工人数量",
+        "分配后的工人状态变化"
+      ]
+    },
+    {
+      "id": "assign-button",
+      "kind": "button",
+      "region": "inspector",
+      "rect": [
+        881,
+        467,
+        292,
+        54
+      ],
+      "label": "分配工人",
+      "binding": null,
+      "action_id": "assign-worker",
+      "object_id": "farm-01",
+      "evidence_refs": []
+    },
+    {
+      "id": "success-notice",
+      "kind": "notice",
+      "region": "inspector",
+      "rect": [
+        880,
+        544,
+        293,
+        64
+      ],
+      "label": "工人已分配",
+      "binding": "ui.notice",
+      "action_id": null,
+      "object_id": "farm-01",
+      "evidence_refs": []
+    }
+  ],
+  "objects": [
+    {
+      "id": "farm-01",
+      "type": "farm",
+      "label": "谷地农场"
+    }
+  ],
+  "actions": [
+    {
+      "id": "inspect-production",
+      "target": "farm-01",
+      "preconditions": {
+        "ui.active_panel": "overview"
+      },
+      "effects": {
+        "ui.active_panel": {
+          "op": "set",
+          "value": "production"
+        }
+      }
+    },
+    {
+      "id": "assign-worker",
+      "target": "farm-01",
+      "preconditions": {
+        "ui.active_panel": "production",
+        "object.farm-01.workers": 2
+      },
+      "effects": {
+        "object.farm-01.workers": {
+          "op": "add",
+          "value": 1
+        },
+        "object.farm-01.production": {
+          "op": "add",
+          "value": 2
+        },
+        "app.available_workers": {
+          "op": "add",
+          "value": -1
+        },
+        "ui.active_panel": {
+          "op": "set",
+          "value": "workers"
+        },
+        "ui.notice": {
+          "op": "set",
+          "value": "分配工人成功"
+        }
+      }
+    }
+  ],
+  "scenes": [
+    {
+      "scene_id": "new-hamlet-builder--UC-001--STEP-001",
+      "step_id": "STEP-001",
+      "selected_object_id": "farm-01",
+      "event_id": null,
+      "visible_elements": [
+        "game-title",
+        "free-workers",
+        "world-art",
+        "selected-farm",
+        "commands"
+      ],
+      "values": {
+        "ui.selected_object": "farm-01",
+        "ui.active_panel": "overview",
+        "ui.notice": "",
+        "object.farm-01.name": "谷地农场",
+        "object.farm-01.workers": 2,
+        "object.farm-01.production": 4,
+        "app.available_workers": 3
+      }
+    },
+    {
+      "scene_id": "new-hamlet-builder--UC-001--STEP-002",
+      "step_id": "STEP-002",
+      "selected_object_id": "farm-01",
+      "event_id": "inspect-production",
+      "visible_elements": [
+        "game-title",
+        "free-workers",
+        "world-art",
+        "selected-farm",
+        "commands",
+        "inspector-name",
+        "farm-tab",
+        "production",
+        "workers",
+        "assign-button"
+      ],
+      "values": {
+        "ui.selected_object": "farm-01",
+        "ui.active_panel": "production",
+        "ui.notice": "",
+        "object.farm-01.name": "谷地农场",
+        "object.farm-01.workers": 2,
+        "object.farm-01.production": 4,
+        "app.available_workers": 3
+      }
+    },
+    {
+      "scene_id": "new-hamlet-builder--UC-001--STEP-003",
+      "step_id": "STEP-003",
+      "selected_object_id": "farm-01",
+      "event_id": "assign-worker",
+      "visible_elements": [
+        "game-title",
+        "free-workers",
+        "world-art",
+        "selected-farm",
+        "commands",
+        "inspector-name",
+        "farm-tab",
+        "production",
+        "workers",
+        "assign-button",
+        "success-notice"
+      ],
+      "values": {
+        "ui.selected_object": "farm-01",
+        "ui.active_panel": "workers",
+        "ui.notice": "分配工人成功",
+        "object.farm-01.name": "谷地农场",
+        "object.farm-01.workers": 3,
+        "object.farm-01.production": 6,
+        "app.available_workers": 2
+      }
+    }
+  ]
+}

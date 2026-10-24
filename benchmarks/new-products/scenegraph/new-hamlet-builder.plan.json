@@ -1,0 +1,636 @@
+{
+  "plan_version": "1.0",
+  "product_id": "new-hamlet-builder",
+  "source_brief_sha256": "3d6392ee89ff7da2f0d5035abd1f2969e4d692a8163ce035ee61a8d05701a238",
+  "generator": "offline-heuristic",
+  "model": null,
+  "requirement_classification": {
+    "must": [
+      {
+        "id": "REQ-001",
+        "text": "一款原创等距视角建造经营游戏，玩家建造农场并规划居民劳动，视觉风格温暖清晰",
+        "authority": "source-stated"
+      },
+      {
+        "id": "REQ-002",
+        "text": "玩家选择农场并查看产量与已分配工人",
+        "authority": "source-stated"
+      }
+    ],
+    "may": [
+      "Navigation and layout can be proposed unless explicitly constrained.",
+      "Control positions, interaction feedback, colors and visual hierarchy are design proposals."
+    ],
+    "unknown": [
+      "actor",
+      "interaction design",
+      "UI layout",
+      "visual style",
+      "visible feedback"
+    ],
+    "use_case_steps": [
+      "UC-001:STEP-001",
+      "UC-001:STEP-002",
+      "UC-001:STEP-003"
+    ]
+  },
+  "design_bundle": {
+    "schema_version": "1.0",
+    "brief": {
+      "schema_version": "1.0",
+      "product_id": "new-hamlet-builder",
+      "name": "Hamlet Builder",
+      "category": "game",
+      "concept": "一款原创等距视角建造经营游戏，玩家建造农场并规划居民劳动，视觉风格温暖清晰",
+      "requirements": [
+        {
+          "id": "REQ-001",
+          "text": "一款原创等距视角建造经营游戏，玩家建造农场并规划居民劳动，视觉风格温暖清晰",
+          "source": "user-prompt",
+          "authority": "source-stated",
+          "use_case_ids": []
+        },
+        {
+          "id": "REQ-002",
+          "text": "玩家选择农场并查看产量与已分配工人",
+          "source": "user-prompt",
+          "authority": "source-stated",
+          "use_case_ids": [
+            "UC-001"
+          ]
+        }
+      ],
+      "hard_constraints": [],
+      "use_cases": [
+        {
+          "id": "UC-001",
+          "title": "玩家选择农场并查看产量与已分配工人",
+          "actor": "unspecified",
+          "goal": "玩家选择农场并查看产量与已分配工人",
+          "steps": [
+            {
+              "id": "STEP-001",
+              "action": "玩家在等距游戏地图中选中一座农场",
+              "state": "in-progress",
+              "flow": "main",
+              "ui_text": [],
+              "visible_evidence": [
+                "等距建造游戏场景",
+                "选中的农场高亮状态"
+              ]
+            },
+            {
+              "id": "STEP-002",
+              "action": "玩家查看所选农场的产量和已分配工人",
+              "state": "in-progress",
+              "flow": "main",
+              "ui_text": [
+                "产量"
+              ],
+              "visible_evidence": [
+                "农场详情面板",
+                "当前产量",
+                "已分配工人数量"
+              ]
+            },
+            {
+              "id": "STEP-003",
+              "action": "玩家为农场分配一名工人并查看分配结果",
+              "state": "success",
+              "flow": "main",
+              "ui_text": [
+                "分配工人"
+              ],
+              "visible_evidence": [
+                "农场仍保持选中",
+                "分配后的工人状态变化"
+              ]
+            }
+          ]
+        }
+      ],
+      "unknowns": [
+        "actor",
+        "interaction design",
+        "UI layout",
+        "visual style",
+        "visible feedback"
+      ],
+      "origin": {
+        "mode": "curated",
+        "source_id": "benchmarks/new-products/fictional-WP02"
+      }
+    },
+    "decisions": [
+      {
+        "schema_version": "1.0",
+        "id": "DES-01-01",
+        "product_id": "new-hamlet-builder",
+        "topic": "Layout and panel structure",
+        "proposal": "世界/关卡视口为主体、右侧情境信息面板及紧凑资源 HUD",
+        "rationale": "世界反馈清晰；面板可能遮挡部分区域",
+        "status": "proposed",
+        "locked": false,
+        "revision": 1,
+        "source": "ai-proposal",
+        "related_use_case_ids": [],
+        "effects": [
+          {
+            "key": "ui.layout",
+            "value": "世界/关卡视口为主体、右侧情境信息面板及紧凑资源 HUD"
+          }
+        ]
+      },
+      {
+        "schema_version": "1.0",
+        "id": "DES-01-02",
+        "product_id": "new-hamlet-builder",
+        "topic": "Navigation and interaction pattern",
+        "proposal": "world-hud-right-panel",
+        "rationale": "世界反馈清晰；面板可能遮挡部分区域",
+        "status": "proposed",
+        "locked": false,
+        "revision": 1,
+        "source": "ai-proposal",
+        "related_use_case_ids": [],
+        "effects": [
+          {
+            "key": "ui.navigation",
+            "value": "world-hud-right-panel"
+          }
+        ]
+      },
+      {
+        "schema_version": "1.0",
+        "id": "DES-01-03",
+        "product_id": "new-hamlet-builder",
+        "topic": "Visual styling and rendering language",
+        "proposal": "原创游戏内可见 UI 和关卡视图，镜头建议：等距视角 (isometric)；布局方案 world-sidepanel；不渲染现实显示器或真人",
+        "rationale": "世界反馈清晰；面板可能遮挡部分区域",
+        "status": "proposed",
+        "locked": false,
+        "revision": 1,
+        "source": "ai-proposal",
+        "related_use_case_ids": [],
+        "effects": [
+          {
+            "key": "ui.visual_style",
+            "value": "原创游戏内可见 UI 和关卡视图，镜头建议：等距视角 (isometric)；布局方案 world-sidepanel；不渲染现实显示器或真人"
+          }
+        ]
+      },
+      {
+        "schema_version": "1.0",
+        "id": "DES-02-01",
+        "product_id": "new-hamlet-builder",
+        "topic": "Layout and panel structure",
+        "proposal": "世界/关卡视口为主体、围绕交互对象的浮动操作和信息卡",
+        "rationale": "沉浸感较强；复杂数值阅读不如固定面板",
+        "status": "proposed",
+        "locked": false,
+        "revision": 1,
+        "source": "ai-proposal",
+        "related_use_case_ids": [],
+        "effects": [
+          {
+            "key": "ui.layout",
+            "value": "世界/关卡视口为主体、围绕交互对象的浮动操作和信息卡"
+          }
+        ]
+      },
+      {
+        "schema_version": "1.0",
+        "id": "DES-02-02",
+        "product_id": "new-hamlet-builder",
+        "topic": "Navigation and interaction pattern",
+        "proposal": "world-object-context-overlay",
+        "rationale": "沉浸感较强；复杂数值阅读不如固定面板",
+        "status": "proposed",
+        "locked": false,
+        "revision": 1,
+        "source": "ai-proposal",
+        "related_use_case_ids": [],
+        "effects": [
+          {
+            "key": "ui.navigation",
+            "value": "world-object-context-overlay"
+          }
+        ]
+      },
+      {
+        "schema_version": "1.0",
+        "id": "DES-02-03",
+        "product_id": "new-hamlet-builder",
+        "topic": "Visual styling and rendering language",
+        "proposal": "原创游戏内可见 UI 和关卡视图，镜头建议：等距视角 (isometric)；布局方案 contextual-overlay；不渲染现实显示器或真人",
+        "rationale": "沉浸感较强；复杂数值阅读不如固定面板",
+        "status": "proposed",
+        "locked": false,
+        "revision": 1,
+        "source": "ai-proposal",
+        "related_use_case_ids": [],
+        "effects": [
+          {
+            "key": "ui.visual_style",
+            "value": "原创游戏内可见 UI 和关卡视图，镜头建议：等距视角 (isometric)；布局方案 contextual-overlay；不渲染现实显示器或真人"
+          }
+        ]
+      }
+    ],
+    "scenes": [
+      {
+        "schema_version": "1.0",
+        "id": "new-hamlet-builder--UC-001--STEP-001",
+        "product_id": "new-hamlet-builder",
+        "use_case_id": "UC-001",
+        "step_id": "STEP-001",
+        "action": "玩家在等距游戏地图中选中一座农场",
+        "state": "in-progress",
+        "flow": "main",
+        "frame_scope": "software-only",
+        "viewpoint_mode": "gameplay",
+        "design_status": "unresolved",
+        "requirement_ids": [
+          "REQ-001",
+          "REQ-002"
+        ],
+        "design_decision_ids": [],
+        "visible_evidence": [
+          "等距建造游戏场景",
+          "选中的农场高亮状态"
+        ],
+        "expected_ui_text": [],
+        "proposed_elements": []
+      },
+      {
+        "schema_version": "1.0",
+        "id": "new-hamlet-builder--UC-001--STEP-002",
+        "product_id": "new-hamlet-builder",
+        "use_case_id": "UC-001",
+        "step_id": "STEP-002",
+        "action": "玩家查看所选农场的产量和已分配工人",
+        "state": "in-progress",
+        "flow": "main",
+        "frame_scope": "software-only",
+        "viewpoint_mode": "gameplay",
+        "design_status": "unresolved",
+        "requirement_ids": [
+          "REQ-001",
+          "REQ-002"
+        ],
+        "design_decision_ids": [],
+        "visible_evidence": [
+          "农场详情面板",
+          "当前产量",
+          "已分配工人数量"
+        ],
+        "expected_ui_text": [
+          "产量"
+        ],
+        "proposed_elements": []
+      },
+      {
+        "schema_version": "1.0",
+        "id": "new-hamlet-builder--UC-001--STEP-003",
+        "product_id": "new-hamlet-builder",
+        "use_case_id": "UC-001",
+        "step_id": "STEP-003",
+        "action": "玩家为农场分配一名工人并查看分配结果",
+        "state": "success",
+        "flow": "main",
+        "frame_scope": "software-only",
+        "viewpoint_mode": "gameplay",
+        "design_status": "unresolved",
+        "requirement_ids": [
+          "REQ-001",
+          "REQ-002"
+        ],
+        "design_decision_ids": [],
+        "visible_evidence": [
+          "农场仍保持选中",
+          "分配后的工人状态变化"
+        ],
+        "expected_ui_text": [
+          "分配工人"
+        ],
+        "proposed_elements": []
+      }
+    ]
+  },
+  "candidates": [
+    {
+      "id": "VAR-01",
+      "status": "proposed",
+      "label": "world-sidepanel",
+      "design_decision_ids": [
+        "DES-01-01",
+        "DES-01-02",
+        "DES-01-03"
+      ],
+      "tradeoff": "世界反馈清晰；面板可能遮挡部分区域",
+      "layout": "世界/关卡视口为主体、右侧情境信息面板及紧凑资源 HUD",
+      "navigation": "world-hud-right-panel",
+      "visual_style": "原创游戏内可见 UI 和关卡视图，镜头建议：等距视角 (isometric)；布局方案 world-sidepanel；不渲染现实显示器或真人",
+      "controls": [
+        "与当前目标关联的选择/操作入口",
+        "状态反馈与必要资源或进度读数",
+        "关闭/返回当前操作的入口"
+      ],
+      "information_priority": [
+        "世界/关卡内当前目标",
+        "与当前用例相关的数值或物件状态",
+        "玩家能够采取的下一步操作"
+      ],
+      "feedback": "根据当前步骤的实际 state 和 flow 表达操作反馈，不预设成功；起始步骤示例：玩家在等距游戏地图中选中一座农场",
+      "screens": [
+        {
+          "scene_id": "new-hamlet-builder--UC-001--STEP-001",
+          "use_case_id": "UC-001",
+          "step_id": "STEP-001",
+          "state": "in-progress",
+          "flow": "main",
+          "required_evidence": [
+            "等距建造游戏场景",
+            "选中的农场高亮状态"
+          ],
+          "required_ui_text": [],
+          "requirement_ids": [
+            "REQ-001",
+            "REQ-002"
+          ],
+          "design_decision_ids": [
+            "DES-01-01",
+            "DES-01-02",
+            "DES-01-03"
+          ],
+          "interaction": {
+            "purpose": "对象选择",
+            "primary_object": "玩家在等距游戏地图中选中一座农场",
+            "proposed_controls": [
+              "交互对象选中高亮",
+              "当前对象详情或数值视图",
+              "可执行上下文操作"
+            ],
+            "proposed_feedback": "状态变化应与所选对象绑定",
+            "priority": [
+              "等距建造游戏场景",
+              "选中的农场高亮状态",
+              "世界/关卡内当前目标",
+              "与当前用例相关的数值或物件状态",
+              "玩家能够采取的下一步操作"
+            ],
+            "status": "proposed"
+          },
+          "prompt": "CREATE ONE ORIGINAL USE-CASE CONCEPT IMAGE FOR A NEW SOFTWARE PRODUCT. Do not reproduce an existing application's screenshot.\nOUTPUT FRAME: SOFTWARE-ONLY; full-bleed app UI or in-game pixels; never a photograph of users, monitors, keyboard, desks, physical devices or surrounding room.\nPRODUCT: Hamlet Builder (game). PRODUCT CONCEPT: 一款原创等距视角建造经营游戏，玩家建造农场并规划居民劳动，视觉风格温暖清晰\nTARGET USE CASE: UC-001: 玩家选择农场并查看产量与已分配工人\nEXACT STEP: STEP-001: 玩家在等距游戏地图中选中一座农场 | state=in-progress | flow=main\nCANONICAL VIEW: an in-game camera chosen for the fictional product's experience\nSOURCE REQUIREMENTS AND HARD FACTS (must not be contradicted):\n- REQ-001 [source-stated] 一款原创等距视角建造经营游戏，玩家建造农场并规划居民劳动，视觉风格温暖清晰\n- REQ-002 [source-stated] 玩家选择农场并查看产量与已分配工人\n\nREQUIRED VISIBLE EVIDENCE:\n- 等距建造游戏场景\n- 选中的农场高亮状态\nEXACT UI TEXT WHEN PROVIDED:\n- No required verbatim labels specified. Suggested wording is a PROPOSAL.\nSELECTED DESIGN CANDIDATE: VAR-01. THIS DESIGN IS A PROPOSAL, NOT USER-APPROVED.\nPROPOSED SPATIAL LAYOUT: 世界/关卡视口为主体、右侧情境信息面板及紧凑资源 HUD\nPROPOSED NAVIGATION AND INTERACTION FLOW: world-hud-right-panel\nPROPOSED INTERACTIVE ELEMENTS: 与当前目标关联的选择/操作入口; 状态反馈与必要资源或进度读数; 关闭/返回当前操作的入口\nVISUAL INFORMATION PRIORITY: 世界/关卡内当前目标 > 与当前用例相关的数值或物件状态 > 玩家能够采取的下一步操作\nCURRENT-STEP INTERACTION DESIGN: 对象选择 | target=玩家在等距游戏地图中选中一座农场\nPROPOSED CURRENT-STEP CONTROLS: 交互对象选中高亮; 当前对象详情或数值视图; 可执行上下文操作\nPROPOSED CURRENT-STEP FEEDBACK: 状态变化应与所选对象绑定\nCURRENT-STEP VISIBLE INFORMATION: 等距建造游戏场景; 选中的农场高亮状态; 世界/关卡内当前目标; 与当前用例相关的数值或物件状态; 玩家能够采取的下一步操作\nPROPOSED VISUAL LANGUAGE: 原创游戏内可见 UI 和关卡视图，镜头建议：等距视角 (isometric)；布局方案 world-sidepanel；不渲染现实显示器或真人\nSTEP-SPECIFIC FEEDBACK: 根据当前步骤的实际 state 和 flow 表达操作反馈，不预设成功；起始步骤示例：玩家在等距游戏地图中选中一座农场; depict actual state=in-progress accurately, not a fabricated success\nThe scene should clearly show WHAT object is involved, WHAT action the user can take, and WHAT feedback corresponds to this exact step.\nAll UI/layout details not required by the source are design suggestions. Do not add unsupported product requirements or claim that the software is implemented.\nDeliver a single software-internal concept frame (not a storyboard, poster, wireframe-on-paper, lifestyle photo, or marketing mockup).",
+          "prompt_sha256": "e482fc863555ee29338a621ea50fcbecbdf69993556bb1068a80473589c560cb"
+        },
+        {
+          "scene_id": "new-hamlet-builder--UC-001--STEP-002",
+          "use_case_id": "UC-001",
+          "step_id": "STEP-002",
+          "state": "in-progress",
+          "flow": "main",
+          "required_evidence": [
+            "农场详情面板",
+            "当前产量",
+            "已分配工人数量"
+          ],
+          "required_ui_text": [
+            "产量"
+          ],
+          "requirement_ids": [
+            "REQ-001",
+            "REQ-002"
+          ],
+          "design_decision_ids": [
+            "DES-01-01",
+            "DES-01-02",
+            "DES-01-03"
+          ],
+          "interaction": {
+            "purpose": "分配管理",
+            "primary_object": "玩家查看所选农场的产量和已分配工人",
+            "proposed_controls": [
+              "可选人员/单位列表",
+              "当前已分配数量",
+              "分配或移除操作"
+            ],
+            "proposed_feedback": "突出选择前后的分配变化",
+            "priority": [
+              "农场详情面板",
+              "当前产量",
+              "已分配工人数量",
+              "世界/关卡内当前目标",
+              "与当前用例相关的数值或物件状态",
+              "玩家能够采取的下一步操作"
+            ],
+            "status": "proposed"
+          },
+          "prompt": "CREATE ONE ORIGINAL USE-CASE CONCEPT IMAGE FOR A NEW SOFTWARE PRODUCT. Do not reproduce an existing application's screenshot.\nOUTPUT FRAME: SOFTWARE-ONLY; full-bleed app UI or in-game pixels; never a photograph of users, monitors, keyboard, desks, physical devices or surrounding room.\nPRODUCT: Hamlet Builder (game). PRODUCT CONCEPT: 一款原创等距视角建造经营游戏，玩家建造农场并规划居民劳动，视觉风格温暖清晰\nTARGET USE CASE: UC-001: 玩家选择农场并查看产量与已分配工人\nEXACT STEP: STEP-002: 玩家查看所选农场的产量和已分配工人 | state=in-progress | flow=main\nCANONICAL VIEW: an in-game camera chosen for the fictional product's experience\nSOURCE REQUIREMENTS AND HARD FACTS (must not be contradicted):\n- REQ-001 [source-stated] 一款原创等距视角建造经营游戏，玩家建造农场并规划居民劳动，视觉风格温暖清晰\n- REQ-002 [source-stated] 玩家选择农场并查看产量与已分配工人\n\nREQUIRED VISIBLE EVIDENCE:\n- 农场详情面板\n- 当前产量\n- 已分配工人数量\nEXACT UI TEXT WHEN PROVIDED:\n- 产量\nSELECTED DESIGN CANDIDATE: VAR-01. THIS DESIGN IS A PROPOSAL, NOT USER-APPROVED.\nPROPOSED SPATIAL LAYOUT: 世界/关卡视口为主体、右侧情境信息面板及紧凑资源 HUD\nPROPOSED NAVIGATION AND INTERACTION FLOW: world-hud-right-panel\nPROPOSED INTERACTIVE ELEMENTS: 与当前目标关联的选择/操作入口; 状态反馈与必要资源或进度读数; 关闭/返回当前操作的入口\nVISUAL INFORMATION PRIORITY: 世界/关卡内当前目标 > 与当前用例相关的数值或物件状态 > 玩家能够采取的下一步操作\nCURRENT-STEP INTERACTION DESIGN: 分配管理 | target=玩家查看所选农场的产量和已分配工人\nPROPOSED CURRENT-STEP CONTROLS: 可选人员/单位列表; 当前已分配数量; 分配或移除操作\nPROPOSED CURRENT-STEP FEEDBACK: 突出选择前后的分配变化\nCURRENT-STEP VISIBLE INFORMATION: 农场详情面板; 当前产量; 已分配工人数量; 世界/关卡内当前目标; 与当前用例相关的数值或物件状态; 玩家能够采取的下一步操作\nPROPOSED VISUAL LANGUAGE: 原创游戏内可见 UI 和关卡视图，镜头建议：等距视角 (isometric)；布局方案 world-sidepanel；不渲染现实显示器或真人\nSTEP-SPECIFIC FEEDBACK: 根据当前步骤的实际 state 和 flow 表达操作反馈，不预设成功；起始步骤示例：玩家在等距游戏地图中选中一座农场; depict actual state=in-progress accurately, not a fabricated success\nThe scene should clearly show WHAT object is involved, WHAT action the user can take, and WHAT feedback corresponds to this exact step.\nAll UI/layout details not required by the source are design suggestions. Do not add unsupported product requirements or claim that the software is implemented.\nDeliver a single software-internal concept frame (not a storyboard, poster, wireframe-on-paper, lifestyle photo, or marketing mockup).",
+          "prompt_sha256": "4b0d755b2f1e8c0d38dea9799a8ebdc6ff2c363fbce6e14530dc43c9b0a8c1a5"
+        },
+        {
+          "scene_id": "new-hamlet-builder--UC-001--STEP-003",
+          "use_case_id": "UC-001",
+          "step_id": "STEP-003",
+          "state": "success",
+          "flow": "main",
+          "required_evidence": [
+            "农场仍保持选中",
+            "分配后的工人状态变化"
+          ],
+          "required_ui_text": [
+            "分配工人"
+          ],
+          "requirement_ids": [
+            "REQ-001",
+            "REQ-002"
+          ],
+          "design_decision_ids": [
+            "DES-01-01",
+            "DES-01-02",
+            "DES-01-03"
+          ],
+          "interaction": {
+            "purpose": "分配管理",
+            "primary_object": "玩家为农场分配一名工人并查看分配结果",
+            "proposed_controls": [
+              "可选人员/单位列表",
+              "当前已分配数量",
+              "分配或移除操作"
+            ],
+            "proposed_feedback": "明确标记已经完成的动作与结果，但不能发明需求中不存在的奖励或业务后果",
+            "priority": [
+              "农场仍保持选中",
+              "分配后的工人状态变化",
+              "世界/关卡内当前目标",
+              "与当前用例相关的数值或物件状态",
+              "玩家能够采取的下一步操作"
+            ],
+            "status": "proposed"
+          },
+          "prompt": "CREATE ONE ORIGINAL USE-CASE CONCEPT IMAGE FOR A NEW SOFTWARE PRODUCT. Do not reproduce an existing application's screenshot.\nOUTPUT FRAME: SOFTWARE-ONLY; full-bleed app UI or in-game pixels; never a photograph of users, monitors, keyboard, desks, physical devices or surrounding room.\nPRODUCT: Hamlet Builder (game). PRODUCT CONCEPT: 一款原创等距视角建造经营游戏，玩家建造农场并规划居民劳动，视觉风格温暖清晰\nTARGET USE CASE: UC-001: 玩家选择农场并查看产量与已分配工人\nEXACT STEP: STEP-003: 玩家为农场分配一名工人并查看分配结果 | state=success | flow=main\nCANONICAL VIEW: an in-game camera chosen for the fictional product's experience\nSOURCE REQUIREMENTS AND HARD FACTS (must not be contradicted):\n- REQ-001 [source-stated] 一款原创等距视角建造经营游戏，玩家建造农场并规划居民劳动，视觉风格温暖清晰\n- REQ-002 [source-stated] 玩家选择农场并查看产量与已分配工人\n\nREQUIRED VISIBLE EVIDENCE:\n- 农场仍保持选中\n- 分配后的工人状态变化\nEXACT UI TEXT WHEN PROVIDED:\n- 分配工人\nSELECTED DESIGN CANDIDATE: VAR-01. THIS DESIGN IS A PROPOSAL, NOT USER-APPROVED.\nPROPOSED SPATIAL LAYOUT: 世界/关卡视口为主体、右侧情境信息面板及紧凑资源 HUD\nPROPOSED NAVIGATION AND INTERACTION FLOW: world-hud-right-panel\nPROPOSED INTERACTIVE ELEMENTS: 与当前目标关联的选择/操作入口; 状态反馈与必要资源或进度读数; 关闭/返回当前操作的入口\nVISUAL INFORMATION PRIORITY: 世界/关卡内当前目标 > 与当前用例相关的数值或物件状态 > 玩家能够采取的下一步操作\nCURRENT-STEP INTERACTION DESIGN: 分配管理 | target=玩家为农场分配一名工人并查看分配结果\nPROPOSED CURRENT-STEP CONTROLS: 可选人员/单位列表; 当前已分配数量; 分配或移除操作\nPROPOSED CURRENT-STEP FEEDBACK: 明确标记已经完成的动作与结果，但不能发明需求中不存在的奖励或业务后果\nCURRENT-STEP VISIBLE INFORMATION: 农场仍保持选中; 分配后的工人状态变化; 世界/关卡内当前目标; 与当前用例相关的数值或物件状态; 玩家能够采取的下一步操作\nPROPOSED VISUAL LANGUAGE: 原创游戏内可见 UI 和关卡视图，镜头建议：等距视角 (isometric)；布局方案 world-sidepanel；不渲染现实显示器或真人\nSTEP-SPECIFIC FEEDBACK: 根据当前步骤的实际 state 和 flow 表达操作反馈，不预设成功；起始步骤示例：玩家在等距游戏地图中选中一座农场; depict actual state=success accurately, not a fabricated success\nThe scene should clearly show WHAT object is involved, WHAT action the user can take, and WHAT feedback corresponds to this exact step.\nAll UI/layout details not required by the source are design suggestions. Do not add unsupported product requirements or claim that the software is implemented.\nDeliver a single software-internal concept frame (not a storyboard, poster, wireframe-on-paper, lifestyle photo, or marketing mockup).",
+          "prompt_sha256": "d167904145e8ca2cf559f2166ffa7c4ef00165eaf4b4cbbcbc1cf60954e8ce81"
+        }
+      ]
+    },
+    {
+      "id": "VAR-02",
+      "status": "proposed",
+      "label": "contextual-overlay",
+      "design_decision_ids": [
+        "DES-02-01",
+        "DES-02-02",
+        "DES-02-03"
+      ],
+      "tradeoff": "沉浸感较强；复杂数值阅读不如固定面板",
+      "layout": "世界/关卡视口为主体、围绕交互对象的浮动操作和信息卡",
+      "navigation": "world-object-context-overlay",
+      "visual_style": "原创游戏内可见 UI 和关卡视图，镜头建议：等距视角 (isometric)；布局方案 contextual-overlay；不渲染现实显示器或真人",
+      "controls": [
+        "与当前目标关联的选择/操作入口",
+        "状态反馈与必要资源或进度读数",
+        "关闭/返回当前操作的入口"
+      ],
+      "information_priority": [
+        "世界/关卡内当前目标",
+        "与当前用例相关的数值或物件状态",
+        "玩家能够采取的下一步操作"
+      ],
+      "feedback": "根据当前步骤的实际 state 和 flow 表达操作反馈，不预设成功；起始步骤示例：玩家在等距游戏地图中选中一座农场",
+      "screens": [
+        {
+          "scene_id": "new-hamlet-builder--UC-001--STEP-001",
+          "use_case_id": "UC-001",
+          "step_id": "STEP-001",
+          "state": "in-progress",
+          "flow": "main",
+          "required_evidence": [
+            "等距建造游戏场景",
+            "选中的农场高亮状态"
+          ],
+          "required_ui_text": [],
+          "requirement_ids": [
+            "REQ-001",
+            "REQ-002"
+          ],
+          "design_decision_ids": [
+            "DES-02-01",
+            "DES-02-02",
+            "DES-02-03"
+          ],
+          "interaction": {
+            "purpose": "对象选择",
+            "primary_object": "玩家在等距游戏地图中选中一座农场",
+            "proposed_controls": [
+              "交互对象选中高亮",
+              "当前对象详情或数值视图",
+              "可执行上下文操作"
+            ],
+            "proposed_feedback": "状态变化应与所选对象绑定",
+            "priority": [
+              "等距建造游戏场景",
+              "选中的农场高亮状态",
+              "世界/关卡内当前目标",
+              "与当前用例相关的数值或物件状态",
+              "玩家能够采取的下一步操作"
+            ],
+            "status": "proposed"
+          },
+          "prompt": "CREATE ONE ORIGINAL USE-CASE CONCEPT IMAGE FOR A NEW SOFTWARE PRODUCT. Do not reproduce an existing application's screenshot.\nOUTPUT FRAME: SOFTWARE-ONLY; full-bleed app UI or in-game pixels; never a photograph of users, monitors, keyboard, desks, physical devices or surrounding room.\nPRODUCT: Hamlet Builder (game). PRODUCT CONCEPT: 一款原创等距视角建造经营游戏，玩家建造农场并规划居民劳动，视觉风格温暖清晰\nTARGET USE CASE: UC-001: 玩家选择农场并查看产量与已分配工人\nEXACT STEP: STEP-001: 玩家在等距游戏地图中选中一座农场 | state=in-progress | flow=main\nCANONICAL VIEW: an in-game camera chosen for the fictional product's experience\nSOURCE REQUIREMENTS AND HARD FACTS (must not be contradicted):\n- REQ-001 [source-stated] 一款原创等距视角建造经营游戏，玩家建造农场并规划居民劳动，视觉风格温暖清晰\n- REQ-002 [source-stated] 玩家选择农场并查看产量与已分配工人\n\nREQUIRED VISIBLE EVIDENCE:\n- 等距建造游戏场景\n- 选中的农场高亮状态\nEXACT UI TEXT WHEN PROVIDED:\n- No required verbatim labels specified. Suggested wording is a PROPOSAL.\nSELECTED DESIGN CANDIDATE: VAR-02. THIS DESIGN IS A PROPOSAL, NOT USER-APPROVED.\nPROPOSED SPATIAL LAYOUT: 世界/关卡视口为主体、围绕交互对象的浮动操作和信息卡\nPROPOSED NAVIGATION AND INTERACTION FLOW: world-object-context-overlay\nPROPOSED INTERACTIVE ELEMENTS: 与当前目标关联的选择/操作入口; 状态反馈与必要资源或进度读数; 关闭/返回当前操作的入口\nVISUAL INFORMATION PRIORITY: 世界/关卡内当前目标 > 与当前用例相关的数值或物件状态 > 玩家能够采取的下一步操作\nCURRENT-STEP INTERACTION DESIGN: 对象选择 | target=玩家在等距游戏地图中选中一座农场\nPROPOSED CURRENT-STEP CONTROLS: 交互对象选中高亮; 当前对象详情或数值视图; 可执行上下文操作\nPROPOSED CURRENT-STEP FEEDBACK: 状态变化应与所选对象绑定\nCURRENT-STEP VISIBLE INFORMATION: 等距建造游戏场景; 选中的农场高亮状态; 世界/关卡内当前目标; 与当前用例相关的数值或物件状态; 玩家能够采取的下一步操作\nPROPOSED VISUAL LANGUAGE: 原创游戏内可见 UI 和关卡视图，镜头建议：等距视角 (isometric)；布局方案 contextual-overlay；不渲染现实显示器或真人\nSTEP-SPECIFIC FEEDBACK: 根据当前步骤的实际 state 和 flow 表达操作反馈，不预设成功；起始步骤示例：玩家在等距游戏地图中选中一座农场; depict actual state=in-progress accurately, not a fabricated success\nThe scene should clearly show WHAT object is involved, WHAT action the user can take, and WHAT feedback corresponds to this exact step.\nAll UI/layout details not required by the source are design suggestions. Do not add unsupported product requirements or claim that the software is implemented.\nDeliver a single software-internal concept frame (not a storyboard, poster, wireframe-on-paper, lifestyle photo, or marketing mockup).",
+          "prompt_sha256": "d6474597db7b4ab6265e6f163f8d71a66dd6f0d539792110f26fa66d49fcd5a6"
+        },
+        {
+          "scene_id": "new-hamlet-builder--UC-001--STEP-002",
+          "use_case_id": "UC-001",
+          "step_id": "STEP-002",
+          "state": "in-progress",
+          "flow": "main",
+          "required_evidence": [
+            "农场详情面板",
+            "当前产量",
+            "已分配工人数量"
+          ],
+          "required_ui_text": [
+            "产量"
+          ],
+          "requirement_ids": [
+            "REQ-001",
+            "REQ-002"
+          ],
+          "design_decision_ids": [
+            "DES-02-01",
+            "DES-02-02",
+            "DES-02-03"
+          ],
+          "interaction": {
+            "purpose": "分配管理",
+            "primary_object": "玩家查看所选农场的产量和已分配工人",
+            "proposed_controls": [
+              "可选人员/单位列表",
+              "当前已分配数量",
+              "分配或移除操作"
+            ],
+            "proposed_feedback": "突出选择前后的分配变化",
+            "priority": [
+              "农场详情面板",
+              "当前产量",
+              "已分配工人数量",
+              "世界/关卡内当前目标",
+              "与当前用例相关的数值或物件状态",
+              "玩家能够采取的下一步操作"
+            ],
+            "status": "proposed"
+          },
+          "prompt": "CREATE ONE ORIGINAL USE-CASE CONCEPT IMAGE FOR A NEW SOFTWARE PRODUCT. Do not reproduce an existing application's screenshot.\nOUTPUT FRAME: SOFTWARE-ONLY; full-bleed app UI or in-game pixels; never a photograph of users, monitors, keyboard, desks, physical devices or surrounding room.\nPRODUCT: Hamlet Builder (game). PRODUCT CONCEPT: 一款原创等距视角建造经营游戏，玩家建造农场并规划居民劳动，视觉风格温暖清晰\nTARGET USE CASE: UC-001: 玩家选择农场并查看产量与已分配工人\nEXACT STEP: STEP-002: 玩家查看所选农场的产量和已分配工人 | state=in-progress | flow=main\nCANONICAL VIEW: an in-game camera chosen for the fictional product's experience\nSOURCE REQUIREMENTS AND HARD FACTS (must not be contradicted):\n- REQ-001 [source-stated] 一款原创等距视角建造经营游戏，玩家建造农场并规划居民劳动，视觉风格温暖清晰\n- REQ-002 [source-stated] 玩家选择农场并查看产量与已分配工人\n\nREQUIRED VISIBLE EVIDENCE:\n- 农场详情面板\n- 当前产量\n- 已分配工人数量\nEXACT UI TEXT WHEN PROVIDED:\n- 产量\nSELECTED DESIGN CANDIDATE: VAR-02. THIS DESIGN IS A PROPOSAL, NOT USER-APPROVED.\nPROPOSED SPATIAL LAYOUT: 世界/关卡视口为主体、围绕交互对象的浮动操作和信息卡\nPROPOSED NAVIGATION AND INTERACTION FLOW: world-object-context-overlay\nPROPOSED INTERACTIVE ELEMENTS: 与当前目标关联的选择/操作入口; 状态反馈与必要资源或进度读数; 关闭/返回当前操作的入口\nVISUAL INFORMATION PRIORITY: 世界/关卡内当前目标 > 与当前用例相关的数值或物件状态 > 玩家能够采取的下一步操作\nCURRENT-STEP INTERACTION DESIGN: 分配管理 | target=玩家查看所选农场的产量和已分配工人\nPROPOSED CURRENT-STEP CONTROLS: 可选人员/单位列表; 当前已分配数量; 分配或移除操作\nPROPOSED CURRENT-STEP FEEDBACK: 突出选择前后的分配变化\nCURRENT-STEP VISIBLE INFORMATION: 农场详情面板; 当前产量; 已分配工人数量; 世界/关卡内当前目标; 与当前用例相关的数值或物件状态; 玩家能够采取的下一步操作\nPROPOSED VISUAL LANGUAGE: 原创游戏内可见 UI 和关卡视图，镜头建议：等距视角 (isometric)；布局方案 contextual-overlay；不渲染现实显示器或真人\nSTEP-SPECIFIC FEEDBACK: 根据当前步骤的实际 state 和 flow 表达操作反馈，不预设成功；起始步骤示例：玩家在等距游戏地图中选中一座农场; depict actual state=in-progress accurately, not a fabricated success\nThe scene should clearly show WHAT object is involved, WHAT action the user can take, and WHAT feedback corresponds to this exact step.\nAll UI/layout details not required by the source are design suggestions. Do not add unsupported product requirements or claim that the software is implemented.\nDeliver a single software-internal concept frame (not a storyboard, poster, wireframe-on-paper, lifestyle photo, or marketing mockup).",
+          "prompt_sha256": "7013f3d675cbf34773a21c7bfd9b3db3046d6527e852ef698c3b44404b13268b"
+        },
+        {
+          "scene_id": "new-hamlet-builder--UC-001--STEP-003",
+          "use_case_id": "UC-001",
+          "step_id": "STEP-003",
+          "state": "success",
+          "flow": "main",
+          "required_evidence": [
+            "农场仍保持选中",
+            "分配后的工人状态变化"
+          ],
+          "required_ui_text": [
+            "分配工人"
+          ],
+          "requirement_ids": [
+            "REQ-001",
+            "REQ-002"
+          ],
+          "design_decision_ids": [
+            "DES-02-01",
+            "DES-02-02",
+            "DES-02-03"
+          ],
+          "interaction": {
+            "purpose": "分配管理",
+            "primary_object": "玩家为农场分配一名工人并查看分配结果",
+            "proposed_controls": [
+              "可选人员/单位列表",
+              "当前已分配数量",
+              "分配或移除操作"
+            ],
+            "proposed_feedback": "明确标记已经完成的动作与结果，但不能发明需求中不存在的奖励或业务后果",
+            "priority": [
+              "农场仍保持选中",
+              "分配后的工人状态变化",
+              "世界/关卡内当前目标",
+              "与当前用例相关的数值或物件状态",
+              "玩家能够采取的下一步操作"
+            ],
+            "status": "proposed"
+          },
+          "prompt": "CREATE ONE ORIGINAL USE-CASE CONCEPT IMAGE FOR A NEW SOFTWARE PRODUCT. Do not reproduce an existing application's screenshot.\nOUTPUT FRAME: SOFTWARE-ONLY; full-bleed app UI or in-game pixels; never a photograph of users, monitors, keyboard, desks, physical devices or surrounding room.\nPRODUCT: Hamlet Builder (game). PRODUCT CONCEPT: 一款原创等距视角建造经营游戏，玩家建造农场并规划居民劳动，视觉风格温暖清晰\nTARGET USE CASE: UC-001: 玩家选择农场并查看产量与已分配工人\nEXACT STEP: STEP-003: 玩家为农场分配一名工人并查看分配结果 | state=success | flow=main\nCANONICAL VIEW: an in-game camera chosen for the fictional product's experience\nSOURCE REQUIREMENTS AND HARD FACTS (must not be contradicted):\n- REQ-001 [source-stated] 一款原创等距视角建造经营游戏，玩家建造农场并规划居民劳动，视觉风格温暖清晰\n- REQ-002 [source-stated] 玩家选择农场并查看产量与已分配工人\n\nREQUIRED VISIBLE EVIDENCE:\n- 农场仍保持选中\n- 分配后的工人状态变化\nEXACT UI TEXT WHEN PROVIDED:\n- 分配工人\nSELECTED DESIGN CANDIDATE: VAR-02. THIS DESIGN IS A PROPOSAL, NOT USER-APPROVED.\nPROPOSED SPATIAL LAYOUT: 世界/关卡视口为主体、围绕交互对象的浮动操作和信息卡\nPROPOSED NAVIGATION AND INTERACTION FLOW: world-object-context-overlay\nPROPOSED INTERACTIVE ELEMENTS: 与当前目标关联的选择/操作入口; 状态反馈与必要资源或进度读数; 关闭/返回当前操作的入口\nVISUAL INFORMATION PRIORITY: 世界/关卡内当前目标 > 与当前用例相关的数值或物件状态 > 玩家能够采取的下一步操作\nCURRENT-STEP INTERACTION DESIGN: 分配管理 | target=玩家为农场分配一名工人并查看分配结果\nPROPOSED CURRENT-STEP CONTROLS: 可选人员/单位列表; 当前已分配数量; 分配或移除操作\nPROPOSED CURRENT-STEP FEEDBACK: 明确标记已经完成的动作与结果，但不能发明需求中不存在的奖励或业务后果\nCURRENT-STEP VISIBLE INFORMATION: 农场仍保持选中; 分配后的工人状态变化; 世界/关卡内当前目标; 与当前用例相关的数值或物件状态; 玩家能够采取的下一步操作\nPROPOSED VISUAL LANGUAGE: 原创游戏内可见 UI 和关卡视图，镜头建议：等距视角 (isometric)；布局方案 contextual-overlay；不渲染现实显示器或真人\nSTEP-SPECIFIC FEEDBACK: 根据当前步骤的实际 state 和 flow 表达操作反馈，不预设成功；起始步骤示例：玩家在等距游戏地图中选中一座农场; depict actual state=success accurately, not a fabricated success\nThe scene should clearly show WHAT object is involved, WHAT action the user can take, and WHAT feedback corresponds to this exact step.\nAll UI/layout details not required by the source are design suggestions. Do not add unsupported product requirements or claim that the software is implemented.\nDeliver a single software-internal concept frame (not a storyboard, poster, wireframe-on-paper, lifestyle photo, or marketing mockup).",
+          "prompt_sha256": "79994c8928b3f6e47d4ab405785f8a30fd2974dfaec0a7b969b590e568dbab01"
+        }
+      ]
+    }
+  ],
+  "approval": "none",
+  "warning": "This is an unapproved original design proposal; static validation does not prove visual quality or software implementation."
+}

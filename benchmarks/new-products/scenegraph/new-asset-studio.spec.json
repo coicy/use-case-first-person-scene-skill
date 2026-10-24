@@ -1,0 +1,467 @@
+{
+  "kind": "scene-graph-spec",
+  "format_version": "1.0",
+  "product_id": "new-asset-studio",
+  "variant_id": "VAR-01",
+  "authority": "proposed",
+  "layout": "工作区主视图与左侧导航、右侧上下文属性面板",
+  "navigation": "sidebar-workspace-inspector",
+  "canvas": {
+    "width": 1200,
+    "height": 720
+  },
+  "regions": [
+    {
+      "id": "header",
+      "role": "header",
+      "rect": [
+        0,
+        0,
+        1200,
+        72
+      ],
+      "parent": null
+    },
+    {
+      "id": "sidebar",
+      "role": "sidebar",
+      "rect": [
+        0,
+        72,
+        200,
+        648
+      ],
+      "parent": null
+    },
+    {
+      "id": "workspace",
+      "role": "workspace",
+      "rect": [
+        200,
+        72,
+        660,
+        648
+      ],
+      "parent": null
+    },
+    {
+      "id": "inspector",
+      "role": "inspector",
+      "rect": [
+        860,
+        72,
+        340,
+        648
+      ],
+      "parent": null
+    }
+  ],
+  "elements": [
+    {
+      "id": "brand",
+      "kind": "heading",
+      "region": "header",
+      "rect": [
+        24,
+        12,
+        170,
+        45
+      ],
+      "label": "ASSET STUDIO",
+      "binding": null,
+      "action_id": null,
+      "object_id": null,
+      "evidence_refs": []
+    },
+    {
+      "id": "search-input",
+      "kind": "chip",
+      "region": "header",
+      "rect": [
+        230,
+        18,
+        392,
+        38
+      ],
+      "label": "搜索素材",
+      "binding": null,
+      "action_id": null,
+      "object_id": null,
+      "evidence_refs": []
+    },
+    {
+      "id": "nav-assets",
+      "kind": "heading",
+      "region": "sidebar",
+      "rect": [
+        24,
+        111,
+        156,
+        40
+      ],
+      "label": "素材库",
+      "binding": null,
+      "action_id": null,
+      "object_id": null,
+      "evidence_refs": []
+    },
+    {
+      "id": "nav-tags",
+      "kind": "text",
+      "region": "sidebar",
+      "rect": [
+        24,
+        172,
+        156,
+        40
+      ],
+      "label": "标签筛选",
+      "binding": null,
+      "action_id": null,
+      "object_id": null,
+      "evidence_refs": []
+    },
+    {
+      "id": "assets-title",
+      "kind": "heading",
+      "region": "workspace",
+      "rect": [
+        222,
+        97,
+        500,
+        44
+      ],
+      "label": "资源列表",
+      "binding": null,
+      "action_id": null,
+      "object_id": null,
+      "evidence_refs": []
+    },
+    {
+      "id": "filter-control",
+      "kind": "chip",
+      "region": "workspace",
+      "rect": [
+        223,
+        157,
+        160,
+        40
+      ],
+      "label": "筛选：城堡",
+      "binding": "ui.filter",
+      "action_id": null,
+      "object_id": null,
+      "evidence_refs": [
+        "筛选条件"
+      ]
+    },
+    {
+      "id": "asset-grid",
+      "kind": "card",
+      "region": "workspace",
+      "rect": [
+        223,
+        224,
+        188,
+        204
+      ],
+      "label": "castle-keep.fbx",
+      "binding": "object.castle-01.name",
+      "action_id": null,
+      "object_id": "castle-01",
+      "evidence_refs": [
+        "筛选后的素材列表",
+        "当前素材选中态"
+      ]
+    },
+    {
+      "id": "asset-card-2",
+      "kind": "card",
+      "region": "workspace",
+      "rect": [
+        428,
+        224,
+        188,
+        204
+      ],
+      "label": "castle-tower.fbx",
+      "binding": null,
+      "action_id": null,
+      "object_id": null,
+      "evidence_refs": []
+    },
+    {
+      "id": "selected-indicator",
+      "kind": "chip",
+      "region": "workspace",
+      "rect": [
+        223,
+        447,
+        188,
+        40
+      ],
+      "label": "已选中",
+      "binding": null,
+      "action_id": null,
+      "object_id": null,
+      "evidence_refs": []
+    },
+    {
+      "id": "inspector-title",
+      "kind": "heading",
+      "region": "inspector",
+      "rect": [
+        880,
+        100,
+        295,
+        42
+      ],
+      "label": "资源详情",
+      "binding": null,
+      "action_id": null,
+      "object_id": null,
+      "evidence_refs": []
+    },
+    {
+      "id": "detail-tab",
+      "kind": "chip",
+      "region": "inspector",
+      "rect": [
+        880,
+        156,
+        108,
+        36
+      ],
+      "label": "详情",
+      "binding": null,
+      "action_id": null,
+      "object_id": null,
+      "evidence_refs": []
+    },
+    {
+      "id": "preview-slot",
+      "kind": "art-slot",
+      "region": "inspector",
+      "rect": [
+        880,
+        212,
+        296,
+        188
+      ],
+      "label": "城堡模型预览",
+      "binding": null,
+      "action_id": null,
+      "object_id": null,
+      "evidence_refs": [
+        "素材预览区域"
+      ]
+    },
+    {
+      "id": "metadata",
+      "kind": "metric",
+      "region": "inspector",
+      "rect": [
+        880,
+        420,
+        296,
+        70
+      ],
+      "label": "模型文件",
+      "binding": "object.castle-01.type",
+      "action_id": null,
+      "object_id": "castle-01",
+      "evidence_refs": [
+        "素材属性区"
+      ]
+    },
+    {
+      "id": "edit-tags",
+      "kind": "chip",
+      "region": "inspector",
+      "rect": [
+        880,
+        521,
+        294,
+        42
+      ],
+      "label": "待保存标签",
+      "binding": "ui.draft_tags",
+      "action_id": null,
+      "object_id": "castle-01",
+      "evidence_refs": [
+        "被编辑的素材标签"
+      ]
+    },
+    {
+      "id": "save-failed",
+      "kind": "notice",
+      "region": "inspector",
+      "rect": [
+        880,
+        586,
+        294,
+        60
+      ],
+      "label": "保存失败",
+      "binding": "ui.notice",
+      "action_id": null,
+      "object_id": null,
+      "evidence_refs": [
+        "与当前素材关联的错误提示"
+      ]
+    },
+    {
+      "id": "save-button",
+      "kind": "button",
+      "region": "inspector",
+      "rect": [
+        880,
+        655,
+        294,
+        45
+      ],
+      "label": "保存",
+      "binding": null,
+      "action_id": "save-tags-fail",
+      "object_id": "castle-01",
+      "evidence_refs": []
+    }
+  ],
+  "objects": [
+    {
+      "id": "castle-01",
+      "type": "model",
+      "label": "城堡模型"
+    }
+  ],
+  "actions": [
+    {
+      "id": "open-detail",
+      "target": "castle-01",
+      "preconditions": {
+        "ui.active_panel": "library"
+      },
+      "effects": {
+        "ui.active_panel": {
+          "op": "set",
+          "value": "detail"
+        }
+      }
+    },
+    {
+      "id": "save-tags-fail",
+      "target": "castle-01",
+      "preconditions": {
+        "ui.active_panel": "detail"
+      },
+      "effects": {
+        "ui.active_panel": {
+          "op": "set",
+          "value": "editor"
+        },
+        "ui.notice": {
+          "op": "set",
+          "value": "保存失败"
+        },
+        "ui.draft_tags": {
+          "op": "set",
+          "value": "城堡 / 中世纪 / 遗迹"
+        }
+      }
+    }
+  ],
+  "scenes": [
+    {
+      "scene_id": "new-asset-studio--UC-001--STEP-001",
+      "step_id": "STEP-001",
+      "selected_object_id": "castle-01",
+      "event_id": null,
+      "visible_elements": [
+        "brand",
+        "search-input",
+        "nav-assets",
+        "nav-tags",
+        "assets-title",
+        "filter-control",
+        "asset-grid",
+        "asset-card-2",
+        "selected-indicator"
+      ],
+      "values": {
+        "ui.selected_object": "castle-01",
+        "ui.active_panel": "library",
+        "ui.filter": "城堡",
+        "ui.notice": "",
+        "ui.draft_tags": "城堡 / 中世纪",
+        "object.castle-01.name": "castle_keep.fbx",
+        "object.castle-01.type": "3D 模型 · FBX",
+        "object.castle-01.tags": "城堡 / 中世纪"
+      }
+    },
+    {
+      "scene_id": "new-asset-studio--UC-001--STEP-002",
+      "step_id": "STEP-002",
+      "selected_object_id": "castle-01",
+      "event_id": "open-detail",
+      "visible_elements": [
+        "brand",
+        "search-input",
+        "nav-assets",
+        "nav-tags",
+        "assets-title",
+        "filter-control",
+        "asset-grid",
+        "asset-card-2",
+        "selected-indicator",
+        "inspector-title",
+        "detail-tab",
+        "preview-slot",
+        "metadata"
+      ],
+      "values": {
+        "ui.selected_object": "castle-01",
+        "ui.active_panel": "detail",
+        "ui.filter": "城堡",
+        "ui.notice": "",
+        "ui.draft_tags": "城堡 / 中世纪",
+        "object.castle-01.name": "castle_keep.fbx",
+        "object.castle-01.type": "3D 模型 · FBX",
+        "object.castle-01.tags": "城堡 / 中世纪"
+      }
+    },
+    {
+      "scene_id": "new-asset-studio--UC-001--STEP-003",
+      "step_id": "STEP-003",
+      "selected_object_id": "castle-01",
+      "event_id": "save-tags-fail",
+      "visible_elements": [
+        "brand",
+        "search-input",
+        "nav-assets",
+        "nav-tags",
+        "assets-title",
+        "filter-control",
+        "asset-grid",
+        "asset-card-2",
+        "selected-indicator",
+        "inspector-title",
+        "detail-tab",
+        "preview-slot",
+        "metadata",
+        "edit-tags",
+        "save-failed",
+        "save-button"
+      ],
+      "values": {
+        "ui.selected_object": "castle-01",
+        "ui.active_panel": "editor",
+        "ui.filter": "城堡",
+        "ui.notice": "保存失败",
+        "ui.draft_tags": "城堡 / 中世纪 / 遗迹",
+        "object.castle-01.name": "castle_keep.fbx",
+        "object.castle-01.type": "3D 模型 · FBX",
+        "object.castle-01.tags": "城堡 / 中世纪"
+      }
+    }
+  ]
+}

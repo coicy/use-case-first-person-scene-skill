@@ -1,0 +1,472 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/ucscene/v0.7/scene-graph.schema.json",
+  "title": "Semantic scene graph v1 — deterministic SVG authority (proposal-only milestone)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "kind",
+    "format_version",
+    "product_id",
+    "variant_id",
+    "authority",
+    "source_plan_sha256",
+    "source_spec_sha256",
+    "design",
+    "canvas",
+    "regions",
+    "elements",
+    "objects",
+    "actions",
+    "scenes",
+    "notice",
+    "graph_sha256"
+  ],
+  "properties": {
+    "kind": {
+      "const": "semantic-scene-graph"
+    },
+    "format_version": {
+      "const": "1.0"
+    },
+    "product_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,79}$"
+    },
+    "variant_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,79}$"
+    },
+    "authority": {
+      "const": "proposed"
+    },
+    "source_plan_sha256": {
+      "$ref": "#/$defs/hash"
+    },
+    "source_spec_sha256": {
+      "$ref": "#/$defs/hash"
+    },
+    "graph_sha256": {
+      "$ref": "#/$defs/hash"
+    },
+    "design": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "layout",
+        "navigation",
+        "visual_style",
+        "status"
+      ],
+      "properties": {
+        "layout": {
+          "type": "string"
+        },
+        "navigation": {
+          "enum": [
+            "sidebar-workspace-inspector",
+            "world-hud-right-panel"
+          ]
+        },
+        "visual_style": {
+          "type": "string"
+        },
+        "status": {
+          "const": "proposed"
+        }
+      }
+    },
+    "canvas": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "width",
+        "height"
+      ],
+      "properties": {
+        "width": {
+          "type": "integer",
+          "minimum": 640,
+          "maximum": 3840
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 360,
+          "maximum": 2160
+        }
+      }
+    },
+    "regions": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 32,
+      "items": {
+        "$ref": "#/$defs/region"
+      }
+    },
+    "elements": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 250,
+      "items": {
+        "$ref": "#/$defs/element"
+      }
+    },
+    "objects": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/object"
+      }
+    },
+    "actions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/action"
+      }
+    },
+    "scenes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/scene"
+      }
+    },
+    "notice": {
+      "type": "string"
+    }
+  },
+  "$defs": {
+    "hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "rect": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {
+        "type": "integer",
+        "minimum": 0
+      }
+    },
+    "scalar": {
+      "type": [
+        "string",
+        "number",
+        "boolean"
+      ]
+    },
+    "region": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "role",
+        "rect",
+        "parent"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,79}$"
+        },
+        "role": {
+          "enum": [
+            "header",
+            "sidebar",
+            "workspace",
+            "inspector",
+            "hud",
+            "world",
+            "toolbar",
+            "panel"
+          ]
+        },
+        "rect": {
+          "$ref": "#/$defs/rect"
+        },
+        "parent": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,79}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "element": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "region",
+        "rect",
+        "label",
+        "binding",
+        "action_id",
+        "object_id",
+        "evidence_refs"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,79}$"
+        },
+        "kind": {
+          "enum": [
+            "heading",
+            "text",
+            "metric",
+            "button",
+            "chip",
+            "card",
+            "world-object",
+            "art-slot",
+            "notice"
+          ]
+        },
+        "region": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,79}$"
+        },
+        "rect": {
+          "$ref": "#/$defs/rect"
+        },
+        "label": {
+          "type": "string"
+        },
+        "binding": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "action_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,79}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "object_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,79}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "object": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "type",
+        "label"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,79}$"
+        },
+        "type": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        }
+      }
+    },
+    "effect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "op",
+        "value"
+      ],
+      "properties": {
+        "op": {
+          "enum": [
+            "set",
+            "add"
+          ]
+        },
+        "value": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "target",
+        "preconditions",
+        "effects"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,79}$"
+        },
+        "target": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,79}$"
+        },
+        "preconditions": {
+          "type": "object",
+          "additionalProperties": {
+            "type": [
+              "string",
+              "number",
+              "boolean"
+            ]
+          }
+        },
+        "effects": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/effect"
+          }
+        }
+      }
+    },
+    "scene": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scene_id",
+        "step_id",
+        "selected_object_id",
+        "event_id",
+        "visible_elements",
+        "values",
+        "use_case_id",
+        "state",
+        "flow",
+        "required_evidence",
+        "required_ui_text",
+        "requirement_ids",
+        "design_decision_ids"
+      ],
+      "properties": {
+        "scene_id": {
+          "type": "string"
+        },
+        "step_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,79}$"
+        },
+        "selected_object_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,79}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "event_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,79}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "visible_elements": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,79}$"
+          }
+        },
+        "values": {
+          "type": "object",
+          "additionalProperties": {
+            "type": [
+              "string",
+              "number",
+              "boolean"
+            ]
+          }
+        },
+        "use_case_id": {
+          "type": "string"
+        },
+        "state": {
+          "enum": [
+            "start",
+            "in-progress",
+            "waiting",
+            "success",
+            "failure"
+          ]
+        },
+        "flow": {
+          "enum": [
+            "main",
+            "alternative",
+            "exception"
+          ]
+        },
+        "required_evidence": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "required_ui_text": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "requirement_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "design_decision_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

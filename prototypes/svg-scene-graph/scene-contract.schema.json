@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/ucscene/prototypes/semantic-svg-scene-contract-v0.1.json",
+  "title": "Prototype Semantic Scene Contract",
+  "description": "Demonstrates a typed source-of-truth for deterministic SVGs, not a production-approved schema.",
+  "type": "object",
+  "required": ["schema_version", "kind", "product_id", "authority", "viewport", "design", "world_objects", "actions", "steps"],
+  "properties": {
+    "schema_version": {"const": "0.1-prototype"},
+    "kind": {"const": "semantic-svg-scene-contract"},
+    "product_id": {"type": "string", "minLength": 1},
+    "title": {"type": "string"},
+    "authority": {"const": "demonstration-proposal-not-user-approved"},
+    "reference_requirements": {"type": "array", "items": {"type": "string"}},
+    "viewport": {
+      "type": "object", "required": ["width", "height"],
+      "properties": {"width": {"type": "integer", "minimum": 160}, "height": {"type": "integer", "minimum": 100}}
+    },
+    "design": {
+      "type": "object", "required": ["camera", "components"],
+      "properties": {
+        "camera": {"enum": ["isometric", "top-down", "first-person", "side-scrolling", "application-ui"]},
+        "style": {"type": "string"},
+        "layout_locked_for_demo": {"type": "boolean"},
+        "components": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/component"}}
+      }
+    },
+    "world_objects": {"type": "array", "items": {"type": "object", "required": ["id", "type", "name"], "properties": {"id": {"type": "string"}, "type": {"type": "string"}, "name": {"type": "string"}, "capacity": {"type": "integer", "minimum": 1}}}},
+    "actions": {"type": "array", "items": {"type": "object", "required": ["id", "target", "effect"], "properties": {"id": {"type": "string"}, "target": {"type": "string"}, "precondition": {"type": "string"}, "effect": {"type": "object", "required": ["workers_delta", "available_workers_delta", "production_delta"], "properties": {"workers_delta": {"type": "integer"}, "available_workers_delta": {"type": "integer"}, "production_delta": {"type": "integer"}}}}}},
+    "steps": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/step"}},
+    "warnings": {"type": "array", "items": {"type": "string"}}
+  },
+  "$defs": {
+    "component": {
+      "type": "object", "required": ["id", "role", "rect", "layer"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "role": {"type": "string", "minLength": 1},
+        "rect": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"type": "integer", "minimum": 0}},
+        "layer": {"type": "integer"}, "bind": {"type": "string"}, "action": {"type": "string"}
+      }
+    },
+    "step": {
+      "type": "object", "required": ["id", "use_case_id", "state", "selected_object", "panel", "objects", "available_workers", "required_evidence", "action_applied"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1}, "use_case_id": {"type": "string"},
+        "state": {"enum": ["start", "in-progress", "waiting", "success", "failure"]},
+        "selected_object": {"type": "string"}, "panel": {"type": "string"},
+        "objects": {"type": "object", "additionalProperties": {"type": "object", "required": ["workers", "production_per_turn"], "properties": {"workers": {"type": "integer", "minimum": 0}, "production_per_turn": {"type": "integer", "minimum": 0}}}},
+        "available_workers": {"type": "integer", "minimum": 0},
+        "required_evidence": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "action_applied": {"type": ["string", "null"]}
+      }
+    }
+  }
+}

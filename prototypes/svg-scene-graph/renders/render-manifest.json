@@ -1,0 +1,27 @@
+{
+  "source_contract_sha256": "5775fc9ae73f04958364564df54e06a97f26c93e52a364234b2a2486a2e011f5",
+  "design_authority": "proposed-not-user-approved",
+  "images": [
+    {
+      "step_id": "STEP-001",
+      "svg": "step-001.svg",
+      "sha256": "16788c86afe9c34826cc3bba712673def02f0c305f902810bb7c2081b7749aa7",
+      "expected_worker_count": 2,
+      "expected_production": 4
+    },
+    {
+      "step_id": "STEP-002",
+      "svg": "step-002.svg",
+      "sha256": "3d97e1b7d6a80e11916a05fd619a44ef6f03586e7f682799090c118e84ebccd1",
+      "expected_worker_count": 2,
+      "expected_production": 4
+    },
+    {
+      "step_id": "STEP-003",
+      "svg": "step-003.svg",
+      "sha256": "4bf8f3615df87ae8e8e7a8cd2c9cac70fc076dd93072c2c4c0db581c225dc79c",
+      "expected_worker_count": 3,
+      "expected_production": 6
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "schema_version": "0.1-prototype",
+  "kind": "semantic-svg-scene-contract",
+  "product_id": "new-hamlet-builder",
+  "title": "Hamlet Builder — farm interaction",
+  "authority": "demonstration-proposal-not-user-approved",
+  "reference_requirements": ["REQ-001", "REQ-002"],
+  "viewport": {"width": 1200, "height": 720},
+  "design": {
+    "camera": "isometric",
+    "style": "proposed: warm low-poly world and dark game HUD",
+    "layout_locked_for_demo": true,
+    "components": [
+      {"id":"hud","role":"resource-hud","rect":[0,0,1200,70],"layer":10},
+      {"id":"world","role":"gameplay-viewport","rect":[0,70,855,576],"layer":1},
+      {"id":"selected-farm","role":"world-selection","rect":[326,265,260,180],"layer":3,"bind":"selected_object"},
+      {"id":"inspector","role":"building-inspector","rect":[855,70,345,650],"layer":10,"bind":"selected_object"},
+      {"id":"worker-counter","role":"bound-data-label","rect":[890,395,225,44],"layer":11,"bind":"objects.farm-01.workers"},
+      {"id":"production-counter","role":"bound-data-label","rect":[890,307,225,44],"layer":11,"bind":"objects.farm-01.production_per_turn"},
+      {"id":"assign-button","role":"action-control","rect":[886,540,279,54],"layer":12,"action":"assign-worker"},
+      {"id":"commands","role":"bottom-command-bar","rect":[0,646,855,74],"layer":10}
+    ]
+  },
+  "world_objects": [
+    {"id":"farm-01","type":"farm","name":"橡树林农场","tile":[7,5],"capacity":4,"base_production_per_turn":4},
+    {"id":"house-01","type":"residence","name":"居民房屋","tile":[3,3]},
+    {"id":"warehouse-01","type":"warehouse","name":"谷仓","tile":[12,4]}
+  ],
+  "actions": [
+    {"id":"assign-worker","target":"farm-01","precondition":"available_workers>=1 and farm.workers<farm.capacity","effect":{"workers_delta":1,"available_workers_delta":-1,"production_delta":2}}
+  ],
+  "steps": [
+    {"id":"STEP-001","use_case_id":"UC-001","state":"in-progress","title":"选择农场","selected_object":"farm-01","panel":"overview","objects":{"farm-01":{"workers":2,"production_per_turn":4}},"available_workers":3,"required_evidence":["等距建造游戏场景","选中的农场高亮状态"],"action_applied":null},
+    {"id":"STEP-002","use_case_id":"UC-001","state":"in-progress","title":"查看产量","selected_object":"farm-01","panel":"production","objects":{"farm-01":{"workers":2,"production_per_turn":4}},"available_workers":3,"required_evidence":["农场详情面板","当前产量","已分配工人数量"],"action_applied":null},
+    {"id":"STEP-003","use_case_id":"UC-001","state":"success","title":"分配工人","selected_object":"farm-01","panel":"workers","objects":{"farm-01":{"workers":3,"production_per_turn":6}},"available_workers":2,"required_evidence":["农场仍保持选中","分配后的工人状态变化"],"action_applied":"assign-worker"}
+  ],
+  "warnings": ["本原型中的具体工人数、产量及空间坐标属于测试提案，不是用户已批准的产品规则。", "SVG 只描述图形与数据绑定，不证明真实软件已实现交互。"]
+}

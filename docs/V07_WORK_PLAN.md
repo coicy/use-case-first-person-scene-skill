@@ -145,3 +145,8 @@ WP-05 的测试夹具可以在 WP-01 同步准备，但正式评分必须在 WP-
 WP-03 **代码和离线验收已完成**，见 [WP03_IMPLEMENTATION.md](WP03_IMPLEMENTATION.md)。已落地 DesignSystem Schema、明确批准/冻结、受控单字段修订、哈希关联的修订历史、跨用例设计继承及设计差异报告。两款原创产品均已验证候选→测试批准→三步场景提示词的完整 CLI 流程。
 
 注意：CI 测试中的批准引用均为模拟输入，不表示用户已批准任何正式候选。真实 PNG 生图、人工视觉评价以及图像一致性验证仍属 WP-04 / WP-05。
+
+
+## P0 change gate — PRODUCT-004 (2026-10-24)
+
+Before WP-05 is accepted, implement semantic fidelity QA independent of rendering format: product identity, UI region topology, component hierarchy/object bindings, supported actions/feedback, and correct step state. Review each panel if a user-requested storyboard contains multiple scenes. Critical confirmed/approved mismatches must fail even when the image is attractive and single-framed. The current `concept-audit` does **not yet** separately measure all these dimensions; see [VISUAL_FIDELITY_ACCEPTANCE](VISUAL_FIDELITY_ACCEPTANCE.md). Do not close WP-05 until this gate is implemented and independently evaluated on original new-product images.

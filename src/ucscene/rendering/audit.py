@@ -74,6 +74,15 @@ def audit_concept_image(packet: dict[str, Any], image_path: str | Path, *,
         'For each exact required visible evidence string, report one pass/fail/uncertain verdict. '
         'Do not claim the software actually exists or that its UX is approved. '
         'Images can be aesthetically attractive yet still fail single-frame composition. '
+        'Verify that every required visible object actually belongs to the requested software and task, '
+        'that object-selection and detail-panel bindings make sense, and that interactive controls plausibly '
+        'support the task without inventing conflicting functions or impossible success/error states. '
+        'Consider expected navigation/layout from the design candidate: a polished but structurally '
+        'incoherent or functionally incorrect screen must not pass its relevant evidence checks. '
+        'A format-only success is not proof of faithful layout, structure, functionality, or state. '
+        'This command currently lacks separate formal fields for every semantic fidelity axis; '
+        'give a conservative uncertain or fail result when supported by the specified evidence, '
+        'and do not fabricate a fully verified semantic verdict. '
         'Return short grounded reasons and minimal fixes.'
     )
     request={

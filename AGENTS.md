@@ -14,6 +14,14 @@ This project is an Agent Skill. When the host Agent exposes image generation, it
 
 Never claim export/import proves the host invoked a particular model, submitted an exact prompt, generated a semantically correct scene, or received user approval. If the host cannot provide PNG bytes or is missing an image tool, report this limitation; standalone concept-render --execute is an explicit separately billed fallback, never an automatic step. Do not merge multiple products or steps into a single generation request. See docs/decision-003-agent-native-generation.md.
 
+## P0 product decision PRODUCT-004 — layout, structure, functionality and state fidelity
+
+**2026-10-24 user requirement:** Regardless of how a picture is organized (single frame, comparison, storyboard, multiple UI views), the *depicted software* must faithfully implement the target product's stated/approved layout, component structure, functionality, and specific use-case state. **Visual format never excuses wrong product or impossible UI behavior.**
+
+For a NEW software product, "real" means a plausible, implementable UI faithful to known product facts and approved DesignSystem; it does NOT require a prior running screenshot. AI may propose missing design elements but must label them `proposed` and preserve user-confirmed constraints. Evaluate layout/structure/functionality/state/identity independently of whether a picture is one frame or a requested multi-scene board. A multi-scene composition is not intrinsically prohibited; if the task asked for one frame, however, return one frame.
+
+Before declaring an image valid, audit each depicted screen against its associated use case and design revision. Reject hard semantic conflicts regardless of visual quality, composition, or image hash. When the relevant facts or pixels are uncertain, report `uncertain` and request review; do not fabricate implementation proofs or user approval. See docs/decision-004-semantic-fidelity.md and docs/VISUAL_FIDELITY_ACCEPTANCE.md.
+
 ## Scope
 
 This repository implements a source-grounded **software-only** use-case-to-scene pipeline. The entire output must be application/editor/game pixels; never real-world user POV, external monitors, keyboard, desk, device or physical surroundings. It is **not** a UML generator, working UX frontend, asset licensing system, or guarantee of model accuracy. Do not add features or claims to the README unless the code and tests verify them.

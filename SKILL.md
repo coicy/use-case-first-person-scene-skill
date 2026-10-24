@@ -9,6 +9,14 @@ description: Design software-only concept visuals for NEW or not-yet-built softw
 
 Read docs/PRODUCT_REQUIREMENTS.md (PRODUCT-002) before planning or developing features. This product creates **new software / game use-case concept images**, based on user requirements and AI design proposals. It does not require actual app screenshots. The older v0.6 screenshot-fidelity objective is superseded as a primary use case.
 
+## P0 product decision PRODUCT-004 — layout, structure, functionality and state fidelity
+
+**2026-10-24 user requirement:** Regardless of how a picture is organized (single frame, comparison, storyboard, multiple UI views), the *depicted software* must faithfully implement the target product's stated/approved layout, component structure, functionality, and specific use-case state. **Visual format never excuses wrong product or impossible UI behavior.**
+
+For a NEW software product, "real" means a plausible, implementable UI faithful to known product facts and approved DesignSystem; it does NOT require a prior running screenshot. AI may propose missing design elements but must label them `proposed` and preserve user-confirmed constraints. Evaluate layout/structure/functionality/state/identity independently of whether a picture is one frame or a requested multi-scene board. A multi-scene composition is not intrinsically prohibited; if the task asked for one frame, however, return one frame.
+
+Before declaring an image valid, audit each depicted screen against its associated use case and design revision. Reject hard semantic conflicts regardless of visual quality, composition, or image hash. When the relevant facts or pixels are uncertain, report `uncertain` and request review; do not fabricate implementation proofs or user approval. See docs/decision-004-semantic-fidelity.md and docs/VISUAL_FIDELITY_ACCEPTANCE.md.
+
 ## Provider priority (PRODUCT-003 — required)
 
 **Capability gate (WP-05):** Before attempting host-native image generation, verify the host can actually receive ONE exact, explicit scene prompt and isolate unrelated conversation content. Run `ucscene concept-agent-preflight PACKET --capabilities HOST.json --out PREFLIGHT.json`. If the route is `host-native-blocked`, do not repeatedly invoke this same unrouteable host and do not report images as successfully prompt-bound. A separate paid API is not automatically authorized. Details: `docs/WP05_AGENT_NATIVE_PREFLIGHT.md`.

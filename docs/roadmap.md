@@ -1,3 +1,7 @@
+## PRODUCT-004 (2026-10-24) — new P0 semantic correctness gate
+
+Images of newly designed software must stay faithful to the product's real/approved layout, component structure, functionality and use-case state, **regardless of whether the user requests a single screen, a storyboard or a comparison board**. Accuracy and presentation are separate quality axes. See [decision-004-semantic-fidelity.md](decision-004-semantic-fidelity.md) and [VISUAL_FIDELITY_ACCEPTANCE.md](VISUAL_FIDELITY_ACCEPTANCE.md). Formal semantic-gate schema, automated audit, multi-panel review and real-image benchmark remain to be implemented; legacy format checks alone are insufficient.
+
 ## PRODUCT-003: host-Agent image generation comes first
 
 Agent native generation is preferred. Portable CLI supports independent task export, PNG import and hash verification with no extra API key. Actual generation happens in the host Agent; separate paid API remains opt-in fallback. Image quality and user approval are separate acceptance gates. See decision-003-agent-native-generation.md.

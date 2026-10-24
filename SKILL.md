@@ -11,6 +11,9 @@ Read docs/PRODUCT_REQUIREMENTS.md (PRODUCT-002) before planning or developing fe
 
 ## Provider priority (PRODUCT-003 — required)
 
+**Capability gate (WP-05):** Before attempting host-native image generation, verify the host can actually receive ONE exact, explicit scene prompt and isolate unrelated conversation content. Run `ucscene concept-agent-preflight PACKET --capabilities HOST.json --out PREFLIGHT.json`. If the route is `host-native-blocked`, do not repeatedly invoke this same unrouteable host and do not report images as successfully prompt-bound. A separate paid API is not automatically authorized. Details: `docs/WP05_AGENT_NATIVE_PREFLIGHT.md`.
+
+
 **ALWAYS prefer the host Agent's own image-generation tool** when available. Do not demand OPENAI_API_KEY just to generate a scene for a new product.
 
 1. Compile a concept-packet and run concept-agent-export to obtain independent, product/step-bound prompt text files.

@@ -2,6 +2,9 @@
 
 ## Current product authority (PRODUCT-002, 2026-10-22)
 
+Host-native image tools are preferred only when an explicit single-scene prompt can be routed and unrelated context isolated. Run `concept-agent-preflight` on an operator/Agent capability declaration; exit 4 blocks this route, not the whole design workflow. Never mistake a capability assertion for proof of actual image prompt submission; never silently switch to separately billed API. See `docs/WP05_AGENT_NATIVE_PREFLIGHT.md`.
+
+
 **Before any implementation or prompt change, read docs/PRODUCT_REQUIREMENTS.md and docs/V07_WORK_PLAN.md.** The project designs visual use-case concepts for **NEW, not-yet-built software and games**. Inventing missing interface arrangements, components and interactions is a REQUIRED design capability when labeled as an AI proposal; it is not automatically a hallucination. Confirmed user requirements override AI proposals; a proposal may not silently become locked. Existing software is a design reference, not the required replication target. Maintain the software-only output boundary of PRODUCT-001. Legacy v0.6 behaviors below remain compatibility constraints until explicitly migrated, not v0.7 product requirements.
 
 

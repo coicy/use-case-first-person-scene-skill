@@ -239,3 +239,14 @@ Use `ucscene concept-audit PACKET --image IMAGE.png --variant VAR-01 --scene SCE
 ## WP-05 live API validation (manual, not yet passed)
 
 The two-original-product live Images API probe is documented in [WP05 acceptance checkpoint](docs/WP05_LIVE_API_ACCEPTANCE.md). The manual-only Actions workflow `wp05-manual-api-probe.yml` requires repository `OPENAI_API_KEY` secret and explicit `YES` confirmation. It never triggers paid calls on normal push/PR. The 2026-10-24 local attempt was blocked by absent credentials; no real API PNGs or model audit results exist from that run.
+
+
+## Agent-native image-routing preflight (WP-05)
+
+Before submitting native host-image jobs, verify the Agent tool can receive an explicit prompt and isolate the current step:
+
+```sh
+ucscene concept-agent-preflight out/packet.json --capabilities out/host-capabilities.json --out out/preflight.json
+```
+
+A declared capability failure returns exit 4 with `host-native-blocked` and does **not** call a billed API. This prevents treating a context-driven montage generator as a reliably prompt-bound scene renderer. The declaration is not proof of submitted prompt or visual quality. See [WP05_AGENT_NATIVE_PREFLIGHT.md](docs/WP05_AGENT_NATIVE_PREFLIGHT.md).

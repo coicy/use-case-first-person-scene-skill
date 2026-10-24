@@ -19,6 +19,7 @@ from .acceptance import create_gallery, verify_gallery
 from .design import (init_brief, migrate_legacy_case, create_bundle, validate_product_brief, validate_design_decision, validate_scene_design, validate_design_bundle, create_design_plan, validate_design_plan, export_design_prompts)
 from .design.system import create_design_system, validate_design_system, revise_design_system, compare_design_system
 from .design.continuity import apply_design_system, validate_consistent_plan
+from .rendering.host_guard import preflight_host_agent
 from .rendering.agent import export_agent_handoff, verify_agent_handoff, import_agent_images, verify_agent_import
 from .rendering import make_render_packet, verify_render_packet, render_concepts, verify_generation_report, build_concept_gallery, verify_concept_gallery, audit_concept_image, create_retry_packet, verify_retry_manifest, record_visual_observation
 
@@ -186,6 +187,10 @@ def run(argv: list[str] | None = None) -> int:
     concept_render.add_argument('--quality', default='medium')
     concept_render.add_argument('--reference-image', help='Optional verified image used as consistent style reference')
     concept_render.add_argument('--chain', action='store_true', help='Optional sequential edit references; has visual drift risk')
+    native_check = sub.add_parser('concept-agent-preflight', help='Offline host prompt-routing capability gate; no image API call')
+    native_check.add_argument('packet')
+    native_check.add_argument('--capabilities', required=True)
+    native_check.add_argument('--out', default='out/agent-preflight.json')
     agent_export = sub.add_parser('concept-agent-export', help='PREFERRED: export independent native-Agent scene image tasks, no key')
     agent_export.add_argument('packet')
     agent_export.add_argument('--out-dir', required=True)
@@ -282,6 +287,13 @@ def run(argv: list[str] | None = None) -> int:
             print(json.dumps({'ok':True,'path':args.out,'mode':packet['mode'],
                 'images_planned':len(packet['items']),'generated_images':0},ensure_ascii=False))
             return 0
+        if args.command == 'concept-agent-preflight':
+            report=preflight_host_agent(load_json(args.packet),load_json(args.capabilities))
+            save_json(args.out,report)
+            print(json.dumps({'ok':report['route']=='host-native-eligible','route':report['route'],
+                'blocked_reasons':report['blocked_reasons'],'images_generated':0,
+                'path':args.out},ensure_ascii=False))
+            return 0 if report['route']=='host-native-eligible' else 4
         if args.command == 'concept-agent-export':
             m=export_agent_handoff(load_json(args.packet),args.out_dir)
             print(json.dumps({'ok':True,'tasks':len(m['tasks']),'generated_images':0,
